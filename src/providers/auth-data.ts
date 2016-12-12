@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFire } from 'angularfire2';
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 
 @Injectable()
 export class AuthData {
