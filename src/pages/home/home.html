@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Home Page
+      Events List
     </ion-title>
     <ion-buttons end>
       <button (click)="goToProfile()">
@@ -12,11 +12,15 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button block color="primary" (click)="goToCreate()">
-      Create a new Event
-  </button>
+  <ion-list>
+    <ion-item *ngFor="let event of eventList" (click)="goToEventDetail(event.id)">
+      <h2>{{event?.name}}</h2>
+      <p>Ticket: <strong>${{event?.price}}</strong></p>
+      <p>Date: <strong>{{event?.date}}</strong></p>
+    </ion-item>
+  </ion-list>
 
-  <button ion-button block color="primary" (click)="goToList()">
-    See your events
-  </button>
+  <ion-fab bottom right>
+    <button ion-fab mini (click)="addEvent()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 </ion-content>
