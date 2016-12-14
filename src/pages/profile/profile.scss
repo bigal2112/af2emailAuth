@@ -1,4 +1,5 @@
 page-profile {
+
   ion-item ion-label {
     margin: 0 !important;
   }
@@ -20,6 +21,34 @@ page-profile {
 
   ion-datetime {
     padding-left: 3px !important;
+  }
+
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 200px;
+  }
+
+  .scroll-content {
+      padding: 10px;
+  }
+
+  .avatarButtons {
+    text-align: center;
+  }
+
+  .cameraButton {
+    width: 45%;
+  }
+
+  .galleryButton {
+    width: 45%;
+  }
+
+  .icon-md {
+    padding-right: 1em;
   }
 
   .item-inner {

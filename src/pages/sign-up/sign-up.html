@@ -11,8 +11,7 @@
   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
 
     <ion-item>
-      <ion-label stacked>Email</ion-label>
-      <ion-input #email formControlName="email" type="email" (change)="elementChanged(email)" placeholder="Your email address"
+      <ion-input #email formControlName="email" type="email" (change)="elementChanged(email)" placeholder="Email"
         [class.invalid]="!signupForm.controls.email.valid && (emailChanged || submitAttempt)"></ion-input>
     </ion-item>
     <ion-item class="error-message" *ngIf="!signupForm.controls.email.valid  && (emailChanged || submitAttempt)">
@@ -20,12 +19,19 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Password</ion-label>
-      <ion-input #password formControlName="password" type="password" (change)="elementChanged(password)" placeholder="Your password"
+      <ion-input #password formControlName="password" type="password" (change)="elementChanged(password)" placeholder="Password"
         [class.invalid]="!signupForm.controls.password.valid && (passwordChanged || submitAttempt)"></ion-input>
     </ion-item>
     <ion-item class="error-message" *ngIf="!signupForm.controls.password.valid  && (passwordChanged || submitAttempt)">
       <p>Your password needs more than 6 characters.</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-input #username formControlName="username" type="text" (change)="elementChanged(username)" placeholder="Username"
+        [class.invalid]="!signupForm.controls.username.valid && (usernameChanged || submitAttempt)"></ion-input>
+    </ion-item>
+    <ion-item class="error-message" *ngIf="!signupForm.controls.username.valid  && (usernameChanged || submitAttempt)">
+      <p>Please enter a username of more than 4 characters.</p>
     </ion-item>
 
     <button ion-button block type="submit">

@@ -13,6 +13,7 @@ export class SignupPage {
   public signupForm;
   emailChanged: boolean = false;
   passwordChanged: boolean = false;
+  usernameChanged: boolean = false;
   submitAttempt: boolean = false;
   loading;
 
@@ -24,6 +25,8 @@ export class SignupPage {
       email: ['', Validators.compose([Validators.required,
       EmailValidator.isValid])],
       password: ['', Validators.compose([Validators.minLength(6),
+      Validators.required])],
+      username: ['', Validators.compose([Validators.minLength(4),
       Validators.required])]
     });
   }
@@ -49,7 +52,8 @@ export class SignupPage {
       console.log(this.signupForm.value);
     } else {
       this.authData.signupUser(this.signupForm.value.email,
-        this.signupForm.value.password).then(() => {
+        this.signupForm.value.password, 
+        this.signupForm.value.username).then(() => {
           this.nav.setRoot(HomePage);
         }, (error) => {
           this.loading.dismiss().then(() => {

@@ -14,7 +14,7 @@ export class AuthData {
         af.auth.subscribe(user => {
             if (user) {
                 this.fireAuth = user.auth;
-                console.log(user);
+                // console.log(user);
             }
         });
     }
@@ -31,18 +31,14 @@ export class AuthData {
         return this.af.auth.logout();
     }
 
-    // signupUser(newEmail: string, newPassword: string): any {
-    //   return this.af.auth.createUser({ email: newEmail, password: newPassword });
-    // }
-
-    signupUser(newEmail: string, newPassword: string): any {
+    signupUser(newEmail: string, newPassword: string, newUserName: string): any {
         return this.af.auth.createUser({ email: newEmail, password: newPassword })
             .then((newUser) => {
                 // we have created a new user so log them in
                 this.af.auth.login({ email: newEmail, password: newPassword })
                     .then((authenticatedUser) => {
                         // we're in and authenricated to save some user details into thier userProfile
-                        this.userProfile.child(authenticatedUser.uid).set({ email: newEmail });
+                        this.userProfile.child(authenticatedUser.uid).set({ email: newEmail, username: newUserName, avatarURL: "https://firebasestorage.googleapis.com/v0/b/af2emailauth.appspot.com/o/guestProfile%2Fdefault-avatar.png?alt=media&token=affcce1a-4b2f-44c8-b73c-0bd3e5f6b209" });
                     })
             });
     }

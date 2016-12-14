@@ -1,18 +1,12 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      Login
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding>
+<ion-content>
+  
+  <img src="img/wannagoLogo.png">
+ 
   <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
 
     <ion-item>
-      <ion-label stacked>Email</ion-label>
-      <ion-input #email formControlName="email" type="email" (change)="elementChanged(email)" placeholder="Your email address"
-        [class.invalid]="!loginForm.controls.email.valid &&
+      <!--<ion-label floating>Email</ion-label>-->
+      <ion-input placeholder="Email" #email formControlName="email" type="email" (change)="elementChanged(email)" [class.invalid]="!loginForm.controls.email.valid &&
           (emailChanged || submitAttempt)"></ion-input>
     </ion-item>
     <ion-item class="error-message" *ngIf="!loginForm.controls.email.valid  &&
@@ -21,9 +15,8 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Password</ion-label>
-      <ion-input #password formControlName="password" type="password" (change)="elementChanged(password)" placeholder="Your password"
-        [class.invalid]="!loginForm.controls.password.valid &&
+      <!--<ion-label floating>Password</ion-label>-->
+      <ion-input placeholder="Password" #password formControlName="password" type="password" (change)="elementChanged(password)" [class.invalid]="!loginForm.controls.password.valid &&
           (passwordChanged || submitAttempt)"></ion-input>
     </ion-item>
     <ion-item class="error-message" *ngIf="!loginForm.controls.password.valid  &&
@@ -31,14 +24,23 @@
       <p>Your password needs more than 6 characters.</p>
     </ion-item>
 
-    <button ion-button block type="submit">
-      Login
+    <button class="loginButton" ion-button block type="submit">
+      SIGN IN
     </button>
 
+    <button ion-button block clear (click)="goToResetPassword()">
+      Forgot your password?
+    </button>
   </form>
 
-  <button ion-button block clear (click)="goToResetPassword()">
-    I forgot my password
+  <button class="facebookButton" ion-button icon-left block>
+    <ion-icon name="logo-facebook"></ion-icon>
+      SIGN IN WITH FACEBOOK
+  </button>
+
+  <button class="googlePlusButton" ion-button icon-left block>
+    <ion-icon name="logo-googleplus"></ion-icon>
+      SIGN IN WITH GOOGLE
   </button>
 
   <button ion-button block clear (click)="createAccount()">

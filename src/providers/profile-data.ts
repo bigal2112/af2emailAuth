@@ -8,8 +8,9 @@ import firebase from 'firebase';
 
 @Injectable()
 export class ProfileData {
-  // We'll use this to create a database reference to the userProfile node.
+  // We'll use this to create a database reference to the userProfile node and their avatar.
   userProfile: any;
+  avatarPictureRef: any;
 
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any;
@@ -19,9 +20,8 @@ export class ProfileData {
     /**
     * Here we create the references I told you about 2 seconds ago ðŸ˜›
     */
-    this.currentUser = firebase.auth().currentUser;
     this.userProfile = firebase.database().ref('/userProfile');
-
+    this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
   }
 
   /**
@@ -30,6 +30,9 @@ export class ProfileData {
   * and we'll use it to get the user profile info in our page.
   */
   getUserProfile(): any {
+    this.currentUser = firebase.auth().currentUser;
+    // console.log("getUserProfile() - this.currentUser.uid");
+    // console.log(this.currentUser.uid);
     return this.userProfile.child(this.currentUser.uid);
   }
 
@@ -37,10 +40,9 @@ export class ProfileData {
   * This one takes 2 string parameters, firstName & lastName, it just saves those 2 to the userProfile/uid node
   * for the current user as the firstName & lastName properties.
   */
-  updateName(firstName: string, lastName: string): any {
+  updateName(username: string): any {
     return this.userProfile.child(this.currentUser.uid).update({
-      firstName: firstName,
-      lastName: lastName,
+      username: username
     });
   }
 
@@ -82,5 +84,16 @@ export class ProfileData {
     }, (error) => {
       console.log(error);
     });
+  }
+
+  updateAvatar(imageData: any) {
+    if (imageData != null) {
+        this.avatarPictureRef.child(this.currentUser.uid).child('avatar.png')
+          .putString(imageData, 'base64', { contentType: 'image/png' })
+          .then((savedPicture) => {
+            this.userProfile.child(this.currentUser.uid).child('avatarURL')
+              .set(savedPicture.downloadURL);
+          });
+      }
   }
 }

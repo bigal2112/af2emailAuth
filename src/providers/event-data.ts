@@ -6,13 +6,11 @@ export class EventData {
   public currentUser: any;
   public eventList: any;
   public guestsList: any;
-  public profilePictureRef: any;
+  
 
   constructor() {
     this.currentUser = firebase.auth().currentUser.uid;
     this.eventList = firebase.database().ref('userProfile/' + this.currentUser + '/eventList');
-    this.profilePictureRef = firebase.storage().ref('/guestProfile/');
-
   }
 
   createEvent(eventName: string, eventDate: string, eventPrice: number, eventCost: number): any {
@@ -28,7 +26,8 @@ export class EventData {
   }
 
   getEventList(): any {
-    // console.log("event-data.getEventList:");
+    this.currentUser = firebase.auth().currentUser.uid;
+    this.eventList = firebase.database().ref('userProfile/' + this.currentUser + '/eventList');
     return this.eventList;
   }
 
@@ -43,8 +42,8 @@ export class EventData {
   }
 
   addGuest(guestName, eventId, eventPrice, guestPicture = null): any {
-    console.log("eventPrice:");
-    console.log(eventPrice);
+    // console.log("eventPrice:");
+    // console.log(eventPrice);
 
     return this.eventList.child(eventId).child('guestList').push({
       guestName: guestName
@@ -54,14 +53,14 @@ export class EventData {
         return revenue;
       });
 
-      if (guestPicture != null) {
-        this.profilePictureRef.child(newGuest.key).child('profilePicture.png')
-          .putString(guestPicture, 'base64', { contentType: 'image/png' })
-          .then((savedPicture) => {
-            this.eventList.child(eventId).child('guestList').child(newGuest.key).child('profilePicture')
-              .set(savedPicture.downloadURL);
-          });
-      }
+      // if (guestPicture != null) {
+      //   this.avatarPictureRef.child(newGuest.key).child('profilePicture.png')
+      //     .putString(guestPicture, 'base64', { contentType: 'image/png' })
+      //     .then((savedPicture) => {
+      //       this.eventList.child(eventId).child('guestList').child(newGuest.key).child('profilePicture')
+      //         .set(savedPicture.downloadURL);
+      //     });
+      // }
     });
   }
 

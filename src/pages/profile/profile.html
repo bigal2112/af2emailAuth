@@ -10,6 +10,20 @@
 </ion-header>
 
 <ion-content class="page-profile">
+
+  <img src="{{userProfile?.avatarURL}}">
+
+  <div class="avatarButtons">
+    <button ion-button icon-left (click)="getAvatarFromCamera()" class="cameraButton">
+    <ion-icon name="camera"></ion-icon>
+      Camera
+  </button>
+    <button ion-button icon-left (click)="getAvatarFromGallery()" class="galleryButton">
+    <ion-icon name="images"></ion-icon>
+      Gallery
+  </button>
+  </div>
+
   <ion-list>
     <ion-list-header>
       Personal Information
@@ -21,10 +35,10 @@
           <ion-col width-50>
             Name
           </ion-col>
-          <ion-col *ngIf="userProfile?.firstName || userProfile?.lastName">
-            {{userProfile?.firstName}} {{userProfile?.lastName}}
+          <ion-col *ngIf="userProfile?.username">
+            {{userProfile?.username}}
           </ion-col>
-          <ion-col class="placeholder-profile" *ngIf="!userProfile?.firstName">
+          <ion-col class="placeholder-profile" *ngIf="!userProfile?.username">
             <span>
               Tap here to edit.
             </span>
