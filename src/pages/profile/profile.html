@@ -1,39 +1,44 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>Profile</ion-title>
+    <ion-title>{{userProfile?.username}}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="logOut()">
-        <ion-icon name="log-out"></ion-icon>
+      <button ion-button (click)="logOut()" color="light">
+        LOG OUT
       </button>
+      <!--<button ion-button icon-only (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>-->
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="page-profile">
 
-  <img src="{{userProfile?.avatarURL}}">
+  <div class="profileHeader">
+    <img src="{{userProfile?.avatarURL}}">
 
-  <div class="avatarButtons">
-    <button ion-button icon-left (click)="getAvatarFromCamera()" class="cameraButton">
+    <div class="avatarButtons">
+      <button ion-button icon-left (click)="getAvatarFromCamera()" class="cameraButton" color="light">
     <ion-icon name="camera"></ion-icon>
       Camera
-  </button>
-    <button ion-button icon-left (click)="getAvatarFromGallery()" class="galleryButton">
-    <ion-icon name="images"></ion-icon>
-      Gallery
-  </button>
+    </button>
+      <button ion-button icon-left (click)="getAvatarFromGallery()" class="galleryButton" color="light">
+      <ion-icon name="images"></ion-icon>
+        Gallery
+    </button>
+    </div>
   </div>
 
   <ion-list>
-    <ion-list-header>
+    <!--<ion-list-header>
       Personal Information
-    </ion-list-header>
+    </ion-list-header>-->
 
     <ion-item (click)="updateName()">
       <ion-grid>
         <ion-row>
           <ion-col width-50>
-            Name
+            Username
           </ion-col>
           <ion-col *ngIf="userProfile?.username">
             {{userProfile?.username}}

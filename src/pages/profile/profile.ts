@@ -15,12 +15,12 @@ export class ProfilePage {
   constructor(public nav: NavController, public alertCtrl: AlertController, public profileData: ProfileData,
     public authData: AuthData) {
 
-      console.log("profile.ts - Constructor");
+      // console.log("profile.ts - Constructor");
     
     this.profileData.getUserProfile().on('value', (data) => {
       this.userProfile = data.val();
-      console.log("userProfile:");
-      console.log(this.userProfile);
+      // console.log("userProfile:");
+      // console.log(this.userProfile);
       
       this.birthDate = this.userProfile.birthDate;
     });
