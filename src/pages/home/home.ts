@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController  } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { ProfilePage } from '../profile/profile';
 import { EventCreatePage } from '../event-create/event-create';
@@ -12,20 +12,31 @@ import { EventData } from '../../providers/event-data';
 })
 export class HomePage {
   public eventList: any;
+  public nextEvent: any = [];
 
   constructor(public nav: NavController, public eventData: EventData, public loadingCtrl: LoadingController) {
-    this.getEventList();
-  }
 
-  getEventList() {
+    // ----------------------------------------------------------------------------------------------
+    // TODO : get the next event as part of getting all the events. This will save on Firebase calls.
+    // ----------------------------------------------------------------------------------------------
+    // console.log("Retrieving first event - started");
+    this.eventData.getNextEvent().on('value', snapshot => {
+      let rawList = [];
+      snapshot.forEach(snap => {
+        rawList.push({
+          id: snap.key,
+          name: snap.val().name,
+          price: snap.val().price,
+          date: snap.val().date
+        });
+      });
+      this.nextEvent = rawList;
+    });
+    // console.log("Retrieving first event - complete");
 
-    console.log("Retrieving events data - started");
-    // let loader = this.loadingCtrl.create({
-    //   content: "Retrieving events...."
-    // });
-    // loader.present();
-  
+    // console.log("Retrieving events list - started");
     this.eventData.getEventList().orderByChild('date').on('value', snapshot => {
+
       let rawList = [];
       snapshot.forEach(snap => {
         rawList.push({
@@ -36,10 +47,9 @@ export class HomePage {
         });
       });
       this.eventList = rawList;
-      console.log("Retrieving events data - complete");
-
-      // loader.dismiss();
+      // console.log("Retrieving events list - complete");
     });
+
   }
 
   goToEventDetail(eventId) {

@@ -15,11 +15,27 @@
 </ion-header>
 
 <ion-content padding>
+
+  <ion-item class="firstItem" *ngFor="let firstEvent of nextEvent; let i = index" (click)="goToEventDetail(event.id)">
+    <h2>{{firstEvent?.name}}</h2>
+    <p>Ticket: <strong>${{firstEvent?.price}}</strong></p>
+    <p>Date: <strong>{{firstEvent?.date | date:'mediumDate'}}</strong></p>
+  </ion-item>
+
   <ion-list>
-    <ion-item *ngFor="let event of eventList " (click)="goToEventDetail(event.id)">
-      <h2>{{event?.name}}</h2>
-      <p>Ticket: <strong>${{event?.price}}</strong></p>
-      <p>Date: <strong>{{event?.date}}</strong></p>
+    <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
+      <div *ngIf="i == 0">
+        <h2>Index:{{i}}</h2>
+        <h2>{{event?.name}}</h2>
+        <p>Ticket: <strong>${{event?.price}}</strong></p>
+        <p>Date: <strong>{{event?.date | date:'mediumDate'}}</strong></p>
+      </div>
+      <div *ngIf="i != 0">
+        <h2>Index:{{i}}</h2>
+        <p>Date: <strong>{{event?.date | date:'mediumDate'}}</strong></p>
+        <h2>{{event?.name}}</h2>
+        <p>Ticket: <strong>${{event?.price}}</strong></p>
+      </div>
     </ion-item>
   </ion-list>
 

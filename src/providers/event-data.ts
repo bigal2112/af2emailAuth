@@ -5,6 +5,7 @@ import firebase from 'firebase';
 export class EventData {
   public currentUser: any;
   public eventList: any;
+  public nextEvent: any;
   public guestsList: any;
   
 
@@ -24,6 +25,12 @@ export class EventData {
     }).then(newEvent => {
       this.eventList.child(newEvent.key).child('id').set(newEvent.key);
     });
+  }
+
+  getNextEvent(): any {
+    this.currentUser = firebase.auth().currentUser.uid;
+    this.nextEvent = firebase.database().ref('userProfile/' + this.currentUser + '/eventList').orderByChild('date').limitToFirst(1);
+    return this.nextEvent;
   }
 
   getEventList(): any {
