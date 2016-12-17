@@ -22,8 +22,14 @@
 
   <ion-item>
     <ion-label>Event Date</ion-label>
-    <ion-datetime displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" max="2020-10-31" [(ngModel)]="eventDate"></ion-datetime>
+    <!--<ion-datetime displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" max="2020-10-31" [(ngModel)]="eventDate"></ion-datetime>-->
+    <ion-datetime displayFormat="D-MMM-YY h:mm a" pickerFormat="DD MMM YYYY h:mm" max="2020-10-31" [(ngModel)]="eventDate"></ion-datetime>
   </ion-item>
+
+  <!--<ion-item>
+    <ion-label>Event Date</ion-label>
+    <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm" [(ngModel)]="eventStart"></ion-datetime>
+  </ion-item>-->
 
   <button ion-button block (click)="createEvent(eventName, eventDate, eventPrice, eventCost)">
     Create Event

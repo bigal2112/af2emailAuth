@@ -25,7 +25,7 @@ export class HomePage {
     // });
     // loader.present();
   
-    this.eventData.getEventList().on('value', snapshot => {
+    this.eventData.getEventList().orderByChild('date').on('value', snapshot => {
       let rawList = [];
       snapshot.forEach(snap => {
         rawList.push({

@@ -9,11 +9,12 @@ import { EventData } from '../../providers/event-data';
 export class EventCreatePage {
   eventName: string;
   eventDate: string; 
+  eventStartTime: string;
   eventPrice: number;
   eventCost: number;
 
   constructor(public nav: NavController, public eventData: EventData) {
-
+    this.eventDate = new Date().toISOString();
   }
 
   createEvent(eventName: string, eventDate: string, eventPrice: number, eventCost: number) {
