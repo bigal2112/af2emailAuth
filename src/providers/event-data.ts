@@ -12,7 +12,6 @@ export class EventData {
   constructor() {
     this.currentUser = firebase.auth().currentUser.uid;
     this.eventList = firebase.database().ref('userProfile/' + this.currentUser + '/eventList');
-    
   }
 
   createEvent(eventName: string, eventDate: string, eventPrice: number, eventCost: number): any {
@@ -29,14 +28,12 @@ export class EventData {
 
   getNextEvent(): any {
     this.currentUser = firebase.auth().currentUser.uid;
-    this.nextEvent = firebase.database().ref('userProfile/' + this.currentUser + '/eventList').orderByChild('date').limitToFirst(1);
-    return this.nextEvent;
+    return this.eventList.orderByChild('date').limitToFirst(1);
   }
 
   getEventList(): any {
     this.currentUser = firebase.auth().currentUser.uid;
-    this.eventList = firebase.database().ref('userProfile/' + this.currentUser + '/eventList');
-    return this.eventList;
+    return this.eventList.orderByChild('date');
   }
 
   getEventDetail(eventId): any {

@@ -3,6 +3,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 // Import pages
 import { HomePage } from '../pages/home/home';
+import { EventAddPage } from '../pages/event-add/event-add';
 import { EventCreatePage } from '../pages/event-create/event-create';
 import { EventDetailPage } from '../pages/event-detail/event-detail';
 import { EventListPage } from '../pages/event-list/event-list';
@@ -37,6 +38,7 @@ const myFirebaseAuthConfig = {
   declarations: [
     MyApp,
     HomePage,
+    EventAddPage,
     EventCreatePage,
     EventDetailPage,
     EventListPage,
@@ -53,6 +55,7 @@ const myFirebaseAuthConfig = {
   entryComponents: [
     MyApp,
     HomePage,
+    EventAddPage,
     EventCreatePage,
     EventDetailPage,
     EventListPage,

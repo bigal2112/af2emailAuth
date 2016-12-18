@@ -16,7 +16,7 @@
 
 <ion-content padding>
 
-  <ion-item class="firstItem" *ngFor="let firstEvent of nextEvent; let i = index" (click)="goToEventDetail(event.id)">
+  <ion-item class="firstItem" *ngFor="let firstEvent of nextEvent; let i = index" (click)="goToEventDetail(firstEvent.id)">
     <h2>{{firstEvent?.name}}</h2>
     <p>Ticket: <strong>${{firstEvent?.price}}</strong></p>
     <p>Date: <strong>{{firstEvent?.date | date:'mediumDate'}}</strong></p>
@@ -24,20 +24,31 @@
 
   <ion-list>
     <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
-      <div *ngIf="i == 0">
-        <h2>Index:{{i}}</h2>
-        <h2>{{event?.name}}</h2>
-        <p>Ticket: <strong>${{event?.price}}</strong></p>
-        <p>Date: <strong>{{event?.date | date:'mediumDate'}}</strong></p>
-      </div>
       <div *ngIf="i != 0">
-        <h2>Index:{{i}}</h2>
-        <p>Date: <strong>{{event?.date | date:'mediumDate'}}</strong></p>
         <h2>{{event?.name}}</h2>
         <p>Ticket: <strong>${{event?.price}}</strong></p>
+        <p>Date: <strong>{{event?.date | date:'mediumDate'}}</strong></p>
       </div>
     </ion-item>
-  </ion-list>
+  </ion-list> 
+
+  <!--<ion-list>
+    <ion-item *ngFor="let event of eventList">
+      <ion-thumbnail item-left>
+        <img src="{{event?.image}}">
+      </ion-thumbnail>
+      <h2>Venue: {{event?.title}}</h2>
+      <p>Venue: {{event?.venue_name}}</p>
+      <p>Address: {{event?.venue_address}}</p>
+      <p>Country: <strong>{{event?.country_name}}</strong></p>
+      <p>Start Time: <strong>{{event?.start_time | date:'fullDate'}}</strong></p>
+
+    </ion-item>
+  </ion-list>-->
+
+  <!--<button ion-button (click)="callEventful()">Eventful</button>-->
+
+
 
   <ion-fab bottom right>
     <button ion-fab mini (click)="addEvent()"><ion-icon name="add"></ion-icon></button>
