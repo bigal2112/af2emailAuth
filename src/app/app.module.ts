@@ -6,6 +6,7 @@ import { HomePage } from '../pages/home/home';
 import { EventAddPage } from '../pages/event-add/event-add';
 import { EventCreatePage } from '../pages/event-create/event-create';
 import { EventDetailPage } from '../pages/event-detail/event-detail';
+import { EventAddDetailsPage } from '../pages/event-add-details/event-add-details';
 import { EventListPage } from '../pages/event-list/event-list';
 import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
@@ -41,6 +42,7 @@ const myFirebaseAuthConfig = {
     EventAddPage,
     EventCreatePage,
     EventDetailPage,
+    EventAddDetailsPage,
     EventListPage,
     LoginPage,
     ProfilePage,
@@ -58,6 +60,7 @@ const myFirebaseAuthConfig = {
     EventAddPage,
     EventCreatePage,
     EventDetailPage,
+    EventAddDetailsPage,
     EventListPage,
     LoginPage,
     ProfilePage,

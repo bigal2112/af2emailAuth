@@ -1,9 +1,3 @@
-<!--
-  Generated template for the EventAdd page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -24,16 +18,19 @@
     </ion-item>
   </ion-list>
 
-   <ion-list>
-    <ion-item *ngFor="let event of searchResults">
+  <ion-list>
+    <ion-item *ngFor="let event of searchResults; let i = index" (click)="showEventDetails(i) ">
       <ion-thumbnail item-left>
         <img src="{{event?.image}}">
       </ion-thumbnail>
       <h5><strong>{{event?.title}}</strong></h5>
-      <p>{{event?.venue_name}}</p>
-      <p>{{event?.venue_address}}</p>
-      <p>{{event?.city_name}}</p>
-      <p>{{event?.start_time | date:'mediumDate'}}</p>
+      <h5>{{event?.venue_name}}</h5>
+
+      <div>
+        <h5 class="alignleft">{{event?.start_time | date:'EEE, MMM dd y'}}</h5>
+        <h5 class="alignright">{{event?.start_time | date:'HH:mm'}}</h5>
+        <div style="clear:both;"></div>
+      </div>
 
     </ion-item>
   </ion-list>

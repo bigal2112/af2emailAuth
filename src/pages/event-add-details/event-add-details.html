@@ -1,0 +1,39 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{performer}}</ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="addEvent()" color="dark">
+        ADD
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <img class="group-image" src="{{groupImage}}">
+
+  <h2>{{eventInfo.title}}</h2>
+  <h6>{{eventInfo.start_time | date: 'fullDate'}}</h6>
+  <h6>{{eventInfo.venue_name}}, {{eventInfo.city_name}}</h6>
+  <hr>
+
+  <div class="ticketInformation">
+    <h2>Ticket Information</h2>
+
+    <h5 (click)="editTicketFaceValue()"><strong>Face value: </strong>{{ticketFaceValue | currency: 'GBP':true}}</h5>
+
+  </div>
+  <hr>
+  <div class="guestsInformation">
+    <h2>Guests</h2>
+
+
+
+  </div>
+
+</ion-content>
