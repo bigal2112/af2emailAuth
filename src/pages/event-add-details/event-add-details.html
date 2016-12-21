@@ -29,9 +29,16 @@
 
   </div>
   <hr>
-  <div class="guestsInformation">
+  <div>
     <h2>Guests</h2>
 
+    <ion-list>
+      <ion-item *ngFor="let user of allUsers">
+        
+          <h2>{{user?.username}}</h2>
+          
+      </ion-item>
+    </ion-list>
 
 
   </div>

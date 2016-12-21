@@ -17,6 +17,7 @@ import { SignupPage } from '../pages/sign-up/sign-up';
 import { AuthData } from '../providers/auth-data';
 import { EventData } from '../providers/event-data';
 import { ProfileData } from '../providers/profile-data';
+import { UserData } from '../providers/user-data';
 
 // Import the AF2 Module
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
@@ -70,6 +71,7 @@ const myFirebaseAuthConfig = {
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthData,
     EventData,
-    ProfileData]
+    ProfileData,
+    UserData]
 })
 export class AppModule { }

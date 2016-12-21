@@ -7,7 +7,7 @@ export class EventData {
   public eventList: any;
   public nextEvent: any;
   public guestsList: any;
-  
+
 
   constructor() {
     this.currentUser = firebase.auth().currentUser.uid;
@@ -41,7 +41,6 @@ export class EventData {
   }
 
   getGuestList(eventId) {
-    // console.log("event-data.getGuestList:" + eventId);
     this.guestsList = firebase.database().ref('userProfile/' + this.currentUser + '/eventList/' + eventId + "/guestList");
     return this.guestsList;
   }
@@ -57,15 +56,6 @@ export class EventData {
         revenue += (eventPrice * 1);
         return revenue;
       });
-
-      // if (guestPicture != null) {
-      //   this.avatarPictureRef.child(newGuest.key).child('profilePicture.png')
-      //     .putString(guestPicture, 'base64', { contentType: 'image/png' })
-      //     .then((savedPicture) => {
-      //       this.eventList.child(eventId).child('guestList').child(newGuest.key).child('profilePicture')
-      //         .set(savedPicture.downloadURL);
-      //     });
-      // }
     });
   }
 

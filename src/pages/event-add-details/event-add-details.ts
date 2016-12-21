@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { UserData } from '../../providers/user-data';
+import firebase from 'firebase';
 
-/*
-  Generated class for the EventAddDetails page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-event-add-details',
   templateUrl: 'event-add-details.html'
@@ -17,8 +13,10 @@ export class EventAddDetailsPage {
   public groupImage: any;
   public performer: any;
   public ticketFaceValue: any;
+  public allUsers: any
+  public currentUserID: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public userData: UserData) {
     this.eventInfo = this.navParams.get('eventInfo')
     console.log(this.eventInfo);
     // get the performs image
@@ -36,6 +34,29 @@ export class EventAddDetailsPage {
 
     this.ticketFaceValue = 0.00
 
+    // get the current users ID for use in the next bit
+    this.currentUserID = firebase.auth().currentUser.uid;
+
+    // get all the users 
+    //
+    // TODO : change this to show only those in the current users group.
+    // TODO : add a way of knowing whether the user has already been invited
+    this.userData.getAllUsers().on('value', (snapshot) => {
+
+      let rawList = [];
+      snapshot.forEach(snap => {
+
+        // if the ID is the same as the current users ID then ignore, otherwise proceed
+        if (this.currentUserID != snap.key) {
+          rawList.push({
+            id: snap.key,
+            username: snap.val().username,
+            avatarURL: snap.val().avatarURL
+          });
+        }
+      });
+      this.allUsers = rawList;
+    });
   }
 
   editTicketFaceValue() {

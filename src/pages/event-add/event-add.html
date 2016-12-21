@@ -18,6 +18,7 @@
     </ion-item>
   </ion-list>
 
+
   <ion-list>
     <ion-item *ngFor="let event of searchResults; let i = index" (click)="showEventDetails(i) ">
       <ion-thumbnail item-left>
@@ -30,9 +31,9 @@
         <h5 class="alignleft">{{event?.start_time | date:'EEE, MMM dd y'}}</h5>
         <h5 class="alignright">{{event?.start_time | date:'HH:mm'}}</h5>
         <div style="clear:both;"></div>
-      </div>
+</div>
 
-    </ion-item>
-  </ion-list>
+</ion-item>
+</ion-list>
 
 </ion-content>

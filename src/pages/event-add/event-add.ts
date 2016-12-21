@@ -23,6 +23,7 @@ export class EventAddPage {
   }
 
   searchForEvent() {
+    
     if (typeof (this.searchString) == 'undefined' || this.searchString === null) {
       console.log("Place alert here");
     } else {

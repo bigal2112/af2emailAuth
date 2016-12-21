@@ -18,7 +18,7 @@ export class ProfileData {
 
   constructor() {
     /**
-    * Here we create the references I told you about 2 seconds ago ðŸ˜›
+    * Here we create the references 
     */
     this.userProfile = firebase.database().ref('/userProfile');
     this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
@@ -31,8 +31,6 @@ export class ProfileData {
   */
   getUserProfile(): any {
     this.currentUser = firebase.auth().currentUser;
-    // console.log("getUserProfile() - this.currentUser.uid");
-    // console.log(this.currentUser.uid);
     return this.userProfile.child(this.currentUser.uid);
   }
 
