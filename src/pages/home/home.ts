@@ -95,46 +95,46 @@ export class HomePage {
     this.nav.push(EventAddPage);
   }
 
-  callEventful() {
-    var oArgs = {
-      app_key: "n7XgQ8mk3VVsc6Qn",
-      keywords: "Placebo"
-    };
+  // callEventful() {
+  //   var oArgs = {
+  //     app_key: "n7XgQ8mk3VVsc6Qn",
+  //     keywords: "Placebo"
+  //   };
 
-    let that = this;
+  //   let that = this;
 
-    EVDB.API.call("json/events/search", oArgs, function (oData) {
-      console.log(oData.events);
+  //   EVDB.API.call("json/events/search", oArgs, function (oData) {
+  //     console.log(oData.events);
 
-      let rawList = [];
-      that.eventList = [];
+  //     let rawList = [];
+  //     that.eventList = [];
 
-      oData.events.event.forEach(event => {
-        // console.log(event);
-        let imageObj = event.image;
-        // console.log(imageObj);
+  //     oData.events.event.forEach(event => {
+  //       // console.log(event);
+  //       let imageObj = event.image;
+  //       // console.log(imageObj);
 
-        let imageUrl = "img/emptyGroup.png";
-        if(imageObj != null) {
-          imageUrl = imageObj.medium.url;
-        } 
-        // console.log(imageUrl);
+  //       let imageUrl = "img/emptyGroup.png";
+  //       if(imageObj != null) {
+  //         imageUrl = imageObj.medium.url;
+  //       } 
+  //       // console.log(imageUrl);
 
-        rawList.push({
-          id: event.id,
-          venue_name: event.venue_name,
-          start_time: event.start_time,
-          venue_address: event.venue_address,
-          country_name: event.country_name,
-          title: event.title,
-          image: imageUrl
-        });
-      });
+  //       rawList.push({
+  //         id: event.id,
+  //         venue_name: event.venue_name,
+  //         start_time: event.start_time,
+  //         venue_address: event.venue_address,
+  //         country_name: event.country_name,
+  //         title: event.title,
+  //         image: imageUrl
+  //       });
+  //     });
 
-      that.eventList = rawList;
-      // console.log(that.eventList);  
-    });
-  }
+  //     that.eventList = rawList;
+  //     // console.log(that.eventList);  
+  //   });
+  // }
 
 }
 

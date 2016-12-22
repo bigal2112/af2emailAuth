@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { UserData } from '../../providers/user-data';
-import firebase from 'firebase';
+import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { ModalUserListPage } from '../modal-user-list/modal-user-list';
 
 @Component({
   selector: 'page-event-add-details',
@@ -16,7 +15,8 @@ export class EventAddDetailsPage {
   public allUsers: any
   public currentUserID: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public userData: UserData) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
+   public modalCtrl: ModalController) {
     this.eventInfo = this.navParams.get('eventInfo')
     console.log(this.eventInfo);
     // get the performs image
@@ -34,29 +34,30 @@ export class EventAddDetailsPage {
 
     this.ticketFaceValue = 0.00
 
-    // get the current users ID for use in the next bit
-    this.currentUserID = firebase.auth().currentUser.uid;
+    // // get the current users ID for use in the next bit
+    // this.currentUserID = firebase.auth().currentUser.uid;
 
-    // get all the users 
-    //
-    // TODO : change this to show only those in the current users group.
-    // TODO : add a way of knowing whether the user has already been invited
-    this.userData.getAllUsers().on('value', (snapshot) => {
+    // // get all the users 
+    // //
+    // // TODO : change this to show only those in the current users group.
+    // // TODO : add a way of knowing whether the user has already been invited
+    // this.userData.getAllUsers().on('value', (snapshot) => {
 
-      let rawList = [];
-      snapshot.forEach(snap => {
+    //   let rawList = [];
+    //   snapshot.forEach(snap => {
 
-        // if the ID is the same as the current users ID then ignore, otherwise proceed
-        if (this.currentUserID != snap.key) {
-          rawList.push({
-            id: snap.key,
-            username: snap.val().username,
-            avatarURL: snap.val().avatarURL
-          });
-        }
-      });
-      this.allUsers = rawList;
-    });
+    //     // if the ID is the same as the current users ID then ignore, otherwise proceed
+    //     if (this.currentUserID != snap.key) {
+    //       rawList.push({
+    //         id: snap.key,
+    //         username: snap.val().username,
+    //         avatarURL: snap.val().avatarURL
+    //       });
+    //     }
+    //   });
+    //   this.allUsers = rawList;
+    //   console.log(this.allUsers);
+    // });
   }
 
   editTicketFaceValue() {
@@ -88,7 +89,11 @@ export class EventAddDetailsPage {
       ]
     });
     prompt.present();
+  }
 
+  showUsersModal() {
+    let usersModal = this.modalCtrl.create(ModalUserListPage);
+    usersModal.present();
   }
 
   addEvent() {

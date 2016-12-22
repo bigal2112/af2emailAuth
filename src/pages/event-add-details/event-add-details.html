@@ -29,18 +29,22 @@
 
   </div>
   <hr>
-  <div>
+  <div class="guestDiv">
     <h2>Guests</h2>
 
-    <ion-list>
-      <ion-item *ngFor="let user of allUsers">
-        
-          <h2>{{user?.username}}</h2>
-          
-      </ion-item>
-    </ion-list>
+    <button ion-button (click)="showUsersModal()">Add Users</button>
 
+    <!--<ion-scroll scrollX="true">
+      <img *ngFor="let user of allUsers" src="{{user?.avatarURL}}">
+      <h6>{{user?.username}}</h6>
+    </ion-scroll>-->
 
   </div>
+
+  <!--<ion-slides>
+    <ion-slide *ngFor="let user of allUsers">
+      <img src="{{user?.avatarURL}}">
+    </ion-slide>
+  </ion-slides>-->
 
 </ion-content>

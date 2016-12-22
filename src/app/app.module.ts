@@ -13,6 +13,8 @@ import { ProfilePage } from '../pages/profile/profile';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { SignupPage } from '../pages/sign-up/sign-up';
 
+import { ModalUserListPage } from '../pages/modal-user-list/modal-user-list';
+
 // Importing provider
 import { AuthData } from '../providers/auth-data';
 import { EventData } from '../providers/event-data';
@@ -48,7 +50,8 @@ const myFirebaseAuthConfig = {
     LoginPage,
     ProfilePage,
     ResetPasswordPage,
-    SignupPage
+    SignupPage,
+    ModalUserListPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -66,7 +69,8 @@ const myFirebaseAuthConfig = {
     LoginPage,
     ProfilePage,
     ResetPasswordPage,
-    SignupPage
+    SignupPage,
+    ModalUserListPage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthData,

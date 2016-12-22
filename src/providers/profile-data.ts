@@ -10,6 +10,7 @@ import firebase from 'firebase';
 export class ProfileData {
   // We'll use this to create a database reference to the userProfile node and their avatar.
   userProfile: any;
+  users: any;
   avatarPictureRef: any;
 
   // We'll use this to create an auth reference to the logged in user.
@@ -21,6 +22,7 @@ export class ProfileData {
     * Here we create the references 
     */
     this.userProfile = firebase.database().ref('/userProfile');
+    this.users = firebase.database().ref('/users');
     this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
   }
 
@@ -89,8 +91,8 @@ export class ProfileData {
         this.avatarPictureRef.child(this.currentUser.uid).child('avatar.png')
           .putString(imageData, 'base64', { contentType: 'image/png' })
           .then((savedPicture) => {
-            this.userProfile.child(this.currentUser.uid).child('avatarURL')
-              .set(savedPicture.downloadURL);
+            this.userProfile.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
+            this.users.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
           });
       }
   }
