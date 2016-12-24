@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController, ToastController } from 'ionic-angular';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
 import { EventData } from '../../providers/event-data';
 
@@ -18,7 +18,7 @@ export class EventAddDetailsPage {
   public chosenUsers: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-    public modalCtrl: ModalController, public eventData: EventData) {
+    public modalCtrl: ModalController, public eventData: EventData, public toastCtrl: ToastController) {
     this.eventInfo = this.navParams.get('eventInfo')
     console.log(this.eventInfo);
     // get the performs image
@@ -127,6 +127,12 @@ export class EventAddDetailsPage {
     } else {
       this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, this.chosenUsers).then(() => {
         this.navCtrl.pop();
+
+        let toast = this.toastCtrl.create({
+          message: 'Event was added successfully',
+          duration: 2000
+        });
+        toast.present();
       });
     }
   }

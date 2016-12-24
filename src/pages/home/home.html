@@ -14,39 +14,18 @@
       <button (click)="goToProfile()">
         <ion-icon name="person"></ion-icon>
       </button>
-      
+
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <ion-grid class="firstItemGrid">
-    
-    <ion-row>
-      <ion-col width-10>
-      </ion-col>
-      <ion-col width-80 (click)="goToEventDetail(0)">
-        <h2>{{firstEventName}}</h2>
-        <p>{{firstEventDate | date:'mediumDate'}}</p>
-        <img class="group-image" src="{{firstEventImageMed}}" />
-      </ion-col>
-      <ion-col width-10>
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col width-25>
-          <ion-icon name="notifications"></ion-icon>
-          <ion-badge>{{numberOfNotifications}}</ion-badge>
-      </ion-col>
-      <ion-col width-50 (click)="goToEventDetail(0)">
-      </ion-col>
-      <ion-col width-25>
-      </ion-col>
-    </ion-row>
-
-  </ion-grid>
+  <ion-item class="firstItem" (click)="goToEventDetail(0)">
+    <h2>{{firstEventPerformer}}</h2>
+    <p>{{firstEventDate | date:'EEE MMM d, y  -  HH:mm'}}</p>
+    <img class="group-image" src="{{firstEventImageMed}}" />
+  </ion-item>
 
   <ion-list no-lines>
     <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
@@ -54,7 +33,7 @@
       <ion-thumbnail item-left>
         <img src="{{event?.imageMed}}">
       </ion-thumbnail>
-      <h2>{{event?.name}}</h2>
+      <h2>{{event?.performer}}</h2>
       <p>Ticket: {{event?.price | currency: 'GBP':true}}</p>
       <p>Date: {{event?.date | date:'mediumDate'}}</p>
       <!--</div>-->

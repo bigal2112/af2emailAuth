@@ -1,11 +1,10 @@
 page-home {
 
-    .firstItemGrid {
-        ion-grid, ion-row, ion-col, ion-item {
-            background-color: #d7d7d7;
-            // border: 1px solid red;
-            text-align: center;
-        }
+    .firstItem {
+    
+        // background-color: #d7d7d7;
+        // border: 1px solid red;
+        text-align: center;
 
         .group-image {
             display: block;
@@ -15,17 +14,18 @@ page-home {
         }
 
         h2 {
-            color: #808080;
+            word-wrap: break-word;
             margin: 3px;
             font-size: 1.9rem;
             text-align: center;
         }
     
         p {
-            color: #808080;
+            // color: #808080;
             text-align: center;
             margin: 0 0 3px 0;
         }
+    }
 
         // ion-badge {
         //     font-size: 2rem;
@@ -37,4 +37,4 @@ page-home {
         border: 1px solid black;
     }
 
-}
+// }

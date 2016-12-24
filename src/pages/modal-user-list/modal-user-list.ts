@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { ViewController, LoadingController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import firebase from 'firebase';
 
@@ -17,8 +17,16 @@ export class ModalUserListPage {
 
   public userList: any;
   public currentUserID: any;
+  public loader: any;
 
-  constructor(public viewCtrl: ViewController, public userData: UserData) {
+  constructor(public viewCtrl: ViewController, public userData: UserData, public loadingCtrl: LoadingController) {
+
+     // show loading control
+    this.loader = this.loadingCtrl.create({
+      content: "Retrieving available users...."
+    });
+    this.loader.present();
+
     // get the current users ID for use in the next bit
     this.currentUserID = firebase.auth().currentUser.uid;
 
@@ -42,7 +50,7 @@ export class ModalUserListPage {
         }
       });
       this.userList = rawList;
-      console.log(this.userList);
+      this.loader.dismiss();
     });
   }
 

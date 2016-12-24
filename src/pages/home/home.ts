@@ -20,7 +20,8 @@ export class HomePage {
   public numberOfNotifications: number = 3;
 
   firstEventId: any;
-  firstEventName: any;
+  firstEventPerformer: any;
+  firstEventTitle: any;
   firstEventPrice: any;
   firstEventDate: any;
   firstEventImage250: any;
@@ -44,7 +45,8 @@ export class HomePage {
         if (this.eventsCntr === 0) {
 
           this.firstEventId = snap.key;
-          this.firstEventName = snap.val().title;
+          this.firstEventPerformer = snap.val().performer;
+          this.firstEventTitle = snap.val().title;
           this.firstEventPrice = snap.val().initialTicketPrice;
           this.firstEventDate = snap.val().start_time;
           this.firstEventImage250 = snap.val().image250;
@@ -53,7 +55,8 @@ export class HomePage {
         } else {
           this.eventList.push({
             id: snap.key,
-            name: snap.val().title,
+            performer: snap.val().performer,
+            title: snap.val().title,
             price: snap.val().initialTicketPrice,
             date: snap.val().start_time,
             image250: snap.val().image250,
