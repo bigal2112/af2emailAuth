@@ -18,8 +18,8 @@ export class EventCreatePage {
   }
 
   createEvent(eventName: string, eventDate: string, eventPrice: number, eventCost: number) {
-    this.eventData.createEvent(eventName, eventDate, eventPrice, eventCost).then(() => {
-      this.nav.pop();
-    });
+    // this.eventData.createEvent(eventName, eventDate, eventPrice, eventCost).then(() => {
+    //   this.nav.pop();
+    // });
   }
 }

@@ -47,7 +47,7 @@ export class ModalUserListPage {
   }
 
   closeModal() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss(this.userList);
   }
 
 }

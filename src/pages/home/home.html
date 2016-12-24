@@ -1,56 +1,67 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Events List
+      Home
     </ion-title>
     <ion-buttons end>
-      <button ion-button (click)="goToProfile()" color="dark">
+      <!--<button ion-button (click)="goToProfile()" color="dark">
         PROFILE
-      </button>
-      <!--<button (click)="goToProfile()">
-        <ion-icon name="person"></ion-icon>
       </button>-->
+      <button (click)="showNotiications()">
+        <ion-icon name="notifications"></ion-icon>
+        <ion-badge>{{numberOfNotifications}}</ion-badge>
+      </button>
+      <button (click)="goToProfile()">
+        <ion-icon name="person"></ion-icon>
+      </button>
+      
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <ion-item class="firstItem" *ngFor="let firstEvent of nextEvent; let i = index" (click)="goToEventDetail(firstEvent.id)">
-    <h2>{{firstEvent?.name}}</h2>
-    <p>Ticket: <strong>${{firstEvent?.price}}</strong></p>
-    <p>Date: <strong>{{firstEvent?.date | date:'mediumDate'}}</strong></p>
-  </ion-item>
+  <ion-grid class="firstItemGrid">
+    
+    <ion-row>
+      <ion-col width-10>
+      </ion-col>
+      <ion-col width-80 (click)="goToEventDetail(0)">
+        <h2>{{firstEventName}}</h2>
+        <p>{{firstEventDate | date:'mediumDate'}}</p>
+        <img class="group-image" src="{{firstEventImageMed}}" />
+      </ion-col>
+      <ion-col width-10>
+      </ion-col>
+    </ion-row>
 
-  <ion-list>
+    <ion-row>
+      <ion-col width-25>
+          <ion-icon name="notifications"></ion-icon>
+          <ion-badge>{{numberOfNotifications}}</ion-badge>
+      </ion-col>
+      <ion-col width-50 (click)="goToEventDetail(0)">
+      </ion-col>
+      <ion-col width-25>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-list no-lines>
     <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
-      <div *ngIf="i != 0">
-        <h2>{{event?.name}}</h2>
-        <p>Ticket: <strong>${{event?.price}}</strong></p>
-        <p>Date: <strong>{{event?.date | date:'mediumDate'}}</strong></p>
-      </div>
-    </ion-item>
-  </ion-list> 
-
-  <!--<ion-list>
-    <ion-item *ngFor="let event of eventList">
+      <!--<div *ngIf="i != 0">-->
       <ion-thumbnail item-left>
-        <img src="{{event?.image}}">
+        <img src="{{event?.imageMed}}">
       </ion-thumbnail>
-      <h2>Venue: {{event?.title}}</h2>
-      <p>Venue: {{event?.venue_name}}</p>
-      <p>Address: {{event?.venue_address}}</p>
-      <p>Country: <strong>{{event?.country_name}}</strong></p>
-      <p>Start Time: <strong>{{event?.start_time | date:'fullDate'}}</strong></p>
-
+      <h2>{{event?.name}}</h2>
+      <p>Ticket: {{event?.price | currency: 'GBP':true}}</p>
+      <p>Date: {{event?.date | date:'mediumDate'}}</p>
+      <!--</div>-->
     </ion-item>
-  </ion-list>-->
-
-  <!--<button ion-button (click)="callEventful()">Eventful</button>-->
-
-
+  </ion-list>
 
   <ion-fab bottom right>
-    <button ion-fab mini (click)="addEvent()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab (click)="addEvent()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 </ion-content>

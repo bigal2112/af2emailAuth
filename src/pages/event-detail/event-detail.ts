@@ -20,17 +20,17 @@ export class EventDetailPage {
         this.currentEvent = snapshot.val();
       });
 
-    this.eventData.getGuestList(this.navParams.get('eventId'))
-    .on('value', snapshot => {
-      let rawList = [];
-      snapshot.forEach(snap => {
-        rawList.push({
-          id: snap.key,
-          guestName: snap.val().guestName
-        });
-      });
-      this.guestList = rawList;
-    });
+    // this.eventData.getGuestList(this.navParams.get('eventId'))
+    // .on('value', snapshot => {
+    //   let rawList = [];
+    //   snapshot.forEach(snap => {
+    //     rawList.push({
+    //       id: snap.key,
+    //       guestName: snap.val().guestName
+    //     });
+    //   });
+    //   this.guestList = rawList;
+    // });
   }
 
   addGuest(guestName) {

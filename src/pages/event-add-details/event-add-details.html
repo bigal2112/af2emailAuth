@@ -4,9 +4,7 @@
     <ion-title>{{performer}}</ion-title>
 
     <ion-buttons end>
-      <button ion-button (click)="addEvent()" color="dark">
-        ADD
-      </button>
+      <button ion-button (click)="addEvent()" color="dark">ADD</button>
     </ion-buttons>
 
   </ion-navbar>
@@ -15,7 +13,7 @@
 
 
 <ion-content padding>
-  <img class="group-image" src="{{groupImage}}">
+  <img class="group-image" src="{{groupImage250}}">
 
   <h2>{{eventInfo.title}}</h2>
   <h6>{{eventInfo.start_time | date: 'fullDate'}}</h6>
@@ -31,20 +29,18 @@
   <hr>
   <div class="guestDiv">
     <h2>Guests</h2>
-
-    <button ion-button (click)="showUsersModal()">Add Users</button>
-
     <!--<ion-scroll scrollX="true">
-      <img *ngFor="let user of allUsers" src="{{user?.avatarURL}}">
-      <h6>{{user?.username}}</h6>
+      <img *ngFor="let user of chosenUsers" src="{{user?.avatarURL}}">
     </ion-scroll>-->
-
+    <ion-list>
+      <ion-item *ngFor="let user of chosenUsers">
+        <div *ngIf="user?.chosen">
+          <h2>{{user?.username}}</h2>
+        </div>
+      </ion-item>
+    </ion-list>
   </div>
 
-  <!--<ion-slides>
-    <ion-slide *ngFor="let user of allUsers">
-      <img src="{{user?.avatarURL}}">
-    </ion-slide>
-  </ion-slides>-->
+  <button ion-button (click)="showUsersModal()">Invite Guests</button>
 
 </ion-content>

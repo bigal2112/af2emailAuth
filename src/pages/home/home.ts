@@ -15,68 +15,58 @@ declare var EVDB: any;
 })
 export class HomePage {
   public eventList: any = [];
-  public nextEvent: any = [];
-  public otherDataRetrieved: boolean;
   public loader: any;
+  public eventsCntr: number;
+  public numberOfNotifications: number = 3;
+
+  firstEventId: any;
+  firstEventName: any;
+  firstEventPrice: any;
+  firstEventDate: any;
+  firstEventImage250: any;
+  firstEventImageMed: any;
 
   constructor(public nav: NavController, public eventData: EventData, public loadingCtrl: LoadingController) {
-    // this.callEventful();
-    this.otherDataRetrieved = false;
-
-    // ----------------------------------------------------------------------------------------------
-    // TODO : get the next event as part of getting all the events. This will save on Firebase calls.
-    // ----------------------------------------------------------------------------------------------
-    // console.log("Retrieving first event - started");
 
     // show loading control
     this.loader = this.loadingCtrl.create({
-      content: "Retrieving events...."
+      content: "Retrieving your events...."
     });
     this.loader.present();
 
-    this.eventData.getNextEvent().on('value', snapshot => {
-      let rawList = [];
-      snapshot.forEach(snap => {
-        rawList.push({
-          id: snap.key,
-          name: snap.val().name,
-          price: snap.val().price,
-          date: snap.val().date
-        });
-      });
-      this.nextEvent = rawList;
-
-      if (this.otherDataRetrieved) {
-        // dismiss loading control
-        this.loader.dismiss();
-      } else {
-        this.otherDataRetrieved = true;
-      }
-    });
-    // console.log("Retrieving first event - complete");
-
     // console.log("Retrieving events list - started");
-    this.eventData.getEventList().on('value', snapshot => {
+    this.eventData.getEventsList().on('value', snapshot => {
 
-      let rawList = [];
+      this.eventList = [];
+      this.eventsCntr = 0;
       snapshot.forEach(snap => {
-        rawList.push({
-          id: snap.key,
-          name: snap.val().name,
-          price: snap.val().price,
-          date: snap.val().date
-        });
+
+        if (this.eventsCntr === 0) {
+
+          this.firstEventId = snap.key;
+          this.firstEventName = snap.val().title;
+          this.firstEventPrice = snap.val().initialTicketPrice;
+          this.firstEventDate = snap.val().start_time;
+          this.firstEventImage250 = snap.val().image250;
+          this.firstEventImageMed = snap.val().imageMed;
+
+        } else {
+          this.eventList.push({
+            id: snap.key,
+            name: snap.val().title,
+            price: snap.val().initialTicketPrice,
+            date: snap.val().start_time,
+            image250: snap.val().image250,
+            imageMed: snap.val().imageMed
+          });
+        }
+
+        this.eventsCntr++;
       });
-      this.eventList = rawList;
-
-      if (this.otherDataRetrieved) {
-        // dismiss loading control
-        this.loader.dismiss();
-      } else {
-        this.otherDataRetrieved = true;
-      }
-
-    // console.log("Retrieving events list - complete");
+      // console.log("Retrieving events list - complete");
+      this.loader.dismiss();
+      // console.log(this.nextEvent);
+      // console.log(this.eventList);
     });
 
   }

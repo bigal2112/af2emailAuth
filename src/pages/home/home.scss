@@ -1,17 +1,40 @@
 page-home {
 
-    img {
-        border: 1px solid black;
-    }
+    .firstItemGrid {
+        ion-grid, ion-row, ion-col, ion-item {
+            background-color: #d7d7d7;
+            // border: 1px solid red;
+            text-align: center;
+        }
 
-    .firstItem {
-
-        border: 1px solid red;
+        .group-image {
+            display: block;
+            margin: 0 auto;
+            height: 150px;
+            width: auto;
+        }
 
         h2 {
+            color: #808080;
+            margin: 3px;
+            font-size: 1.9rem;
             text-align: center;
-            padding-bottom: 10px;
         }
+    
+        p {
+            color: #808080;
+            text-align: center;
+            margin: 0 0 3px 0;
+        }
+
+        // ion-badge {
+        //     font-size: 2rem;
+        // }
+
+    }
+
+    img {
+        border: 1px solid black;
     }
 
 }
