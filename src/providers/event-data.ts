@@ -7,36 +7,23 @@ export class EventData {
   public eventsRef: any;
   public nextEvent: any;
   public guestsRef: any;
-
+  public invitesRef: any;
 
   constructor() {
     this.currentUser = firebase.auth().currentUser.uid;
     this.eventsRef = firebase.database().ref('events');
+    this.invitesRef = firebase.database().ref('invites');
   }
 
   createEvent(eventInfo: any, ticketValue: any, guestList: any): any {
 
     console.log("createEvent");
     let performerObj = eventInfo.performers
-    // console.log(performerObj);
-
-    // let performer = "";
-    // if (performerObj != null) {
-    //   performer = performerObj.performer.name
-    // } else {
-    //   performer = eventInfo.title;
-    // }
     let imageObj = eventInfo.image;
-
-    // console.log("Performer:" + performer);
 
     // ----------------------------------------------------------
     // TODO : check for NULL values during the push to Firebase.
     // ----------------------------------------------------------
-
-    // -------------------------------------------------------------------------------------------------------
-    // TODO : there maybe cases where there are no guests, this would pass a null value and break the forEach
-    // -------------------------------------------------------------------------------------------------------
     return this.eventsRef.push({
       ownerId: this.currentUser,
       eventId: eventInfo.id,
@@ -47,14 +34,25 @@ export class EventData {
       image250: imageObj.block250.url,
       imageMed: imageObj.medium.url
     }).then(newEvent => {
-      this.guestsRef = this.eventsRef.child(newEvent.key).child('guests');
-      guestList.forEach(guest => {
-        this.guestsRef.push({
-          id: guest.id,
-          username: guest.username,
-          avatarURL: guest.avatarURL
-        })
-      });
+      // now create the invites if there are any
+      if (guestList != null) {
+
+        guestList.forEach(guest => {
+          this.invitesRef.push({
+            ownerId: this.currentUser,
+            inviteeId: guest.id,
+            inviteeName: guest.username,
+            inviteeAvatarURL: guest.avatarURL,
+            eventId: eventInfo.id,
+            title: eventInfo.title,
+            start_time: eventInfo.start_time,
+            initialTicketPrice: ticketValue * 1.00,
+            performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
+            image250: imageObj.block250.url,
+            imageMed: imageObj.medium.url
+          })
+        });
+      }
     });
   }
 
@@ -67,10 +65,15 @@ export class EventData {
     return this.eventsRef.orderByChild('ownerId').equalTo(this.currentUser);
   }
 
-  getNextEvent(): any {
+  getMyInvitedEvents() {
     this.currentUser = firebase.auth().currentUser.uid;
-    return this.eventsRef.orderByChild('start_time').limitToFirst(1);
+    return this.invitesRef.orderByChild('inviteeId').equalTo(this.currentUser);
   }
+
+  // getNextEvent(): any {
+  //   this.currentUser = firebase.auth().currentUser.uid;
+  //   return this.eventsRef.orderByChild('start_time').limitToFirst(1);
+  // }
 
   // geteventsRef(): any {
   //   this.currentUser = firebase.auth().currentUser.uid;
