@@ -1,40 +1,50 @@
 page-home {
-
-    .firstItem {
-    
-        // background-color: #d7d7d7;
-        // border: 1px solid red;
+    ion-card {
         text-align: center;
+    }
 
-        .group-image {
-            display: block;
-            margin: 0 auto;
-            height: 150px;
-            width: auto;
-        }
+    // .firstItem {
+    //      padding: 0;
+
+    //     .label-md {
+    //         margin: 0;
+    //     }
+
+    //     // ion-row {
+    //     //     margin-left: 5px;
+    //     // }
+
+    //     .group-image {
+    //         // display: block;
+    //         margin: 5 auto;
+    //         height: 150px;
+    //         width: auto;
+    //     }
+
+    //     h2 {
+    //         // word-wrap: break-word;
+    //         // margin: 3px;
+    //         font-size: 1.8rem;
+    //         text-align: center;
+    //     }
+    
+    //     p {
+    //         margin: 0 0 3px 0;
+    //         text-align: center;
+    //     }
+    // }
+
+    .noEvents {
+        text-align: center; 
 
         h2 {
-            word-wrap: break-word;
-            margin: 3px;
-            font-size: 1.9rem;
-            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 20px;
         }
+    }
     
-        p {
-            // color: #808080;
-            text-align: center;
-            margin: 0 0 3px 0;
-        }
-    }
-
-        // ion-badge {
-        //     font-size: 2rem;
-        // }
-
-    }
 
     img {
         border: 1px solid black;
     }
-
-// }
+}

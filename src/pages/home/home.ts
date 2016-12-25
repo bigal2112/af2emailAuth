@@ -15,6 +15,7 @@ declare var EVDB: any;
 })
 export class HomePage {
   public eventList: any = [];
+  public unorderedList: any = [];
   public loader: any;
   public eventsCntr: number;
   public numberOfNotifications: number = 3;
@@ -36,31 +37,54 @@ export class HomePage {
     this.loader.present();
 
     // console.log("Retrieving events list - started");
-    this.eventData.getEventsList().on('value', snapshot => {
+    this.eventData.getMyEvents().on('value', snapshot => {
 
+      // get the returned events into an array
+      this.unorderedList = [];
+      snapshot.forEach(snap => {
+        this.unorderedList.push({
+          key: snap.key,
+          performer: snap.val().performer,
+          title: snap.val().title,
+          initialTicketPrice: snap.val().initialTicketPrice,
+          start_time: snap.val().start_time,
+          image250: snap.val().image250,
+          imageMed: snap.val().imageMed
+        });
+      })
+
+      // sort the array by start_time
+      let orderedList = this.unorderedList.sort(this.compare);
+
+      // and remove any events that are in the past
+      orderedList = orderedList.filter((event) => {
+        return Date.parse(event.start_time) >= Date.now();
+      })
+
+      // now create the first itema dn eventsList from the sorted array
       this.eventList = [];
       this.eventsCntr = 0;
-      snapshot.forEach(snap => {
+      orderedList.forEach(event => {
 
         if (this.eventsCntr === 0) {
 
-          this.firstEventId = snap.key;
-          this.firstEventPerformer = snap.val().performer;
-          this.firstEventTitle = snap.val().title;
-          this.firstEventPrice = snap.val().initialTicketPrice;
-          this.firstEventDate = snap.val().start_time;
-          this.firstEventImage250 = snap.val().image250;
-          this.firstEventImageMed = snap.val().imageMed;
+          this.firstEventId = event.key;
+          this.firstEventPerformer = event.performer;
+          this.firstEventTitle = event.title;
+          this.firstEventPrice = event.initialTicketPrice;
+          this.firstEventDate = event.start_time;
+          this.firstEventImage250 = event.image250;
+          this.firstEventImageMed = event.imageMed;
 
         } else {
           this.eventList.push({
-            id: snap.key,
-            performer: snap.val().performer,
-            title: snap.val().title,
-            price: snap.val().initialTicketPrice,
-            date: snap.val().start_time,
-            image250: snap.val().image250,
-            imageMed: snap.val().imageMed
+            id: event.key,
+            performer: event.performer,
+            title: event.title,
+            initialTicketPrice: event.initialTicketPrice,
+            start_time: event.start_time,
+            image250: event.image250,
+            imageMed: event.imageMed
           });
         }
 
@@ -88,46 +112,17 @@ export class HomePage {
     this.nav.push(EventAddPage);
   }
 
-  // callEventful() {
-  //   var oArgs = {
-  //     app_key: "n7XgQ8mk3VVsc6Qn",
-  //     keywords: "Placebo"
-  //   };
+  showNotiications() {
+    console.log("showNotifications");
+  }
 
-  //   let that = this;
-
-  //   EVDB.API.call("json/events/search", oArgs, function (oData) {
-  //     console.log(oData.events);
-
-  //     let rawList = [];
-  //     that.eventList = [];
-
-  //     oData.events.event.forEach(event => {
-  //       // console.log(event);
-  //       let imageObj = event.image;
-  //       // console.log(imageObj);
-
-  //       let imageUrl = "img/emptyGroup.png";
-  //       if(imageObj != null) {
-  //         imageUrl = imageObj.medium.url;
-  //       } 
-  //       // console.log(imageUrl);
-
-  //       rawList.push({
-  //         id: event.id,
-  //         venue_name: event.venue_name,
-  //         start_time: event.start_time,
-  //         venue_address: event.venue_address,
-  //         country_name: event.country_name,
-  //         title: event.title,
-  //         image: imageUrl
-  //       });
-  //     });
-
-  //     that.eventList = rawList;
-  //     // console.log(that.eventList);  
-  //   });
-  // }
+  compare(a, b) {
+    if (a.start_time < b.start_time)
+      return -1;
+    if (a.start_time > b.start_time)
+      return 1;
+    return 0;
+  }
 
 }
 

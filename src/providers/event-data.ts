@@ -62,6 +62,11 @@ export class EventData {
     return this.eventsRef.orderByChild('start_time');
   }
 
+  getMyEvents() {
+    this.currentUser = firebase.auth().currentUser.uid;
+    return this.eventsRef.orderByChild('ownerId').equalTo(this.currentUser);
+  }
+
   getNextEvent(): any {
     this.currentUser = firebase.auth().currentUser.uid;
     return this.eventsRef.orderByChild('start_time').limitToFirst(1);

@@ -37,30 +37,9 @@ export class EventAddDetailsPage {
 
     this.ticketFaceValue = 0.00
 
-    // // get the current users ID for use in the next bit
-    // this.currentUserID = firebase.auth().currentUser.uid;
-
-    // // get all the users 
-    // //
-    // // TODO : change this to show only those in the current users group.
-    // // TODO : add a way of knowing whether the user has already been invited
-    // this.userData.getAllUsers().on('value', (snapshot) => {
-
-    //   let rawList = [];
-    //   snapshot.forEach(snap => {
-
-    //     // if the ID is the same as the current users ID then ignore, otherwise proceed
-    //     if (this.currentUserID != snap.key) {
-    //       rawList.push({
-    //         id: snap.key,
-    //         username: snap.val().username,
-    //         avatarURL: snap.val().avatarURL
-    //       });
-    //     }
-    //   });
-    //   this.allUsers = rawList;
-    //   console.log(this.allUsers);
-    // });
+    // -------------------------------------
+    // TODO - show currently invited guests
+    // -------------------------------------
   }
 
   editTicketFaceValue() {
@@ -112,28 +91,33 @@ export class EventAddDetailsPage {
   }
 
   addEvent() {
-    console.log("addEvent");
-
-    // --------------------------------------------------------------------
-    // TODO : if could be the case there IS no ticket value i.e. a freebie
-    // --------------------------------------------------------------------
-    if (this.ticketFaceValue === 0) {
-      let alert = this.alertCtrl.create({
-        title: 'No Ticket Value',
-        subTitle: "You've forgot to enter a ticket value.",
-        buttons: ['OK']
-      });
-      alert.present();
+    
+    // check to see whether any guests have been invited.
+    if (this.chosenUsers == null || this.chosenUsers.length === 0) {
+      console.log("Billy no mates");
     } else {
-      this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, this.chosenUsers).then(() => {
-        this.navCtrl.pop();
 
-        let toast = this.toastCtrl.create({
-          message: 'Event was added successfully',
-          duration: 2000
+      // --------------------------------------------------------------------
+      // TODO : if could be the case there IS no ticket value i.e. a freebie
+      // --------------------------------------------------------------------
+      if (this.ticketFaceValue === 0) {
+        let alert = this.alertCtrl.create({
+          title: 'No Ticket Value',
+          subTitle: "You've forgot to enter a ticket value.",
+          buttons: ['OK']
         });
-        toast.present();
-      });
+        alert.present();
+      } else {
+        this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, this.chosenUsers).then(() => {
+          this.navCtrl.pop();
+
+          let toast = this.toastCtrl.create({
+            message: 'Event was added successfully',
+            duration: 2000
+          });
+          toast.present();
+        });
+      }
     }
   }
 

@@ -21,24 +21,64 @@
 
 <ion-content padding>
 
-  <ion-item class="firstItem" (click)="goToEventDetail(0)">
-    <h2>{{firstEventPerformer}}</h2>
-    <p>{{firstEventDate | date:'EEE MMM d, y  -  HH:mm'}}</p>
-    <img class="group-image" src="{{firstEventImageMed}}" />
-  </ion-item>
+  <!-- if we have some events to display -->
+  <div *ngIf="firstEventPerformer != null">
 
-  <ion-list no-lines>
-    <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
-      <!--<div *ngIf="i != 0">-->
-      <ion-thumbnail item-left>
-        <img src="{{event?.imageMed}}">
-      </ion-thumbnail>
-      <h2>{{event?.performer}}</h2>
-      <p>Ticket: {{event?.price | currency: 'GBP':true}}</p>
-      <p>Date: {{event?.date | date:'mediumDate'}}</p>
-      <!--</div>-->
-    </ion-item>
-  </ion-list>
+    <ion-card (click)="goToEventDetail(0)">
+      <img src="{{firstEventImage250}}" />
+      <ion-card-content>
+        <h2>{{firstEventPerformer}}</h2>
+        <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!--<ion-item class="firstItem" (click)="goToEventDetail(0)">
+      <h2>{{firstEventPerformer}}</h2>
+      <img class="group-image" src="{{firstEventImageMed}}" />
+      <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>-->
+      <!--<ion-note item-right>{{firstEventDate | date:'EEE MMM d, y'}}</ion-note>
+      <ion-note item-right>4:43 pm</ion-note>-->
+
+    <!--</ion-item>-->
+
+    <!--<ion-item class="firstItem" (click)="goToEventDetail(0)">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <img class="group-image" src="{{firstEventImageMed}}" />
+          </ion-col>
+          <ion-col>
+            <h2>{{firstEventPerformer}}</h2>
+            <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>-->
+
+    <ion-list no-lines>
+      <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
+        <!--<div *ngIf="i != 0">-->
+        <ion-thumbnail item-left>
+          <img src="{{event?.imageMed}}">
+        </ion-thumbnail>
+        <h2>{{event?.performer}}</h2>
+        <p>Ticket: {{event?.initialTicketPrice | currency: 'GBP':true}}</p>
+        <p>Date: {{event?.start_time | date:'mediumDate'}}</p>
+        <!--</div>-->
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- if no events to display -->
+  <div class="noEvents" *ngIf="firstEventPerformer == null && eventsCntr === 0">
+    <h2>You have no events</h2>
+    <p>Click on the button below to start adding some.</p>
+  </div>
+
+  <!-- if we're still retrieving the events -->
+  <div class="noEvents" *ngIf="firstEventPerformer == null">
+
+  </div>
 
   <ion-fab bottom right>
     <button ion-fab (click)="addEvent()"><ion-icon name="add"></ion-icon></button>
