@@ -4,14 +4,10 @@
       Home
     </ion-title>
     <ion-buttons end>
-      <!--<button ion-button (click)="goToProfile()" color="dark">
-        PROFILE
-      </button>-->
-      <button (click)="showNotiications()">
-        <ion-icon name="notifications"></ion-icon>
-        <ion-badge>{{numberOfNotifications}}</ion-badge>
+      <button *ngIf="numberOfInvitations > 0" ion-button icon-left clear item-right>
+        <ion-icon name="heart"></ion-icon>{{numberOfInvitations}}
       </button>
-      <button (click)="goToProfile()">
+      <button ion-button clear (click)="goToProfile()">
         <ion-icon name="person"></ion-icon>
       </button>
 
@@ -24,46 +20,60 @@
   <!-- if we have some events to display -->
   <div *ngIf="firstEventPerformer != null">
 
-    <ion-card (click)="goToEventDetail(0)">
-      <img src="{{firstEventImage250}}" />
+    <ion-card (click)="goToEventDetail(firstEventEventfulId)">
+      <img *ngIf="firstEventImage250 == null" src="/img/no-picture-available.jpg" />
+      <img *ngIf="firstEventImage250 != null" src="{{firstEventImage250}}" />
       <ion-card-content>
         <h2>{{firstEventPerformer}}</h2>
         <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
       </ion-card-content>
-    </ion-card>
-
-    <!--<ion-item class="firstItem" (click)="goToEventDetail(0)">
-      <h2>{{firstEventPerformer}}</h2>
-      <img class="group-image" src="{{firstEventImageMed}}" />
-      <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>-->
-      <!--<ion-note item-right>{{firstEventDate | date:'EEE MMM d, y'}}</ion-note>
-      <ion-note item-right>4:43 pm</ion-note>-->
-
-    <!--</ion-item>-->
-
-    <!--<ion-item class="firstItem" (click)="goToEventDetail(0)">
       <ion-grid>
         <ion-row>
-          <ion-col>
-            <img class="group-image" src="{{firstEventImageMed}}" />
+          <ion-col width-33>
+            <ion-item>
+              <ion-icon name="happy" item-left></ion-icon>
+              <ion-badge item-right>{{firstEventNumberOfInvites}}</ion-badge>
+            </ion-item>
           </ion-col>
-          <ion-col>
-            <h2>{{firstEventPerformer}}</h2>
-            <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
+          <ion-col width-33>
+            <ion-item>
+              <ion-icon name="thumbs-up" item-left></ion-icon>
+              <ion-badge item-right color="secondary">1</ion-badge>
+            </ion-item>
+          </ion-col>
+          <ion-col width-33>
+            <ion-item>
+              <ion-icon name="thumbs-down" item-left></ion-icon>
+              <ion-badge item-right color="danger">0</ion-badge>
+            </ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-item>-->
+    </ion-card>
 
     <ion-list no-lines>
-      <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.id)">
+      <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId)">
         <!--<div *ngIf="i != 0">-->
         <ion-thumbnail item-left>
-          <img src="{{event?.imageMed}}">
+          <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
+          <img *ngIf="event?.imageMed != null" src="{{event?.imageMed}}" />
         </ion-thumbnail>
         <h2>{{event?.performer}}</h2>
-        <p>Ticket: {{event?.initialTicketPrice | currency: 'GBP':true}}</p>
-        <p>Date: {{event?.start_time | date:'mediumDate'}}</p>
+        <ion-grid>
+          <ion-row>
+            <ion-col width-50 class="floatLeft">
+              <p>{{event?.start_time | date:'mediumDate'}}</p>
+            </ion-col>
+            <ion-col width-50 class="floatRight">
+              <p>{{event?.initialTicketPrice | currency: 'GBP':true}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              {{event?.numberOfInvites}}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
         <!--</div>-->
       </ion-item>
     </ion-list>

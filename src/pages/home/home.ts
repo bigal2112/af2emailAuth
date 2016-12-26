@@ -23,8 +23,10 @@ export class HomePage {
   public unorderedList: any = [];
   public loader: any;
   public eventsCntr: number;
-  public numberOfNotifications: number = 3;
+  public numberOfInvitations: number;
 
+  firstEventEventfulId: any;
+  firstEventType: any;
   firstEventId: any;
   firstEventPerformer: any;
   firstEventTitle: any;
@@ -32,8 +34,10 @@ export class HomePage {
   firstEventDate: any;
   firstEventImage250: any;
   firstEventImageMed: any;
+  firstEventNumberOfInvites: any;
 
   constructor(public nav: NavController, public eventData: EventData, public loadingCtrl: LoadingController) {
+    this.numberOfInvitations = 0;
 
     // show loading control
     this.loader = this.loadingCtrl.create({
@@ -47,36 +51,51 @@ export class HomePage {
     // first get the events I've created
     this.eventData.getMyEvents().on('value', data => {
       this.myEvents = data;
-
+      
       // next get the events I've been invited too
       this.eventData.getMyInvitedEvents().on('value', data => {
         this.invitedEvents = data;
-
-        // now we have all the events we need to combien them into one array
+        
+        // now we have all the events we need to combine them into one array
         this.unorderedList = [];
         this.myEvents.forEach(snap => {
           this.unorderedList.push({
+            eventfulId: snap.val().eventId,
+            type: "MYEVENTS",
             key: snap.key,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
             start_time: snap.val().start_time,
             image250: snap.val().image250,
-            imageMed: snap.val().imageMed
+            imageMed: snap.val().imageMed,
+            numberOfInvites: snap.val().numberOfInvites
           });
         })
 
+        console.log("myEvents");
+        console.log(this.unorderedList);
+
+        this.numberOfInvitations = 0;
         this.invitedEvents.forEach(snap => {
+          this.numberOfInvitations++;
+
           this.unorderedList.push({
+            eventfulId: snap.val().eventId,
+            type: "INVITES",
             key: snap.key,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
             start_time: snap.val().start_time,
             image250: snap.val().image250,
-            imageMed: snap.val().imageMed
+            imageMed: snap.val().imageMed,
+            numberOfInvites: 0
           });
         })
+
+        console.log("and invitedEvents");
+        console.log(this.unorderedList);
 
         // sort the array by start_time
         let orderedList = this.unorderedList.sort(this.compare);
@@ -92,7 +111,8 @@ export class HomePage {
         orderedList.forEach(event => {
 
           if (this.eventsCntr === 0) {
-
+            this.firstEventEventfulId = event.eventfulId,
+            this.firstEventType = event.type;
             this.firstEventId = event.key;
             this.firstEventPerformer = event.performer;
             this.firstEventTitle = event.title;
@@ -100,111 +120,57 @@ export class HomePage {
             this.firstEventDate = event.start_time;
             this.firstEventImage250 = event.image250;
             this.firstEventImageMed = event.imageMed;
-
+            this.firstEventNumberOfInvites = event.numberOfInvites;
           } else {
             this.eventList.push({
+              eventfulId: event.eventfulId,
+              type: event.type,
               id: event.key,
               performer: event.performer,
               title: event.title,
               initialTicketPrice: event.initialTicketPrice,
               start_time: event.start_time,
               image250: event.image250,
-              imageMed: event.imageMed
+              imageMed: event.imageMed,
+              numberOfInvites: event.numberOfInvites
             });
           }
 
           this.eventsCntr++;
         });
-        // console.log("Retrieving events list - complete");
+        console.log("Retrieving events list - complete");
+        console.log(this.eventList);
         this.loader.dismiss();
 
       });
     });
+  }
 
-    // // get the returned events into an array
-    // this.unorderedList = [];
-    // snapshot.forEach(snap => {
-    //   this.unorderedList.push({
-    //     key: snap.key,
-    //     performer: snap.val().performer,
-    //     title: snap.val().title,
-    //     initialTicketPrice: snap.val().initialTicketPrice,
-    //     start_time: snap.val().start_time,
-    //     image250: snap.val().image250,
-    //     imageMed: snap.val().imageMed
-    //   });
-    // })
+  goToEventDetail(eventId) {
+    this.nav.push(EventDetailPage, {
+      eventId: eventId,
+    });
+  }
 
-    // // sort the array by start_time
-    // let orderedList = this.unorderedList.sort(this.compare);
+  goToProfile() {
+    this.nav.push(ProfilePage);
+  }
 
-    // // and remove any events that are in the past
-    // orderedList = orderedList.filter((event) => {
-    //   return Date.parse(event.start_time) >= Date.now();
-    // })
+  addEvent() {
+    this.nav.push(EventAddPage);
+  }
 
-    // // now create the first itema dn eventsList from the sorted array
-    // this.eventList = [];
-    // this.eventsCntr = 0;
-    // orderedList.forEach(event => {
+  showNotiications() {
+    console.log("showNotifications");
+  }
 
-    //   if (this.eventsCntr === 0) {
-
-    //     this.firstEventId = event.key;
-    //     this.firstEventPerformer = event.performer;
-    //     this.firstEventTitle = event.title;
-    //     this.firstEventPrice = event.initialTicketPrice;
-    //     this.firstEventDate = event.start_time;
-    //     this.firstEventImage250 = event.image250;
-    //     this.firstEventImageMed = event.imageMed;
-
-    //   } else {
-    //     this.eventList.push({
-    //       id: event.key,
-    //       performer: event.performer,
-    //       title: event.title,
-    //       initialTicketPrice: event.initialTicketPrice,
-    //       start_time: event.start_time,
-    //       image250: event.image250,
-    //       imageMed: event.imageMed
-    //     });
-    //   }
-
-    //   this.eventsCntr++;
-    // });
-    // // console.log("Retrieving events list - complete");
-    // this.loader.dismiss();
-    // console.log(this.nextEvent);
-    // console.log(this.eventList);
-  // });
-
-}
-
-goToEventDetail(eventId) {
-  this.nav.push(EventDetailPage, {
-    eventId: eventId,
-  });
-}
-
-goToProfile() {
-  this.nav.push(ProfilePage);
-}
-
-addEvent() {
-  this.nav.push(EventAddPage);
-}
-
-showNotiications() {
-  console.log("showNotifications");
-}
-
-compare(a, b) {
-  if (a.start_time < b.start_time)
-    return -1;
-  if (a.start_time > b.start_time)
-    return 1;
-  return 0;
-}
+  compare(a, b) {
+    if (a.start_time < b.start_time)
+      return -1;
+    if (a.start_time > b.start_time)
+      return 1;
+    return 0;
+  }
 
 }
 

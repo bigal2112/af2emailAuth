@@ -33,7 +33,7 @@ export class EventAddPage {
       var oArgs = {
         app_key: "n7XgQ8mk3VVsc6Qn",
         keywords: this.searchString,
-        image_sizes: "block250,medium",
+        image_sizes: "block250,block188,medium",
         page_size: 100,
         location: "London, United Kingdom",
         within: "30",
@@ -48,7 +48,9 @@ export class EventAddPage {
       this.resultsCounter = 0;
 
       // show loading control
-      this.loader = this.loadingCtrl.create({});
+      this.loader = this.loadingCtrl.create({
+        content: "Searching for events...."
+      });
       this.loader.present();
 
       // grab the current scope to use withing the EVDB callback

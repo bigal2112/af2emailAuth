@@ -21,6 +21,7 @@ export class EventAddDetailsPage {
     public modalCtrl: ModalController, public eventData: EventData, public toastCtrl: ToastController) {
     this.eventInfo = this.navParams.get('eventInfo')
     console.log(this.eventInfo);
+    
     // get the performs image
     let imageObj = this.eventInfo.image;
 

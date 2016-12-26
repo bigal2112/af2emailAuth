@@ -1,12 +1,29 @@
-.event-detail {
-  ion-card-header {
-    text-align: center;
+page-event-detail {
+
+  ion-slides {
+    height: auto;
   }
 
-  .add-guest-form {
-    button {
-      margin-top: 16px;
-    }
+  .swiper-container {
+    padding-bottom: 20px;
+  }
+
+  .swiper-container-horizontal > .swiper-pagination {
+    bottom: 0;
+  }
+
+  h2 {
+      color: #808080;
+      margin: 5px;
+      font-size: 1.9rem;
+      text-align: center;
+  }
+
+  h6 {
+      color: #808080;
+      margin: 1px 5px;
+      font-size: 1.2rem;
+      text-align: center;
   }
 
   .profitable {

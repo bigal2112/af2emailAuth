@@ -1,63 +1,108 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { EventData } from '../../providers/event-data';
-import { Camera } from 'ionic-native';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
+
+// declare this variable so the typescript doesn't balk at EVDB
+declare var EVDB: any;
 
 @Component({
   selector: 'page-event-detail',
   templateUrl: 'event-detail.html',
 })
 export class EventDetailPage {
-  currentEvent: any;
-  guestName: string;
-  guestPicture: any;
-  guestList: any;
+  eventId: any;
+  loader: any;
+  groupImages: any;
+  performer: any;
+  sliderOptions: any;
+  imgCounter: number;
 
-  constructor(public nav: NavController, public navParams: NavParams, public eventData: EventData) {
+  eventVenueName: any;
+  eventStartTime: any;
+  eventVenueAddress: any;
+  eventCity: any;
+  eventTitle: any;
 
-    this.eventData.getEventDetail(this.navParams.get('eventId'))
-      .on('value', (snapshot) => {
-        this.currentEvent = snapshot.val();
-      });
+  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
 
-    // this.eventData.getGuestList(this.navParams.get('eventId'))
-    // .on('value', snapshot => {
-    //   let rawList = [];
-    //   snapshot.forEach(snap => {
-    //     rawList.push({
-    //       id: snap.key,
-    //       guestName: snap.val().guestName
-    //     });
-    //   });
-    //   this.guestList = rawList;
-    // });
-  }
+    this.sliderOptions = {
+      pager: true
+    };
 
-  addGuest(guestName) {
-    // console.log(guestName);
-    // console.log(this.currentEvent.id);
-    // console.log(this.currentEvent.price);
+    this.eventId = this.navParams.get('eventId');
+    console.log("eventId:" + this.eventId);
 
-    this.eventData.addGuest(guestName, this.currentEvent.id, this.currentEvent.price, this.guestPicture).then(() => {
-      this.guestName = '';
-      this.guestPicture = null;
+    // console.log("Search for:" + this.searchString);
+    // they've entered a search criteria, let's see what it brings back.....
+
+    var oArgs = {
+      app_key: "n7XgQ8mk3VVsc6Qn",
+      id: this.eventId,
+      image_sizes: "block250,block188,medium",
+    };
+
+    // show loading control
+    this.loader = this.loadingCtrl.create({
+      content: "Retrieving event details...."
     });
-  }
+    this.loader.present();
 
-  takePicture() {
-    Camera.getPicture({
-      quality: 95,
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: Camera.PictureSourceType.CAMERA,
-      allowEdit: true,
-      encodingType: Camera.EncodingType.PNG,
-      targetWidth: 500,
-      targetHeight: 500,
-      saveToPhotoAlbum: true
-    }).then(imageData => {
-      this.guestPicture = imageData;
-    }, error => {
-      console.log("ERROR -> " + JSON.stringify(error));
+    // grab the current scope to use withing the EVDB callback
+    let that = this;
+
+    // ---------------------------------------------------------
+    // TODO: put the call to EVDB into the event-data provider.
+    // ---------------------------------------------------------
+
+    // go get the results from Eventful
+    EVDB.API.call("json/events/get", oArgs, function (eventData) {
+      console.log(eventData);
+      that.loader.dismiss();
+
+      // if no results returned then inform user
+      if (typeof (eventData) == 'undefined' || eventData == null) {
+        console.log("SOME FUCKING WEIRD SHIT ERROR");
+      } else {
+
+        console.log("Event details retrieved");
+        // so we've got the event details back
+        // load them into the member variable to display on the html.
+
+        // get the performs image
+        let imagesObj = eventData.images;
+        // that.groupImage250 = "img/no-picture-available.jpg";
+        if (imagesObj != null) {
+          let imageObj = imagesObj.image
+
+          that.imgCounter = 0;
+          that.groupImages = [];
+          imageObj.forEach(element => {
+            that.groupImages.push({
+              // image: imageObj[that.imgCounter].medium.url
+              image: imageObj[that.imgCounter].block188.url
+            });
+
+            that.imgCounter++;
+          });
+
+          console.log(that.groupImages);
+        }
+
+        let performerObj = eventData.performers
+        if (performerObj != null) {
+          that.performer = performerObj.performer.name;
+        }
+        console.log("Performer:" + that.performer);
+
+        that.eventVenueName = eventData.venue_name;
+        that.eventStartTime = eventData.start_time;
+        that.eventVenueAddress = eventData.address;
+        that.eventCity = eventData.city;
+        that.eventTitle = eventData.title;
+
+        // ------------------------------------------------
+        // TODO : retrieve the event message board records
+        // ------------------------------------------------
+      }
     });
   }
 }

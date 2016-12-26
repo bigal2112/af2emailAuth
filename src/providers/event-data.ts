@@ -18,6 +18,8 @@ export class EventData {
   createEvent(eventInfo: any, ticketValue: any, guestList: any): any {
 
     console.log("createEvent");
+    console.log(eventInfo);
+    
     let performerObj = eventInfo.performers
     let imageObj = eventInfo.image;
 
@@ -31,10 +33,12 @@ export class EventData {
       start_time: eventInfo.start_time,
       initialTicketPrice: ticketValue * 1.00,
       performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
-      image250: imageObj.block250.url,
-      imageMed: imageObj.medium.url
+      image250: imageObj != null ? imageObj.block250.url : null,
+      image188: imageObj != null ? imageObj.block188.url : null,
+      imageMed: imageObj != null ? imageObj.medium.url : null,
+      numberOfInvites: guestList != null ? guestList.length : 0
     }).then(newEvent => {
-      // now create the invites if there are any
+      // now create the invites, if there are any
       if (guestList != null) {
 
         guestList.forEach(guest => {
@@ -48,13 +52,16 @@ export class EventData {
             start_time: eventInfo.start_time,
             initialTicketPrice: ticketValue * 1.00,
             performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
-            image250: imageObj.block250.url,
-            imageMed: imageObj.medium.url
+            image250: imageObj != null ? imageObj.block250.url : null,
+            image188: imageObj != null ? imageObj.block188.url : null,
+            imageMed: imageObj != null ? imageObj.medium.url : null,
+            inviteAccepted: "NOT YET"
           })
         });
       }
     });
   }
+
 
   getEventsList() {
     return this.eventsRef.orderByChild('start_time');
