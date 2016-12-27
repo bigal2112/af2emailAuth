@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { EventData } from '../../providers/event-data';
 
 // declare this variable so the typescript doesn't balk at EVDB
 declare var EVDB: any;
@@ -10,6 +11,7 @@ declare var EVDB: any;
 })
 export class EventDetailPage {
   eventId: any;
+  firebaseEventId: any;
   loader: any;
   groupImages: any;
   performer: any;
@@ -20,16 +22,22 @@ export class EventDetailPage {
   eventStartTime: any;
   eventVenueAddress: any;
   eventCity: any;
+  eventCountry: any;
   eventTitle: any;
 
-  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
+  eventMessages: any;
+
+  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public eventData: EventData) {
+    this.eventMessages = [];
 
     this.sliderOptions = {
       pager: true
     };
 
     this.eventId = this.navParams.get('eventId');
+    this.firebaseEventId = this.navParams.get('firebaseEventId');
     console.log("eventId:" + this.eventId);
+    console.log("firebaseEventId:" + this.firebaseEventId);
 
     // console.log("Search for:" + this.searchString);
     // they've entered a search criteria, let's see what it brings back.....
@@ -55,7 +63,7 @@ export class EventDetailPage {
 
     // go get the results from Eventful
     EVDB.API.call("json/events/get", oArgs, function (eventData) {
-      console.log(eventData);
+      // console.log(eventData);
       that.loader.dismiss();
 
       // if no results returned then inform user
@@ -63,45 +71,71 @@ export class EventDetailPage {
         console.log("SOME FUCKING WEIRD SHIT ERROR");
       } else {
 
-        console.log("Event details retrieved");
         // so we've got the event details back
         // load them into the member variable to display on the html.
 
         // get the performs image
         let imagesObj = eventData.images;
         // that.groupImage250 = "img/no-picture-available.jpg";
+        that.groupImages = [];
+
         if (imagesObj != null) {
           let imageObj = imagesObj.image
-
+          // console.log(imageObj);
+          // console.log("Length:" + imageObj.length);
           that.imgCounter = 0;
-          that.groupImages = [];
-          imageObj.forEach(element => {
+
+          // 1 image         : push the 1 image to the array
+          // loads of images : push all if them to the array
+          if (typeof(imageObj.length) === 'undefined') {
             that.groupImages.push({
-              // image: imageObj[that.imgCounter].medium.url
-              image: imageObj[that.imgCounter].block188.url
+              image: imageObj.block188.url
+            });
+          } else {
+            imageObj.forEach(element => {
+              that.groupImages.push({
+                image: imageObj[that.imgCounter].block188.url
+              });
+
+              that.imgCounter++;
             });
 
-            that.imgCounter++;
+            // console.log(that.groupImages);
+          }
+        } else {
+          // there are no images so push the default to the array
+          that.groupImages.push({
+            image: "img/no-picture-available.jpg"
           });
-
-          console.log(that.groupImages);
         }
 
         let performerObj = eventData.performers
         if (performerObj != null) {
           that.performer = performerObj.performer.name;
         }
-        console.log("Performer:" + that.performer);
 
         that.eventVenueName = eventData.venue_name;
         that.eventStartTime = eventData.start_time;
         that.eventVenueAddress = eventData.address;
         that.eventCity = eventData.city;
         that.eventTitle = eventData.title;
+        that.eventCountry = eventData.country
 
         // ------------------------------------------------
         // TODO : retrieve the event message board records
         // ------------------------------------------------
+        that.eventData.getEventMessages(that.firebaseEventId).on('value', data => {
+          console.log(data);
+          
+          data.forEach(snap => {
+          that.eventMessages.push({
+            ownerId: snap.val().ownerId,
+            ownerUsername: snap.val().ownerUsername,
+            createdOn: snap.val().messageCreatedOn,
+            body: snap.val().messageBody
+          });
+        })
+        });
       }
     });
   }

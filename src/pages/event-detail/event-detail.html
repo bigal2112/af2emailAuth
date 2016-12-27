@@ -14,10 +14,17 @@
 
   <h2>{{eventTitle}}</h2>
   <h6>{{eventStartTime | date: 'fullDate'}}</h6>
-  <h6>{{eventVenueName}}, {{eventCity}}</h6>
+  <h6>{{eventVenueName}}, {{eventCity}} {{eventCountry}}</h6>
   <hr>
 
-<!--<ion-row padding>
+  <ion-list>
+    <ion-item class="messages" *ngFor="let message of eventMessages" style="background-color: aliceblue; padding-left: 5px;">
+      <p>{{message.createdOn | date: 'fullDate'}}{{message.ownerUsername}}</p>
+      <h2>{{message.body}}</h2>
+    </ion-item>
+  </ion-list>
+
+  <!--<ion-row padding>
     <ion-col width-70>
       Current Revenue
     </ion-col>

@@ -14,4 +14,8 @@ export class UserData {
     return this.users;
   }
 
+  getUserDetails(userId): any {
+    return this.users.child(userId);
+  }
+
 }

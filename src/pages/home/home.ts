@@ -28,6 +28,7 @@ export class HomePage {
   firstEventEventfulId: any;
   firstEventType: any;
   firstEventId: any;
+  firstEventFirebaseEventId: any;
   firstEventPerformer: any;
   firstEventTitle: any;
   firstEventPrice: any;
@@ -62,7 +63,7 @@ export class HomePage {
           this.unorderedList.push({
             eventfulId: snap.val().eventId,
             type: "MYEVENTS",
-            key: snap.key,
+            firebaseEventId: snap.key,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
@@ -83,7 +84,7 @@ export class HomePage {
           this.unorderedList.push({
             eventfulId: snap.val().eventId,
             type: "INVITES",
-            key: snap.key,
+            firebaseEventId: snap.key,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
@@ -113,7 +114,7 @@ export class HomePage {
           if (this.eventsCntr === 0) {
             this.firstEventEventfulId = event.eventfulId,
             this.firstEventType = event.type;
-            this.firstEventId = event.key;
+            this.firstEventFirebaseEventId = event.firebaseEventId;
             this.firstEventPerformer = event.performer;
             this.firstEventTitle = event.title;
             this.firstEventPrice = event.initialTicketPrice;
@@ -125,7 +126,7 @@ export class HomePage {
             this.eventList.push({
               eventfulId: event.eventfulId,
               type: event.type,
-              id: event.key,
+              firebaseEventId: event.firebaseEventId,
               performer: event.performer,
               title: event.title,
               initialTicketPrice: event.initialTicketPrice,
@@ -146,9 +147,10 @@ export class HomePage {
     });
   }
 
-  goToEventDetail(eventId) {
+  goToEventDetail(eventId, firebaseEventId) {
     this.nav.push(EventDetailPage, {
       eventId: eventId,
+      firebaseEventId: firebaseEventId
     });
   }
 

@@ -26,6 +26,27 @@ page-event-detail {
       text-align: center;
   }
 
+  .messages {
+    .item-md {
+      background-color: #ffff80;
+    }
+
+    .label-md {
+      margin:0;
+    }
+
+    h2 {
+      color: #004080;
+      font-size: 1.7rem;
+      text-align: left;
+    }
+
+    p {
+        color: #004080;
+        font-size: 1.1rem;
+    }
+  }
+
   .profitable {
     color: #22BB22;
     text-align: right;
