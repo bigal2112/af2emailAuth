@@ -27,25 +27,38 @@ page-event-detail {
   }
 
   .messages {
-    .item-md {
-      background-color: #ffff80;
-    }
 
     .label-md {
       margin:0;
     }
 
+    .messageHeader {
+      border-bottom: 1px solid #808080;
+      margin-top: 5px;
+    }
+
     h2 {
-      color: #004080;
-      font-size: 1.7rem;
+      color: #e9e9e9;
+      font-size: 1.5rem;
       text-align: left;
     }
 
     p {
-        color: #004080;
+        color: #e9e9e9;
         font-size: 1.1rem;
     }
   }
+
+  ion-col {
+    padding: 1px;
+  }
+
+  .floatLeft {
+        text-align: left;
+    }
+    .floatRight {
+        text-align: right;
+    }
 
   .profitable {
     color: #22BB22;

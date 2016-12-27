@@ -18,13 +18,21 @@
   <hr>
 
   <ion-list>
-    <ion-item class="messages" *ngFor="let message of eventMessages" style="background-color: aliceblue; padding-left: 5px;">
-      <p>{{message.createdOn | date: 'fullDate'}}{{message.ownerUsername}}</p>
-      <h2>{{message.body}}</h2>
+    <ion-item class="messages" *ngFor="let message of eventMessages" style="background-color: lightslategrey; padding-left: 5px;border-top-right-radius: 8px;">
+
+    <ion-row class="messageHeader">
+      <ion-col width-50 class="floatLeft">
+        <p>{{message.ownerUsername}}</p>
+      </ion-col>
+      <ion-col width-50 class="floatRight">
+        <p>{{message.createdOn | date: 'd MMM'}}</p>
+      </ion-col>
+    </ion-row>
+    <h2>{{message.body}}</h2>
     </ion-item>
   </ion-list>
 
-  <!--<ion-row padding>
+<!--<ion-row padding>
     <ion-col width-70>
       Current Revenue
     </ion-col>
