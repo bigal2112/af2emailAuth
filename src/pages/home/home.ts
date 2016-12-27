@@ -3,8 +3,9 @@ import { NavController, LoadingController } from 'ionic-angular';
 
 import { ProfilePage } from '../profile/profile';
 import { EventAddPage } from '../event-add/event-add';
-import { EventDetailPage } from '../event-detail/event-detail';
+import { EventDetailTabsPage } from '../event-detail-tabs/event-detail-tabs';
 import { EventData } from '../../providers/event-data';
+import { GlobalVariables } from '../../providers/global-variables';
 
 // declare this variable so the typescript doesn't balk at google
 declare var EVDB: any;
@@ -37,7 +38,11 @@ export class HomePage {
   firstEventImageMed: any;
   firstEventNumberOfInvites: any;
 
-  constructor(public nav: NavController, public eventData: EventData, public loadingCtrl: LoadingController) {
+  constructor(public nav: NavController, public eventData: EventData, public globalVars: GlobalVariables, public loadingCtrl: LoadingController) {
+
+    // initialise the current users global details
+    this.globalVars.setCurrentUserDetals();
+
     this.numberOfInvitations = 0;
 
     // show loading control
@@ -74,8 +79,8 @@ export class HomePage {
           });
         })
 
-        console.log("myEvents");
-        console.log(this.unorderedList);
+        // console.log("myEvents");
+        // console.log(this.unorderedList);
 
         this.numberOfInvitations = 0;
         this.invitedEvents.forEach(snap => {
@@ -84,7 +89,7 @@ export class HomePage {
           this.unorderedList.push({
             eventfulId: snap.val().eventId,
             type: "INVITES",
-            firebaseEventId: snap.key,
+            firebaseEventId: snap.val().firebaseEventId,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
@@ -95,8 +100,8 @@ export class HomePage {
           });
         })
 
-        console.log("and invitedEvents");
-        console.log(this.unorderedList);
+        // console.log("and invitedEvents");
+        // console.log(this.unorderedList);
 
         // sort the array by start_time
         let orderedList = this.unorderedList.sort(this.compare);
@@ -139,8 +144,8 @@ export class HomePage {
 
           this.eventsCntr++;
         });
-        console.log("Retrieving events list - complete");
-        console.log(this.eventList);
+        // console.log("Retrieving events list - complete");
+        // console.log(this.eventList);
         this.loader.dismiss();
 
       });
@@ -148,10 +153,10 @@ export class HomePage {
   }
 
   goToEventDetail(eventId, firebaseEventId) {
-    this.nav.push(EventDetailPage, {
-      eventId: eventId,
-      firebaseEventId: firebaseEventId
-    });
+    // use the Global variables to store the Evenful and the Firebase event ID's 
+    // so they are accessible to the TAB pages.
+    this.globalVars.setEventIds(eventId, firebaseEventId);
+    this.nav.push(EventDetailTabsPage);
   }
 
   goToProfile() {

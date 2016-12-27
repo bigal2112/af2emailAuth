@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
+import { GlobalVariables } from '../../providers/global-variables';
+import { EventDetailMessagesPage } from '../event-detail-messages/event-detail-messages'
 
 // declare this variable so the typescript doesn't balk at EVDB
 declare var EVDB: any;
 
 @Component({
-  selector: 'page-event-detail',
-  templateUrl: 'event-detail.html',
+  selector: 'page-event-detail-information',
+  templateUrl: 'event-detail-information.html'
 })
-export class EventDetailPage {
-  eventId: any;
+export class EventDetailInformationPage {
+
+ eventId: any;
   firebaseEventId: any;
   loader: any;
   groupImages: any;
@@ -25,17 +28,15 @@ export class EventDetailPage {
   eventCountry: any;
   eventTitle: any;
 
-  eventMessages: any;
-
-  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, public eventData: EventData) {
-    this.eventMessages = [];
-
+  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
+              public eventData: EventData, public globalVars: GlobalVariables) {
+    
     this.sliderOptions = {
       pager: true
     };
 
-    this.eventId = this.navParams.get('eventId');
-    this.firebaseEventId = this.navParams.get('firebaseEventId');
+    this.eventId = this.globalVars.getEventfulEventId();
+    this.firebaseEventId = this.globalVars.getFirebaseEventId();
     console.log("eventId:" + this.eventId);
     console.log("firebaseEventId:" + this.firebaseEventId);
 
@@ -120,23 +121,8 @@ export class EventDetailPage {
         that.eventCity = eventData.city;
         that.eventTitle = eventData.title;
         that.eventCountry = eventData.country
-
-        // ------------------------------------------------
-        // TODO : retrieve the event message board records
-        // ------------------------------------------------
-        that.eventData.getEventMessages(that.firebaseEventId).on('value', data => {
-          console.log(data);
-          
-          data.forEach(snap => {
-          that.eventMessages.push({
-            ownerId: snap.val().ownerId,
-            ownerUsername: snap.val().ownerUsername,
-            createdOn: snap.val().messageCreatedOn,
-            body: snap.val().messageBody
-          });
-        })
-        });
       }
     });
   }
+
 }

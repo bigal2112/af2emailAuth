@@ -1,0 +1,20 @@
+<!--<ion-header>
+
+  <ion-navbar>
+    <ion-title>Information</ion-title>
+  </ion-navbar>
+
+</ion-header>-->
+
+<ion-content padding>
+  <ion-slides [options]="sliderOptions">
+    <ion-slide *ngFor="let groupImage of groupImages">
+      <img src="{{groupImage.image}}">
+    </ion-slide>
+  </ion-slides>
+
+  <h2>{{eventTitle}}</h2>
+  <h6>{{eventStartTime | date: 'fullDate'}}</h6>
+  <h6>{{eventVenueName}}, {{eventCity}} {{eventCountry}}</h6>
+  <hr>
+</ion-content>

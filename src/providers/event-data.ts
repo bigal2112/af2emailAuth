@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { UserData } from '../providers/user-data';
+import { GlobalVariables } from '../providers/global-variables';
 
 @Injectable()
 export class EventData {
@@ -13,7 +14,7 @@ export class EventData {
   public usersRef: any;
   public userDetails: any;
 
-  constructor(public userData: UserData) {
+  constructor(public userData: UserData, public globalVars: GlobalVariables) {
     this.currentUser = firebase.auth().currentUser.uid;
     this.usersRef = firebase.database().ref('users');
     this.eventsRef = firebase.database().ref('events');
@@ -23,19 +24,15 @@ export class EventData {
 
   createEvent(eventInfo: any, ticketValue: any, guestList: any): any {
 
-    console.log("createEvent");
-    console.log(eventInfo);
+    // console.log("createEvent");
+    // console.log(eventInfo);
+
+    this.userDetails = this.globalVars.getCurrentUserDetals();
+    // console.log("User details retrieved");
+    // console.log(this.userDetails);
 
     let performerObj = eventInfo.performers
     let imageObj = eventInfo.image;
-
-    // grab the current users details
-    this.userData.getUserDetails(this.currentUser).on('value', data => {
-      this.userDetails = data.val();
-
-      console.log("User details retrieved");
-      console.log(this.userDetails);
-    });
 
     // create the event
     return this.eventsRef.push({
@@ -60,7 +57,7 @@ export class EventData {
         messageBody: "Event created."
       }).then(data => {
 
-        console.log("Message created");
+        // console.log("Message created");
 
         // now create the invites, if there are any
         if (guestList != null) {
@@ -84,7 +81,7 @@ export class EventData {
             });
           });
 
-          console.log("Guest created");
+          // console.log("Guest created");
         }
       });
 
@@ -98,11 +95,13 @@ export class EventData {
 
   getMyEvents() {
     this.currentUser = firebase.auth().currentUser.uid;
+    // console.log("Getting my event with ID: " + this.currentUser);
     return this.eventsRef.orderByChild('ownerId').equalTo(this.currentUser);
   }
 
   getMyInvitedEvents() {
     this.currentUser = firebase.auth().currentUser.uid;
+    // console.log("Getting invited with ID: " + this.currentUser);
     return this.invitesRef.orderByChild('inviteeId').equalTo(this.currentUser);
   }
 

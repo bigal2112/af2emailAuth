@@ -5,9 +5,10 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { EventAddPage } from '../pages/event-add/event-add';
 import { EventCreatePage } from '../pages/event-create/event-create';
-import { EventDetailPage } from '../pages/event-detail/event-detail';
+import { EventDetailInformationPage } from '../pages/event-detail-information/event-detail-information';
+import { EventDetailMessagesPage } from '../pages/event-detail-messages/event-detail-messages';
+import { EventDetailTabsPage } from '../pages/event-detail-tabs/event-detail-tabs';
 import { EventAddDetailsPage } from '../pages/event-add-details/event-add-details';
-import { EventListPage } from '../pages/event-list/event-list';
 import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
@@ -20,6 +21,7 @@ import { AuthData } from '../providers/auth-data';
 import { EventData } from '../providers/event-data';
 import { ProfileData } from '../providers/profile-data';
 import { UserData } from '../providers/user-data';
+import { GlobalVariables } from '../providers/global-variables';
 
 // Import the AF2 Module
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
@@ -44,9 +46,10 @@ const myFirebaseAuthConfig = {
     HomePage,
     EventAddPage,
     EventCreatePage,
-    EventDetailPage,
+    EventDetailInformationPage,
+    EventDetailMessagesPage,
+    EventDetailTabsPage,
     EventAddDetailsPage,
-    EventListPage,
     LoginPage,
     ProfilePage,
     ResetPasswordPage,
@@ -63,9 +66,10 @@ const myFirebaseAuthConfig = {
     HomePage,
     EventAddPage,
     EventCreatePage,
-    EventDetailPage,
+    EventDetailInformationPage,
+    EventDetailMessagesPage,
+    EventDetailTabsPage,
     EventAddDetailsPage,
-    EventListPage,
     LoginPage,
     ProfilePage,
     ResetPasswordPage,
@@ -76,6 +80,7 @@ const myFirebaseAuthConfig = {
     AuthData,
     EventData,
     ProfileData,
-    UserData]
+    UserData,
+    GlobalVariables]
 })
 export class AppModule { }

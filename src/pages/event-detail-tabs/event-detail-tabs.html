@@ -1,12 +1,16 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{performer}}</ion-title>
+    <ion-title>Event Details</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content scroll="false">
+  <ion-tabs>
+  <ion-tab tabIcon="information-circle" [root]="tab1Root" [rootParams]="eventId"></ion-tab>
+  <ion-tab tabIcon="chatboxes" [root]="tab2Root"></ion-tab>
+</ion-tabs>
 
-  <ion-slides [options]="sliderOptions">
+  <!--<ion-slides [options]="sliderOptions">
     <ion-slide *ngFor="let groupImage of groupImages">
       <img src="{{groupImage.image}}">
     </ion-slide>
@@ -30,15 +34,6 @@
     </ion-row>
     <h2>{{message.body}}</h2>
     </ion-item>
-  </ion-list>
-
-<!--<ion-row padding>
-    <ion-col width-70>
-      Current Revenue
-    </ion-col>
-    <ion-col width-30 [class.profitable]="currentEvent?.revenue >= 0" [class.no-profit]="currentEvent?.revenue < 0">
-      {{currentEvent?.revenue | currency}}
-    </ion-col>
-  </ion-row>-->
+  </ion-list>-->
 
 </ion-content>

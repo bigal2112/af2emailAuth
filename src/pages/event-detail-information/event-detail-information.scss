@@ -1,0 +1,42 @@
+page-event-detail-information {
+
+    ion-slides {
+        height: auto;
+    }
+
+    .swiper-container {
+        padding-bottom: 20px;
+    }
+
+    .swiper-container-horizontal > .swiper-pagination {
+        bottom: 0;
+    }
+
+    h2 {
+        color: #808080;
+        margin: 5px;
+        font-size: 1.9rem;
+        text-align: center;
+    }
+
+    h6 {
+        color: #808080;
+        margin: 1px 5px;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    ion-col {
+        padding: 1px;
+    }
+
+    .floatLeft {
+        text-align: left;
+    }
+
+    .floatRight {
+        text-align: right;
+    }
+
+}
+
