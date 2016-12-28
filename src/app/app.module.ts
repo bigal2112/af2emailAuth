@@ -22,6 +22,7 @@ import { EventData } from '../providers/event-data';
 import { ProfileData } from '../providers/profile-data';
 import { UserData } from '../providers/user-data';
 import { GlobalVariables } from '../providers/global-variables';
+import { TimeSince } from '../pipes/time-since';
 
 // Import the AF2 Module
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
@@ -54,7 +55,8 @@ const myFirebaseAuthConfig = {
     ProfilePage,
     ResetPasswordPage,
     SignupPage,
-    ModalUserListPage
+    ModalUserListPage,
+    TimeSince
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -81,6 +83,6 @@ const myFirebaseAuthConfig = {
     EventData,
     ProfileData,
     UserData,
-    GlobalVariables]
+    GlobalVariables],
 })
 export class AppModule { }

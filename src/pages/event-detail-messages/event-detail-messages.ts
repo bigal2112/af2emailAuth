@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
+// import { TimeSince } from '../../pipes/time-since';
 
 @Component({
   selector: 'page-event-detail-messages',
