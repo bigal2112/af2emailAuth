@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 import { EventDetailInformationPage } from '../event-detail-information/event-detail-information'
 import { EventDetailMessagesPage } from '../event-detail-messages/event-detail-messages'
@@ -14,7 +14,10 @@ export class EventDetailTabsPage {
   // should be each tab's root Page
   tab1Root = EventDetailInformationPage;
   tab2Root = EventDetailMessagesPage;
+  performer: any;
 
-  constructor(public nav: NavController) {
+  constructor(public nav: NavController, public navParams: NavParams) {
+    this.performer = this.navParams.get("performer");
+    // console.log("Title:" + this.eventTitle);
   }
 }

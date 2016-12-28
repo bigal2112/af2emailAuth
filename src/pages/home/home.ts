@@ -57,11 +57,11 @@ export class HomePage {
     // first get the events I've created
     this.eventData.getMyEvents().on('value', data => {
       this.myEvents = data;
-      
+
       // next get the events I've been invited too
       this.eventData.getMyInvitedEvents().on('value', data => {
         this.invitedEvents = data;
-        
+
         // now we have all the events we need to combine them into one array
         this.unorderedList = [];
         this.myEvents.forEach(snap => {
@@ -118,7 +118,7 @@ export class HomePage {
 
           if (this.eventsCntr === 0) {
             this.firstEventEventfulId = event.eventfulId,
-            this.firstEventType = event.type;
+              this.firstEventType = event.type;
             this.firstEventFirebaseEventId = event.firebaseEventId;
             this.firstEventPerformer = event.performer;
             this.firstEventTitle = event.title;
@@ -152,11 +152,13 @@ export class HomePage {
     });
   }
 
-  goToEventDetail(eventId, firebaseEventId) {
+  goToEventDetail(eventId, firebaseEventId, performer) {
     // use the Global variables to store the Evenful and the Firebase event ID's 
     // so they are accessible to the TAB pages.
     this.globalVars.setEventIds(eventId, firebaseEventId);
-    this.nav.push(EventDetailTabsPage);
+    this.nav.push(EventDetailTabsPage, {
+      performer: performer
+    });
   }
 
   goToProfile() {
