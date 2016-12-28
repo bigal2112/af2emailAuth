@@ -8,35 +8,50 @@
 
 <ion-content padding>
   <ion-list no-lines>
-    
+
     <div *ngFor="let message of eventMessages">
 
-      <ion-item *ngIf="currentUserDetails.username === message.ownerUsername" class="ownerMessages">
-        <ion-row>
-          <ion-col width-50 class="floatLeft">
-            <p>{{message.ownerUsername}}</p>
-          </ion-col>
-          <ion-col width-50 class="floatRight">
-            <p>{{message.createdOn | date: 'd MMM'}}</p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <h2>{{message.body}}</h2>
-        </ion-row>
+
+      <ion-item *ngIf="currentUserDetails.username === message.ownerUsername">
+        <div class="talk-bubble-right tri-right right-top">
+          <div class="talktext">
+
+            <ion-row>
+              <h2>{{message.body}}</h2>
+            </ion-row>
+
+            <ion-row>
+              <ion-col class="floatRight">
+                <p>{{message.createdOn | date: 'd MMM'}}</p>
+              </ion-col>
+            </ion-row>
+
+          </div>
+        </div>
       </ion-item>
-        
-      <ion-item *ngIf="currentUserDetails.username != message.ownerUsername" class="othersMessages">
-        <ion-row>
-          <ion-col width-50 class="floatLeft">
-            <p>{{message.ownerUsername}}</p>
-          </ion-col>
-          <ion-col width-50 class="floatRight">
-            <p>{{message.createdOn | date: 'd MMM'}}</p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <h2>{{message.body}}</h2>
-        </ion-row>
+
+
+      <ion-item *ngIf="currentUserDetails.username != message.ownerUsername">
+        <div class="talk-bubble-left tri-right left-top">
+          <div class="talktext">
+            <ion-row>
+              <ion-col class="floatRight">
+                <p>{{message.ownerUsername}}
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <h2>{{message.body}}</h2>
+            </ion-row>
+
+            <ion-row>
+              <ion-col class="floatRight">
+                <p>{{message.createdOn | date: 'd MMM'}}</p>
+              </ion-col>
+            </ion-row>
+
+          </div>
+        </div>
       </ion-item>
 
     </div>
@@ -45,6 +60,7 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-textarea [(ngModel)]="newMessage" placeholder="Type a message"></ion-textarea><ion-icon name="heart" (click)="addMessage()"></ion-icon>
+    <ion-textarea [(ngModel)]="newMessage" placeholder="Type a message"></ion-textarea>
+    <ion-icon name="heart" (click)="addMessage()"></ion-icon>
   </ion-toolbar>
 </ion-footer>
