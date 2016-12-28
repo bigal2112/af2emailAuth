@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
-import { EventDetailMessagesPage } from '../event-detail-messages/event-detail-messages'
 
 // declare this variable so the typescript doesn't balk at EVDB
 declare var EVDB: any;

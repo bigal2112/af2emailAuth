@@ -3,7 +3,7 @@ import firebase from 'firebase';
 
 @Injectable()
 export class GlobalVariables {
-  public currentUser: any;
+  public currentUserId: any;
   public currentUserDetails: any;
   public usersRef: any;
   public userDetails: any;
@@ -20,9 +20,13 @@ export class GlobalVariables {
     return this.userDetails;
   }
 
+  getCurrentUserId(): any {
+    return this.currentUserId;
+  }
+
   setCurrentUserDetals(): any {
-    this.currentUser = firebase.auth().currentUser.uid;
-    this.usersRef.child(this.currentUser).on('value', data => {
+    this.currentUserId = firebase.auth().currentUser.uid;
+    this.usersRef.child(this.currentUserId).on('value', data => {
       this.userDetails = data.val();
     });
   }

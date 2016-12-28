@@ -138,4 +138,18 @@ export class EventData {
     return this.messagesRef.orderByChild('firebaseEventId').equalTo(firebaseEventId);
   }
 
+  addMessage(firebaseEventId: any, messageBody: any, userDetails: any): any {
+    console.log("firebaseEventId:" + firebaseEventId);
+    console.log("messageBody:" + messageBody);
+    console.log(userDetails);
+    
+    return this.messagesRef.push({
+      firebaseEventId: firebaseEventId,
+      messageBody: messageBody,
+      messageCreatedOn: Date.now(),
+      ownerId: this.globalVars.getCurrentUserId(),
+      ownerUsername: userDetails.username
+    })
+  }
+
 }

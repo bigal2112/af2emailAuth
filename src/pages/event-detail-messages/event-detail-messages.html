@@ -7,18 +7,44 @@
 </ion-header>-->
 
 <ion-content padding>
-  <ion-list>
-    <ion-item class="messages" *ngFor="let message of eventMessages" style="background-color: lightslategrey; padding-left: 5px;border-top-right-radius: 8px;">
+  <ion-list no-lines>
+    
+    <div *ngFor="let message of eventMessages">
 
-      <ion-row class="messageHeader">
-        <ion-col width-50 class="floatLeft">
-          <p>{{message.ownerUsername}}</p>
-        </ion-col>
-        <ion-col width-50 class="floatRight">
-          <p>{{message.createdOn | date: 'd MMM'}}</p>
-        </ion-col>
-      </ion-row>
-      <h2>{{message.body}}</h2>
-    </ion-item>
+      <ion-item *ngIf="currentUserDetails.username === message.ownerUsername" class="ownerMessages">
+        <ion-row>
+          <ion-col width-50 class="floatLeft">
+            <p>{{message.ownerUsername}}</p>
+          </ion-col>
+          <ion-col width-50 class="floatRight">
+            <p>{{message.createdOn | date: 'd MMM'}}</p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <h2>{{message.body}}</h2>
+        </ion-row>
+      </ion-item>
+        
+      <ion-item *ngIf="currentUserDetails.username != message.ownerUsername" class="othersMessages">
+        <ion-row>
+          <ion-col width-50 class="floatLeft">
+            <p>{{message.ownerUsername}}</p>
+          </ion-col>
+          <ion-col width-50 class="floatRight">
+            <p>{{message.createdOn | date: 'd MMM'}}</p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <h2>{{message.body}}</h2>
+        </ion-row>
+      </ion-item>
+
+    </div>
   </ion-list>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-textarea [(ngModel)]="newMessage" placeholder="Type a message"></ion-textarea><ion-icon name="heart" (click)="addMessage()"></ion-icon>
+  </ion-toolbar>
+</ion-footer>

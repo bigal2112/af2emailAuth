@@ -104,7 +104,7 @@ export class HomePage {
         // console.log(this.unorderedList);
 
         // sort the array by start_time
-        let orderedList = this.unorderedList.sort(this.compare);
+        let orderedList = this.unorderedList.sort(this.sortByStartTimeDesc);
 
         // and remove any events that are in the past
         orderedList = orderedList.filter((event) => {
@@ -171,7 +171,7 @@ export class HomePage {
     console.log("showNotifications");
   }
 
-  compare(a, b) {
+  sortByStartTimeDesc(a, b) {
     if (a.start_time < b.start_time)
       return -1;
     if (a.start_time > b.start_time)

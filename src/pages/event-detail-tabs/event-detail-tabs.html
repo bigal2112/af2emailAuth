@@ -5,35 +5,10 @@
 </ion-header>
 
 <ion-content scroll="false">
+  
   <ion-tabs>
-  <ion-tab tabIcon="information-circle" [root]="tab1Root" [rootParams]="eventId"></ion-tab>
-  <ion-tab tabIcon="chatboxes" [root]="tab2Root"></ion-tab>
-</ion-tabs>
-
-  <!--<ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let groupImage of groupImages">
-      <img src="{{groupImage.image}}">
-    </ion-slide>
-  </ion-slides>
-
-  <h2>{{eventTitle}}</h2>
-  <h6>{{eventStartTime | date: 'fullDate'}}</h6>
-  <h6>{{eventVenueName}}, {{eventCity}} {{eventCountry}}</h6>
-  <hr>
-
-  <ion-list>
-    <ion-item class="messages" *ngFor="let message of eventMessages" style="background-color: lightslategrey; padding-left: 5px;border-top-right-radius: 8px;">
-
-    <ion-row class="messageHeader">
-      <ion-col width-50 class="floatLeft">
-        <p>{{message.ownerUsername}}</p>
-      </ion-col>
-      <ion-col width-50 class="floatRight">
-        <p>{{message.createdOn | date: 'd MMM'}}</p>
-      </ion-col>
-    </ion-row>
-    <h2>{{message.body}}</h2>
-    </ion-item>
-  </ion-list>-->
+    <ion-tab tabIcon="information-circle" [root]="tab1Root"></ion-tab>
+    <ion-tab tabIcon="chatboxes" [root]="tab2Root"></ion-tab>
+  </ion-tabs>
 
 </ion-content>
