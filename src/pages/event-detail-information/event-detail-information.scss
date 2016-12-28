@@ -19,6 +19,12 @@ page-event-detail-information {
         text-align: center;
     }
 
+    h3 {
+        color: #808080;
+        margin: 0 0 5px 0;
+        font-size: 1.5rem;
+    }
+
     h6 {
         color: #808080;
         margin: 1px 5px;
@@ -36,6 +42,37 @@ page-event-detail-information {
 
     .floatRight {
         text-align: right;
+    }
+
+    .invitedUsers {
+
+        .scroll-content {
+            padding:0;
+        }
+
+        ion-col {
+            display: inline-table;
+            width: 50px;
+        }
+
+        ion-scroll {
+            height: 55px;
+            // border: 1px solid black;
+
+            img {
+                border: 1px solid #000;
+                width: 50px;
+                max-width: 50px;
+            }
+        }
+
+        ion-scroll.scroll-x .scroll-content {
+            overflow-y: hidden;
+        }
+
+        page-event-detail-information ion-scroll .scroll-content {
+        height: 160px;
+    }
     }
 
 }

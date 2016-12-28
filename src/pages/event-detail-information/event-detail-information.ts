@@ -12,7 +12,7 @@ declare var EVDB: any;
 })
 export class EventDetailInformationPage {
 
- eventId: any;
+  eventId: any;
   firebaseEventId: any;
   loader: any;
   groupImages: any;
@@ -27,17 +27,19 @@ export class EventDetailInformationPage {
   eventCountry: any;
   eventTitle: any;
 
-  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, 
-              public eventData: EventData, public globalVars: GlobalVariables) {
-    
+  invitedUsers: any;
+
+  constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
+    public eventData: EventData, public globalVars: GlobalVariables) {
+
     this.sliderOptions = {
       pager: true
     };
 
     this.eventId = this.globalVars.getEventfulEventId();
     this.firebaseEventId = this.globalVars.getFirebaseEventId();
-    console.log("eventId:" + this.eventId);
-    console.log("firebaseEventId:" + this.firebaseEventId);
+    // console.log("eventId:" + this.eventId);
+    // console.log("firebaseEventId:" + this.firebaseEventId);
 
     // console.log("Search for:" + this.searchString);
     // they've entered a search criteria, let's see what it brings back.....
@@ -76,18 +78,16 @@ export class EventDetailInformationPage {
 
         // get the performs image
         let imagesObj = eventData.images;
-        // that.groupImage250 = "img/no-picture-available.jpg";
+
         that.groupImages = [];
 
         if (imagesObj != null) {
           let imageObj = imagesObj.image
-          // console.log(imageObj);
-          // console.log("Length:" + imageObj.length);
           that.imgCounter = 0;
 
           // 1 image         : push the 1 image to the array
-          // loads of images : push all if them to the array
-          if (typeof(imageObj.length) === 'undefined') {
+          // loads of images : push all of them to the array
+          if (typeof (imageObj.length) === 'undefined') {
             that.groupImages.push({
               image: imageObj.block188.url
             });
@@ -100,7 +100,6 @@ export class EventDetailInformationPage {
               that.imgCounter++;
             });
 
-            // console.log(that.groupImages);
           }
         } else {
           // there are no images so push the default to the array
@@ -122,6 +121,27 @@ export class EventDetailInformationPage {
         that.eventCountry = eventData.country
       }
     });
+
+
+    // now get the invited users
+    this.eventData.getInvitedUsers(this.firebaseEventId).on('value', data => {
+      if (data == null || typeof (data) == 'undefined') {
+        console.log("NO INVITES");
+      } else {
+
+        this.invitedUsers = [];
+        data.forEach(invitedUser => {
+          this.invitedUsers.push({
+            imageMed: invitedUser.val().imageMed,
+            inviteAccepted: invitedUser.val().inviteAccepted,
+            inviteeAvatarURL: invitedUser.val().inviteeAvatarURL,
+            inviteeName: invitedUser.val().inviteeName            
+          });
+        });
+
+        console.log(this.invitedUsers);
+      }
+    })
   }
 
 }

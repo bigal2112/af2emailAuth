@@ -38,6 +38,8 @@ export class HomePage {
   firstEventImageMed: any;
   firstEventNumberOfInvites: any;
 
+  that: any;
+
   constructor(public nav: NavController, public eventData: EventData, public globalVars: GlobalVariables, public loadingCtrl: LoadingController) {
 
     // initialise the current users global details
@@ -50,6 +52,8 @@ export class HomePage {
       content: "Retrieving your events...."
     });
     this.loader.present();
+
+    this.that = this;
 
     // this.myEventsRetrieved = false;
     // this.invitedEventsRetrieved = false;
@@ -146,7 +150,7 @@ export class HomePage {
         });
         // console.log("Retrieving events list - complete");
         // console.log(this.eventList);
-        this.loader.dismiss();
+        this.that.loader.dismiss();
 
       });
     });

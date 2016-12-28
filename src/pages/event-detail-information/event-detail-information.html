@@ -1,11 +1,3 @@
-<!--<ion-header>
-
-  <ion-navbar>
-    <ion-title>Information</ion-title>
-  </ion-navbar>
-
-</ion-header>-->
-
 <ion-content padding>
   <ion-slides [options]="sliderOptions">
     <ion-slide *ngFor="let groupImage of groupImages">
@@ -17,4 +9,20 @@
   <h6>{{eventStartTime | date: 'fullDate'}}</h6>
   <h6>{{eventVenueName}}, {{eventCity}} {{eventCountry}}</h6>
   <hr>
+
+  <h3>Other people invited to this event</h3>
+  <div class="invitedUsers">
+    <ion-scroll scrollX="true" scrollY="true">
+      <ion-row>
+        <ion-col *ngFor="let user of invitedUsers">
+          <img src="{{user.inviteeAvatarURL}}">
+
+        </ion-col>
+      </ion-row>
+    </ion-scroll>
+  </div>
+  <hr>
+
+  <h3>Map</h3>
+
 </ion-content>

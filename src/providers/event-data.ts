@@ -152,4 +152,9 @@ export class EventData {
     })
   }
 
+  getInvitedUsers(firebaseEventId) {
+    console.log("Retrieving users from Id: " + firebaseEventId);
+    return this.invitesRef.orderByChild('firebaseEventId').equalTo(firebaseEventId);
+  }
+
 }
