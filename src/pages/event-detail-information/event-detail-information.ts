@@ -1,16 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
+import { ConnectivityService } from '../../providers/connectivity-service';
+import { Geolocation } from 'ionic-native';
 
-// declare this variable so the typescript doesn't balk at EVDB
+// declare these variables so the typescript doesn't balk.
 declare var EVDB: any;
+declare var google;
 
 @Component({
   selector: 'page-event-detail-information',
   templateUrl: 'event-detail-information.html'
 })
 export class EventDetailInformationPage {
+
+  // variables for the map
+  @ViewChild('map') mapElement: ElementRef;
+  map: any;
+  mapInitialised: boolean = false;
+  apiKey: any;
 
   eventId: any;
   firebaseEventId: any;
@@ -39,7 +48,7 @@ export class EventDetailInformationPage {
   statusRejectColor: string;
 
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
-    public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController) {
+    public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController, public connectivityService: ConnectivityService) {
 
     this.sliderOptions = {
       pager: true
@@ -179,6 +188,8 @@ export class EventDetailInformationPage {
       });
     }
 
+    this.loadGoogleMaps();
+
 
   }
 
@@ -230,6 +241,119 @@ export class EventDetailInformationPage {
       });
       toast.present();
     })
+  }
+
+  loadGoogleMaps() {
+
+    this.addConnectivityListeners();
+
+    if (typeof google == "undefined" || typeof google.maps == "undefined") {
+
+      console.log("Google maps JavaScript needs to be loaded.");
+      this.disableMap();
+
+      if (this.connectivityService.isOnline()) {
+        console.log("online, loading map");
+
+        //Load the SDK
+        window['mapInit'] = () => {
+          this.initMap();
+          this.enableMap();
+        }
+
+        let script = document.createElement("script");
+        script.id = "googleMaps";
+
+        if (this.apiKey) {
+          script.src = 'http://maps.google.com/maps/api/js?key=' + this.apiKey + '&callback=mapInit';
+        } else {
+          script.src = 'http://maps.google.com/maps/api/js?callback=mapInit';
+        }
+
+        document.body.appendChild(script);
+
+      }
+    }
+    else {
+
+      if (this.connectivityService.isOnline()) {
+        console.log("showing map");
+        this.initMap();
+        this.enableMap();
+      }
+      else {
+        console.log("disabling map");
+        this.disableMap();
+      }
+
+    }
+
+  }
+
+  initMap() {
+
+    this.mapInitialised = true;
+
+    Geolocation.getCurrentPosition().then((position) => {
+
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      let mapOptions = {
+        center: latLng,
+        zoom: 14,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        draggable: false
+      }
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+      let marker = new google.maps.Marker({
+          position: latLng,
+          map: this.map,
+          title: this.eventVenueName
+        });
+
+    });
+
+  }
+
+  disableMap() {
+    console.log("disable map");
+  }
+
+  enableMap() {
+    console.log("enable map");
+  }
+
+  addConnectivityListeners() {
+
+    let onOnline = () => {
+
+      setTimeout(() => {
+        if (typeof google == "undefined" || typeof google.maps == "undefined") {
+
+          this.loadGoogleMaps();
+
+        } else {
+
+          if (!this.mapInitialised) {
+            this.initMap();
+          }
+
+          this.enableMap();
+        }
+      }, 2000);
+
+    };
+
+    let onOffline = () => {
+      this.disableMap();
+    };
+
+    document.addEventListener('online', onOnline, false);
+    document.addEventListener('offline', onOffline, false);
+
   }
 
 }

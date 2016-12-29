@@ -22,6 +22,7 @@ import { EventData } from '../providers/event-data';
 import { ProfileData } from '../providers/profile-data';
 import { UserData } from '../providers/user-data';
 import { GlobalVariables } from '../providers/global-variables';
+import { ConnectivityService } from '../providers/connectivity-service';
 import { TimeSince } from '../pipes/time-since';
 
 // Import the AF2 Module
@@ -83,6 +84,7 @@ const myFirebaseAuthConfig = {
     EventData,
     ProfileData,
     UserData,
-    GlobalVariables],
+    GlobalVariables,
+    ConnectivityService],
 })
 export class AppModule { }

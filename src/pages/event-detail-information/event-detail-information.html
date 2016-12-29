@@ -10,13 +10,18 @@
 
   <h2>{{eventTitle}}</h2>
   <h6>{{eventStartTime | date: 'fullDate'}}</h6>
+  <hr>
+
+  <!--  Map - list of users that were invited to this event
+        ALL USERS -->
   <h6>{{eventVenueName}}, {{eventCity}} {{eventCountry}}</h6>
+  <div #map id="map"></div>
   <hr>
 
   <!--  Invited users - list of users that were invited to this event
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
-    <h3>Other people invited to this event</h3>
+    <h3>People you invited to this event</h3>
     <div class="invitedUsers">
       <ion-scroll scrollX="true" scrollY="true">
         <ion-row>
@@ -30,6 +35,7 @@
     <hr>
   </div>
 
+  
   <!--  Clashes details - Clashes with existing accepted events or possibnle clashes with invited to events
         INVITED USERS -->
 
@@ -55,14 +61,14 @@
     <hr>
   </div>
 
+  
+
   <!--  Ticket details - original cost, actual cost, total outlay, last chance to accept datetime etc.
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
     <h3>Ticket details</h3>
     <hr>
   </div>
-  <!--  Map - list of users that were invited to this event
-        ALL USERS -->
-  <h3>Map</h3>
+  
 
 </ion-content>
