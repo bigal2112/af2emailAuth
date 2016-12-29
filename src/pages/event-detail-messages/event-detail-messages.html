@@ -61,8 +61,8 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-textarea [(ngModel)]="newMessage" placeholder="Type a message"></ion-textarea>
-    <ion-icon name="heart" (click)="addMessage()"></ion-icon>
-  </ion-toolbar>
+  <ion-item>
+    <ion-input [(ngModel)]="newMessage" placeholder="Type a message"></ion-input>
+    <button ion-button item-right color="secondary" (click)="addMessage()"><ion-icon name="text"></ion-icon></button>
+  </ion-item>
 </ion-footer>

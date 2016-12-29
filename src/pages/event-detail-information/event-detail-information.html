@@ -1,4 +1,7 @@
 <ion-content padding>
+
+  <!--  Event Header - group picture and venue details
+        ALL USERS -->
   <ion-slides [options]="sliderOptions">
     <ion-slide *ngFor="let groupImage of groupImages">
       <img src="{{groupImage.image}}">
@@ -10,19 +13,38 @@
   <h6>{{eventVenueName}}, {{eventCity}} {{eventCountry}}</h6>
   <hr>
 
-  <h3>Other people invited to this event</h3>
-  <div class="invitedUsers">
-    <ion-scroll scrollX="true" scrollY="true">
-      <ion-row>
-        <ion-col *ngFor="let user of invitedUsers">
-          <img src="{{user.inviteeAvatarURL}}">
+  <!--  Invited users - list of users that were invited to this event
+        OWNER -->
+  <div *ngIf="eventType === 'MY_EVENT'">
+    <h3>Other people invited to this event</h3>
+    <div class="invitedUsers">
+      <ion-scroll scrollX="true" scrollY="true">
+        <ion-row>
+          <ion-col *ngFor="let user of invitedUsers">
+            <img src="{{user.inviteeAvatarURL}}">
 
-        </ion-col>
-      </ion-row>
-    </ion-scroll>
+          </ion-col>
+        </ion-row>
+      </ion-scroll>
+    </div>
+    <hr>
   </div>
-  <hr>
 
+  <!--  Acceptance details - Going, Tracking, Outstanding amount owed
+        INVITED USERS -->
+  <div *ngIf="eventType === 'INVITED_TO_EVENT'">
+    <h3>Acceptance details</h3>
+    <hr>
+  </div>
+
+  <!--  Ticket details - origibal cost, actual cost, total outlay etc.
+        OWNER -->
+  <div *ngIf="eventType === 'MY_EVENT'">
+    <h3>Ticket details</h3>
+    <hr>
+  </div>
+  <!--  Map - list of users that were invited to this event
+        ALL USERS -->
   <h3>Map</h3>
 
 </ion-content>

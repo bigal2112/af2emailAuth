@@ -9,6 +9,7 @@ export class GlobalVariables {
   public userDetails: any;
   public eventfulEventId: any;
   public firebaseEventId: any;
+  public eventType: string;
 
   constructor() {
     console.log('Hello GlobalVariables Provider');
@@ -43,5 +44,13 @@ export class GlobalVariables {
     // console.log("Setting IDs - Eventful: " + eventfulId + ", Firebase: " + firebaseId);
     this.eventfulEventId = eventfulId;
     this.firebaseEventId = firebaseId;
+  }
+
+  getEventType(): any {
+    return this.eventType;
+  }
+
+  setEventType(eventType: string): any {
+    this.eventType = eventType;
   }
 }

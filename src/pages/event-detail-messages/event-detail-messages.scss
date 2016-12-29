@@ -50,6 +50,17 @@ page-event-detail-messages {
     text-align: right;
   }
 
+  ion-footer {
+    .item-md {
+      background-color: white;
+      
+    }
+
+    ion-icon {
+      font-size: 1.5em;
+    }
+  }
+
   /* CSS talk bubble */
   .talk-bubble-left {
     margin: 5px 20px;

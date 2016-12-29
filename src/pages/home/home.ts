@@ -71,7 +71,7 @@ export class HomePage {
         this.myEvents.forEach(snap => {
           this.unorderedList.push({
             eventfulId: snap.val().eventId,
-            type: "MYEVENTS",
+            eventType: "MY_EVENT",
             firebaseEventId: snap.key,
             performer: snap.val().performer,
             title: snap.val().title,
@@ -92,7 +92,7 @@ export class HomePage {
 
           this.unorderedList.push({
             eventfulId: snap.val().eventId,
-            type: "INVITES",
+            eventType: "INVITED_TO_EVENT",
             firebaseEventId: snap.val().firebaseEventId,
             performer: snap.val().performer,
             title: snap.val().title,
@@ -121,8 +121,8 @@ export class HomePage {
         orderedList.forEach(event => {
 
           if (this.eventsCntr === 0) {
-            this.firstEventEventfulId = event.eventfulId,
-              this.firstEventType = event.type;
+            this.firstEventEventfulId = event.eventfulId;
+            this.firstEventType = event.eventType;
             this.firstEventFirebaseEventId = event.firebaseEventId;
             this.firstEventPerformer = event.performer;
             this.firstEventTitle = event.title;
@@ -134,7 +134,7 @@ export class HomePage {
           } else {
             this.eventList.push({
               eventfulId: event.eventfulId,
-              type: event.type,
+              eventType: event.eventType,
               firebaseEventId: event.firebaseEventId,
               performer: event.performer,
               title: event.title,
@@ -156,10 +156,11 @@ export class HomePage {
     });
   }
 
-  goToEventDetail(eventId, firebaseEventId, performer) {
+  goToEventDetail(eventId, firebaseEventId, performer, eventType) {
     // use the Global variables to store the Evenful and the Firebase event ID's 
     // so they are accessible to the TAB pages.
     this.globalVars.setEventIds(eventId, firebaseEventId);
+    this.globalVars.setEventType(eventType);
     this.nav.push(EventDetailTabsPage, {
       performer: performer
     });

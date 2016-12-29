@@ -29,6 +29,8 @@ export class EventDetailInformationPage {
 
   invitedUsers: any;
 
+  eventType: string;    // "MY_EVENT" or "INVITED_TO_EVENT"
+
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
     public eventData: EventData, public globalVars: GlobalVariables) {
 
@@ -38,6 +40,8 @@ export class EventDetailInformationPage {
 
     this.eventId = this.globalVars.getEventfulEventId();
     this.firebaseEventId = this.globalVars.getFirebaseEventId();
+    this.eventType = this.globalVars.getEventType();
+
     // console.log("eventId:" + this.eventId);
     // console.log("firebaseEventId:" + this.firebaseEventId);
 

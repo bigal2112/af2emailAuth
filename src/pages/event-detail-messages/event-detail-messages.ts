@@ -16,13 +16,13 @@ export class EventDetailMessagesPage {
   loader: any;
   currentUserDetails: any;
   newMessage: any;
+  
+  constructor(public nav: NavController, public eventData: EventData, public globalVars: GlobalVariables, public loadingCtrl: LoadingController) {
 
-  constructor(public nav: NavController, public eventData: EventData, public globaVars: GlobalVariables, public loadingCtrl: LoadingController) {
 
-
-    this.firebaseEventId = this.globaVars.getFirebaseEventId();
-    this.currentUserDetails = this.globaVars.getCurrentUserDetals();
-
+    this.firebaseEventId = this.globalVars.getFirebaseEventId();
+    this.currentUserDetails = this.globalVars.getCurrentUserDetals();
+    
     // // show loading control
     this.loader = this.loadingCtrl.create({
       content: "Retrieving event messages...."
