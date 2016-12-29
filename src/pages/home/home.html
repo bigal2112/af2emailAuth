@@ -51,32 +51,34 @@
       </ion-grid>
     </ion-card>
 
-    <ion-list no-lines>
-      <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType, event.firebaseInviteId)">
-        <!--<div *ngIf="i != 0">-->
-        <ion-thumbnail item-left>
-          <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
-          <img *ngIf="event?.imageMed != null" src="{{event?.imageMed}}" />
-        </ion-thumbnail>
-        <h2>{{event?.performer}}</h2>
-        <ion-grid>
-          <ion-row>
-            <ion-col width-50 class="floatLeft">
-              <p>{{event?.start_time | date:'mediumDate'}}</p>
-            </ion-col>
-            <ion-col width-50 class="floatRight">
-              <p>{{event?.initialTicketPrice | currency: 'GBP':true}}</p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              {{event?.numberOfInvites}}
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <!--</div>-->
-      </ion-item>
-    </ion-list>
+    <div>
+      <ion-list no-lines>
+        <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType, event.firebaseInviteId)">
+          <!--<div *ngIf="i != 0">-->
+          <ion-thumbnail item-left>
+            <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
+            <img *ngIf="event?.imageMed != null" src="{{event?.imageMed}}" />
+          </ion-thumbnail>
+          <h2>{{event?.performer}}</h2>
+          <ion-grid>
+            <ion-row>
+              <ion-col width-50 class="floatLeft">
+                <p>{{event?.start_time | date:'mediumDate'}}</p>
+              </ion-col>
+              <ion-col width-50 class="floatRight">
+                <p>{{event?.initialTicketPrice | currency: 'GBP':true}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                {{event?.numberOfInvites}}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <!--</div>-->
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
 
   <!-- if no events to display -->

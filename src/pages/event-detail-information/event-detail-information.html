@@ -36,21 +36,20 @@
   <!--  Acceptance details - Going, Tracking, Outstanding amount owed
         INVITED USERS -->
   <div *ngIf="eventType === 'INVITED_TO_EVENT'" class="acceptanceDetails">
-    <h2>Acceptance details</h2>
-    
-
     <ion-row>
-      <ion-col width-33>
-        <ion-label [style.color]="statusTrackColor">Track</ion-label>
+      <ion-col width-33 (click)="updateAcceptanceStatus('TRACK')">
         <ion-checkbox [(ngModel)]="statusTrack" (click)="updateAcceptanceStatus('TRACK')" color="danger"></ion-checkbox>
+        <ion-label [style.color]="statusTrackColor">Track</ion-label>
       </ion-col>
-      <ion-col width-33>
-        <ion-label [style.color]="statusAcceptColor">Accept</ion-label>
+
+      <ion-col width-33 (click)="updateAcceptanceStatus('ACCEPT')">
         <ion-checkbox [(ngModel)]="statusAccept" (click)="updateAcceptanceStatus('ACCEPT')" color="danger"></ion-checkbox>
+        <ion-label [style.color]="statusAcceptColor">Accept</ion-label>
       </ion-col>
-      <ion-col width-33>
-        <ion-label [style.color]="statusRejectColor">Reject</ion-label>
+
+      <ion-col width-33 (click)="updateAcceptanceStatus('REJECT')">
         <ion-checkbox [(ngModel)]="statusReject" (click)="updateAcceptanceStatus('REJECT')" color="danger"></ion-checkbox>
+        <ion-label [style.color]="statusRejectColor">Reject</ion-label>
       </ion-col>
     </ion-row>
     <hr>
