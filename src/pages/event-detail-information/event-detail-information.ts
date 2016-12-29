@@ -47,6 +47,9 @@ export class EventDetailInformationPage {
   statusAcceptColor: string;
   statusRejectColor: string;
 
+  public eventLatitude: any;
+  public eventLongitude: any;
+
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
     public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController, public connectivityService: ConnectivityService) {
 
@@ -139,8 +142,17 @@ export class EventDetailInformationPage {
         that.eventVenueAddress = eventData.address;
         that.eventCity = eventData.city;
         that.eventTitle = eventData.title;
-        that.eventCountry = eventData.country
+        that.eventCountry = eventData.country;
+        that.eventLatitude = eventData.latitude;
+        that.eventLongitude = eventData.longitude;
       }
+
+      console.log("Event Data");
+      console.log(eventData);
+      console.log(that.eventLatitude);
+      console.log(that.eventLongitude);
+
+      that.loadGoogleMaps();
     });
 
     // ---------------------------------------------
@@ -188,7 +200,7 @@ export class EventDetailInformationPage {
       });
     }
 
-    this.loadGoogleMaps();
+    
 
 
   }
@@ -294,13 +306,14 @@ export class EventDetailInformationPage {
 
     this.mapInitialised = true;
 
-    Geolocation.getCurrentPosition().then((position) => {
+    // Geolocation.getCurrentPosition().then((position) => {
 
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      console.log("Setting map position to " + this.eventLatitude + ", " + this.eventLongitude);
+      let latLng = new google.maps.LatLng(this.eventLatitude, this.eventLongitude);
 
       let mapOptions = {
         center: latLng,
-        zoom: 14,
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true,
         draggable: false
@@ -314,7 +327,7 @@ export class EventDetailInformationPage {
           title: this.eventVenueName
         });
 
-    });
+    // });
 
   }
 
