@@ -20,29 +20,29 @@
   <!-- if we have some events to display -->
   <div *ngIf="firstEventPerformer != null">
 
-    <ion-card (click)="goToEventDetail(firstEventEventfulId, firstEventFirebaseEventId, firstEventPerformer, firstEventType, firstEventFirebaseInviteId)">
+    <ion-card [ngStyle]="{'background-color': firstEventBackgroundColor}" (click)="goToEventDetail(firstEventEventfulId, firstEventFirebaseEventId, firstEventPerformer, firstEventType, firstEventFirebaseInviteId)">
       <img *ngIf="firstEventImage250 == null" src="/img/no-picture-available.jpg" />
       <img *ngIf="firstEventImage250 != null" src="{{firstEventImage250}}" />
       <ion-card-content>
         <h2>{{firstEventPerformer}}</h2>
         <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
       </ion-card-content>
-      <ion-grid>
+      <ion-grid *ngIf="firstEventType === 'MY_EVENT'">
         <ion-row>
           <ion-col width-33>
-            <ion-item>
+            <ion-item [ngStyle]="{'background-color': firstEventBackgroundColor}">
               <ion-icon name="happy" item-left></ion-icon>
               <ion-badge item-right>{{firstEventNumberOfInvites}}</ion-badge>
             </ion-item>
           </ion-col>
           <ion-col width-33>
-            <ion-item>
+            <ion-item [ngStyle]="{'background-color': firstEventBackgroundColor}">
               <ion-icon name="thumbs-up" item-left></ion-icon>
               <ion-badge item-right color="secondary">1</ion-badge>
             </ion-item>
           </ion-col>
           <ion-col width-33>
-            <ion-item>
+            <ion-item [ngStyle]="{'background-color': firstEventBackgroundColor}">
               <ion-icon name="thumbs-down" item-left></ion-icon>
               <ion-badge item-right color="danger">0</ion-badge>
             </ion-item>
@@ -51,35 +51,39 @@
       </ion-grid>
     </ion-card>
 
-    <div>
-      <ion-list no-lines>
-        <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType, event.firebaseInviteId)">
-          <!--<div *ngIf="i != 0">-->
-          <ion-thumbnail item-left>
-            <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
-            <img *ngIf="event?.imageMed != null" src="{{event?.imageMed}}" />
-          </ion-thumbnail>
-          <h2>{{event?.performer}}</h2>
-          <ion-grid>
-            <ion-row>
-              <ion-col width-50 class="floatLeft">
-                <p>{{event?.start_time | date:'mediumDate'}}</p>
-              </ion-col>
-              <ion-col width-50 class="floatRight">
-                <p>{{event?.initialTicketPrice | currency: 'GBP':true}}</p>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                {{event?.numberOfInvites}}
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-          <!--</div>-->
-        </ion-item>
-      </ion-list>
-    </div>
+    <!--<div style="background-color: gray;" *ngIf="event?.eventType === 'TRACK'">
+    <div style="background-color: red;" *ngIf="event?.eventType === 'REJECT'">
+    <div style="background-color: seagreen;" *ngIf="event?.eventType === 'NOT YET'">-->
+    <ion-list no-lines>
+      <ion-item [ngStyle]="{'background-color': event.backgroundColor}" *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType, event.firebaseInviteId)">
+        <!--<div *ngIf="i != 0">-->
+        <ion-thumbnail item-left>
+          <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
+          <img *ngIf="event?.imageMed != null" src="{{event?.imageMed}}" />
+        </ion-thumbnail>
+        <h2>{{event?.performer}}</h2>
+        <ion-grid>
+          <ion-row>
+            <ion-col width-50 class="floatLeft">
+              <p>{{event?.start_time | date:'mediumDate'}}</p>
+            </ion-col>
+            <ion-col width-50 class="floatRight">
+              <p>{{event?.initialTicketPrice | currency: 'GBP':true}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              {{event?.numberOfInvites}}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!--</div>-->
+      </ion-item>
+    </ion-list>
   </div>
+  <!--</div>
+</div>
+</div>-->
 
   <!-- if no events to display -->
   <div class="noEvents" *ngIf="firstEventPerformer == null && eventsCntr === 0">

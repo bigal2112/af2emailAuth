@@ -38,6 +38,10 @@ export class HomePage {
   firstEventImageMed: any;
   firstEventNumberOfInvites: any;
   firstEventFirebaseInviteId: any;
+  firstEventInviteAcceptedStatus: any;
+  firstEventBackgroundColor: string;
+
+  testBackgroundColor: string = "myStyle={'background-color':'blue'}";
 
   that: any;
 
@@ -81,7 +85,8 @@ export class HomePage {
             image250: snap.val().image250,
             imageMed: snap.val().imageMed,
             numberOfInvites: snap.val().numberOfInvites,
-            firebaseInviteId: null
+            firebaseInviteId: null,
+            inviteAcceptedStatus: null
           });
         })
 
@@ -103,7 +108,8 @@ export class HomePage {
             image250: snap.val().image250,
             imageMed: snap.val().imageMed,
             numberOfInvites: 0,
-            firebaseInviteId: snap.key
+            firebaseInviteId: snap.key,
+            inviteAcceptedStatus: snap.val().inviteAccepted
           });
         })
 
@@ -123,6 +129,16 @@ export class HomePage {
         this.eventsCntr = 0;
         orderedList.forEach(event => {
 
+          // work out the list items background color base on the inviteAccepted value
+          let backgroundColor = "white";
+          if(event.inviteAcceptedStatus === "TRACK") {
+            backgroundColor = "lightcyan";
+          } else if(event.inviteAcceptedStatus === "REJECT") {
+            backgroundColor = "lightcoral";
+          } else if(event.inviteAcceptedStatus === "NOT YET") {
+            backgroundColor = "lightgoldenrodyellow";
+          }
+
           if (this.eventsCntr === 0) {
             this.firstEventEventfulId = event.eventfulId;
             this.firstEventType = event.eventType;
@@ -134,7 +150,9 @@ export class HomePage {
             this.firstEventImage250 = event.image250;
             this.firstEventImageMed = event.imageMed;
             this.firstEventNumberOfInvites = event.numberOfInvites;
-            this.firstEventFirebaseInviteId = event.firebaseInviteId
+            this.firstEventFirebaseInviteId = event.firebaseInviteId;
+            this.firstEventInviteAcceptedStatus = event.inviteAcceptedStatus;
+            this.firstEventBackgroundColor = backgroundColor;
           } else {
             this.eventList.push({
               eventfulId: event.eventfulId,
@@ -147,7 +165,9 @@ export class HomePage {
               image250: event.image250,
               imageMed: event.imageMed,
               numberOfInvites: event.numberOfInvites,
-              firebaseInviteId: event.firebaseInviteId
+              firebaseInviteId: event.firebaseInviteId,
+              inviteAcceptedStatus: event.inviteAcceptedStatus,
+              backgroundColor: backgroundColor
             });
           }
 
