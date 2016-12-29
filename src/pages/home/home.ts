@@ -37,6 +37,7 @@ export class HomePage {
   firstEventImage250: any;
   firstEventImageMed: any;
   firstEventNumberOfInvites: any;
+  firstEventFirebaseInviteId: any;
 
   that: any;
 
@@ -79,7 +80,8 @@ export class HomePage {
             start_time: snap.val().start_time,
             image250: snap.val().image250,
             imageMed: snap.val().imageMed,
-            numberOfInvites: snap.val().numberOfInvites
+            numberOfInvites: snap.val().numberOfInvites,
+            firebaseInviteId: null
           });
         })
 
@@ -100,12 +102,13 @@ export class HomePage {
             start_time: snap.val().start_time,
             image250: snap.val().image250,
             imageMed: snap.val().imageMed,
-            numberOfInvites: 0
+            numberOfInvites: 0,
+            firebaseInviteId: snap.key
           });
         })
 
-        // console.log("and invitedEvents");
-        // console.log(this.unorderedList);
+        console.log("and invitedEvents");
+        console.log(this.unorderedList);
 
         // sort the array by start_time
         let orderedList = this.unorderedList.sort(this.sortByStartTimeDesc);
@@ -131,6 +134,7 @@ export class HomePage {
             this.firstEventImage250 = event.image250;
             this.firstEventImageMed = event.imageMed;
             this.firstEventNumberOfInvites = event.numberOfInvites;
+            this.firstEventFirebaseInviteId = event.firebaseInviteId
           } else {
             this.eventList.push({
               eventfulId: event.eventfulId,
@@ -142,7 +146,8 @@ export class HomePage {
               start_time: event.start_time,
               image250: event.image250,
               imageMed: event.imageMed,
-              numberOfInvites: event.numberOfInvites
+              numberOfInvites: event.numberOfInvites,
+              firebaseInviteId: event.firebaseInviteId
             });
           }
 
@@ -156,10 +161,10 @@ export class HomePage {
     });
   }
 
-  goToEventDetail(eventId, firebaseEventId, performer, eventType) {
+  goToEventDetail(eventId, firebaseEventId, performer, eventType, firebaseInviteId) {
     // use the Global variables to store the Evenful and the Firebase event ID's 
     // so they are accessible to the TAB pages.
-    this.globalVars.setEventIds(eventId, firebaseEventId);
+    this.globalVars.setEventIds(eventId, firebaseEventId, firebaseInviteId);
     this.globalVars.setEventType(eventType);
     this.nav.push(EventDetailTabsPage, {
       performer: performer

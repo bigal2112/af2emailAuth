@@ -9,6 +9,7 @@ export class GlobalVariables {
   public userDetails: any;
   public eventfulEventId: any;
   public firebaseEventId: any;
+  public firebaseInviteID: any;
   public eventType: string;
 
   constructor() {
@@ -40,10 +41,15 @@ export class GlobalVariables {
     return this.firebaseEventId;
   }
 
-  setEventIds(eventfulId: any, firebaseId: any): any {
-    // console.log("Setting IDs - Eventful: " + eventfulId + ", Firebase: " + firebaseId);
+  getFirebaseInviteId(): any {
+    return this.firebaseInviteID;
+  }
+
+  setEventIds(eventfulId: any, firebaseId: any, firebaseInviteID: any): any {
+    // console.log("Setting IDs - Eventful: " + eventfulId + ", Firebase: " + firebaseId + ", Invite: " + firebaseInviteID);
     this.eventfulEventId = eventfulId;
     this.firebaseEventId = firebaseId;
+    this.firebaseInviteID = firebaseInviteID;
   }
 
   getEventType(): any {

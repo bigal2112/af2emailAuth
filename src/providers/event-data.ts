@@ -119,19 +119,19 @@ export class EventData {
     return this.eventsRef.child(eventId);
   }
 
-  addGuest(guestName, eventId, eventPrice, guestPicture = null): any {
-    // console.log("eventPrice:");
-    // console.log(eventPrice);
+  // addGuest(guestName, eventId, eventPrice, guestPicture = null): any {
+  //   // console.log("eventPrice:");
+  //   // console.log(eventPrice);
 
-    return this.eventsRef.child(eventId).child('guestList').push({
-      guestName: guestName
-    }).then((newGuest) => {
-      this.eventsRef.child(eventId).child('revenue').transaction((revenue: number) => {
-        revenue += (eventPrice * 1);
-        return revenue;
-      });
-    });
-  }
+  //   return this.eventsRef.child(eventId).child('guestList').push({
+  //     guestName: guestName
+  //   }).then((newGuest) => {
+  //     this.eventsRef.child(eventId).child('revenue').transaction((revenue: number) => {
+  //       revenue += (eventPrice * 1);
+  //       return revenue;
+  //     });
+  //   });
+  // }
 
   getEventMessages(firebaseEventId) {
     console.log("Retrieving messages from Id: " + firebaseEventId);
@@ -139,9 +139,9 @@ export class EventData {
   }
 
   addMessage(firebaseEventId: any, messageBody: any, userDetails: any): any {
-    console.log("firebaseEventId:" + firebaseEventId);
-    console.log("messageBody:" + messageBody);
-    console.log(userDetails);
+    // console.log("firebaseEventId:" + firebaseEventId);
+    // console.log("messageBody:" + messageBody);
+    // console.log(userDetails);
     
     return this.messagesRef.push({
       firebaseEventId: firebaseEventId,
@@ -153,8 +153,20 @@ export class EventData {
   }
 
   getInvitedUsers(firebaseEventId) {
-    console.log("Retrieving users from Id: " + firebaseEventId);
+    // console.log("Retrieving users from Id: " + firebaseEventId);
     return this.invitesRef.orderByChild('firebaseEventId').equalTo(firebaseEventId);
+  }
+
+  getInviteDetails(firebaseInviteId) {
+    // console.log("Retrieving invite details from Id: " + firebaseInviteId);
+    return this.invitesRef.child(firebaseInviteId);
+  }
+
+  updateInviteAcceptedStatus(firebaseInviteId: any, newStatus: string) {
+    // console.log("Updating invite details for Id: " + firebaseInviteId + " with new status of " + newStatus);
+    return this.invitesRef.child(firebaseInviteId).update({
+      inviteAccepted: newStatus
+    });
   }
 
 }

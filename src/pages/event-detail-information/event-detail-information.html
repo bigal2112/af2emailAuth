@@ -30,14 +30,33 @@
     <hr>
   </div>
 
+  <!--  Clashes details - Clashes with existing accepted events or possibnle clashes with invited to events
+        INVITED USERS -->
+
   <!--  Acceptance details - Going, Tracking, Outstanding amount owed
         INVITED USERS -->
-  <div *ngIf="eventType === 'INVITED_TO_EVENT'">
-    <h3>Acceptance details</h3>
+  <div *ngIf="eventType === 'INVITED_TO_EVENT'" class="acceptanceDetails">
+    <h2>Acceptance details</h2>
+    
+
+    <ion-row>
+      <ion-col width-33>
+        <ion-label [style.color]="statusTrackColor">Track</ion-label>
+        <ion-checkbox [(ngModel)]="statusTrack" (click)="updateAcceptanceStatus('TRACK')" color="danger"></ion-checkbox>
+      </ion-col>
+      <ion-col width-33>
+        <ion-label [style.color]="statusAcceptColor">Accept</ion-label>
+        <ion-checkbox [(ngModel)]="statusAccept" (click)="updateAcceptanceStatus('ACCEPT')" color="danger"></ion-checkbox>
+      </ion-col>
+      <ion-col width-33>
+        <ion-label [style.color]="statusRejectColor">Reject</ion-label>
+        <ion-checkbox [(ngModel)]="statusReject" (click)="updateAcceptanceStatus('REJECT')" color="danger"></ion-checkbox>
+      </ion-col>
+    </ion-row>
     <hr>
   </div>
 
-  <!--  Ticket details - origibal cost, actual cost, total outlay etc.
+  <!--  Ticket details - original cost, actual cost, total outlay, last chance to accept datetime etc.
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
     <h3>Ticket details</h3>

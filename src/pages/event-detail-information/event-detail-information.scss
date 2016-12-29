@@ -72,7 +72,20 @@ page-event-detail-information {
 
         page-event-detail-information ion-scroll .scroll-content {
         height: 160px;
+        }
     }
+
+    .acceptanceDetails {
+        ion-col {
+            display: flex;
+        }
+        .checkbox-md {
+            margin-top: 14px;
+            margin-right: 25px;
+        }
+        .label-md {
+            margin-left: 2px;
+        }
     }
 
 }

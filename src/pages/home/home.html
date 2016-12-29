@@ -20,7 +20,7 @@
   <!-- if we have some events to display -->
   <div *ngIf="firstEventPerformer != null">
 
-    <ion-card (click)="goToEventDetail(firstEventEventfulId, firstEventFirebaseEventId, firstEventPerformer, firstEventType)">
+    <ion-card (click)="goToEventDetail(firstEventEventfulId, firstEventFirebaseEventId, firstEventPerformer, firstEventType, firstEventFirebaseInviteId)">
       <img *ngIf="firstEventImage250 == null" src="/img/no-picture-available.jpg" />
       <img *ngIf="firstEventImage250 != null" src="{{firstEventImage250}}" />
       <ion-card-content>
@@ -52,7 +52,7 @@
     </ion-card>
 
     <ion-list no-lines>
-      <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType)">
+      <ion-item *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType, event.firebaseInviteId)">
         <!--<div *ngIf="i != 0">-->
         <ion-thumbnail item-left>
           <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
