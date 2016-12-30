@@ -6,10 +6,10 @@ import { EventAddDetailsPage } from '../event-add-details/event-add-details';
 declare var EVDB: any;
 
 @Component({
-  selector: 'page-event-add',
-  templateUrl: 'event-add.html'
+  selector: 'page-event-search',
+  templateUrl: 'event-search.html'
 })
-export class EventAddPage {
+export class EventSearchPage {
   public searchString: String;
   public searchResults: any = [];
   public eventsList: any;

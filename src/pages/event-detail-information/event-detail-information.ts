@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController, Platform } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
 import { ConnectivityService } from '../../providers/connectivity-service';
@@ -50,8 +50,16 @@ export class EventDetailInformationPage {
   public eventLatitude: any;
   public eventLongitude: any;
 
+  private _platform: Platform;
+  private _isAndroid: boolean;
+  private _isiOS: boolean;
+
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
-    public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController, public connectivityService: ConnectivityService) {
+    public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController, public connectivityService: ConnectivityService, public platform: Platform) {
+
+    this._platform = platform;
+    this._isAndroid = platform.is('android');
+    this._isiOS = platform.is('ios');
 
     this.sliderOptions = {
       pager: true
@@ -200,7 +208,7 @@ export class EventDetailInformationPage {
       });
     }
 
-    
+
 
 
   }
@@ -308,24 +316,24 @@ export class EventDetailInformationPage {
 
     // Geolocation.getCurrentPosition().then((position) => {
 
-      console.log("Setting map position to " + this.eventLatitude + ", " + this.eventLongitude);
-      let latLng = new google.maps.LatLng(this.eventLatitude, this.eventLongitude);
+    console.log("Setting map position to " + this.eventLatitude + ", " + this.eventLongitude);
+    let latLng = new google.maps.LatLng(this.eventLatitude, this.eventLongitude);
 
-      let mapOptions = {
-        center: latLng,
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: true,
-        draggable: false
-      }
+    let mapOptions = {
+      center: latLng,
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      draggable: false
+    }
 
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-      let marker = new google.maps.Marker({
-          position: latLng,
-          map: this.map,
-          title: this.eventVenueName
-        });
+    let marker = new google.maps.Marker({
+      position: latLng,
+      map: this.map,
+      title: this.eventVenueName
+    });
 
     // });
 
@@ -369,4 +377,18 @@ export class EventDetailInformationPage {
 
   }
 
+  openMapsApp() {
+    // let coords = "loc:" + this.eventLatitude + "+" + this.eventLongitude;
+    let coords = this.eventLatitude + "," + this.eventLongitude;
+
+    if (this._isiOS) {
+      window.open("http://maps.apple.com/?q=" + coords, '_system');
+      return;
+    }
+    if (this._isAndroid) {
+      window.open("geo:" + coords);
+      return;
+    }
+    window.open("http://maps.google.com/?q=" + coords, '_system');
+  }
 }

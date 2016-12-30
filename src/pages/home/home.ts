@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 
 import { ProfilePage } from '../profile/profile';
-import { EventAddPage } from '../event-add/event-add';
+import { EventSearchPage } from '../event-search/event-search';
 import { EventDetailTabsPage } from '../event-detail-tabs/event-detail-tabs';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
@@ -195,8 +195,8 @@ export class HomePage {
     this.nav.push(ProfilePage);
   }
 
-  addEvent() {
-    this.nav.push(EventAddPage);
+  eventSearch() {
+    this.nav.push(EventSearchPage);
   }
 
   showNotiications() {
