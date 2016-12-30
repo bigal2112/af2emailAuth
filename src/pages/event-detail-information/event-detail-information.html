@@ -16,28 +16,29 @@
         ALL USERS -->
   <h2>{{eventVenueName}}</h2>
   <div #map id="map"></div>
-  <button ion-button full color="secondary" (click)="openMapsApp()">Get directions</button>
+  <button ion-button full outline color="secondary" (click)="openMapsApp()">Get directions</button>
   <hr>
 
-  <!--  Invited users - list of users that were invited to this event
+  <!--  Invited guests - list of users that were invited to this event
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
     <h2>Invited Guests</h2>
-    <div class="invitedUsers">
+    <div class="invitedGuests">
       <ion-scroll scrollX="true" scrollY="true">
         <ion-row>
-          <ion-col *ngFor="let user of invitedUsers">
-            <ion-label>{{user.inviteeName}}</ion-label>
-            <img src="{{user.inviteeAvatarURL}}">
-
-          </ion-col>
+          <div *ngFor="let user of invitedUsers">
+            <ion-col [ngStyle]="{'background-color': user.inviteeBackgroundColor}">
+              <ion-label>{{user.inviteeName}}</ion-label>
+              <img src="{{user.inviteeAvatarURL}}">
+            </ion-col>
+          </div>
         </ion-row>
       </ion-scroll>
     </div>
     <hr>
   </div>
 
-  
+
   <!--  Clashes details - Clashes with existing accepted events or possibnle clashes with invited to events
         INVITED USERS -->
 
@@ -63,14 +64,27 @@
     <hr>
   </div>
 
-  
+
 
   <!--  Ticket details - original cost, actual cost, total outlay, last chance to accept datetime etc.
         OWNER -->
-  <div *ngIf="eventType === 'MY_EVENT'">
-    <h3>Ticket details</h3>
-    <hr>
+  <div *ngIf="eventType === 'MY_EVENT'" class="ticketDetails">
+    <h2>Ticket Details</h2>
+    <ion-row>
+      <ion-col width-50>
+        <ion-label>Facevalue: {{eventIntialTicketPrice | currency: 'GBP':true}}</ion-label>
+      </ion-col>
+      <ion-col width-50>
+        <ion-label>Actual: {{eventActualTicketPrice | currency: 'GBP':true}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label><strong>Estimate event cost: {{currentCostOfEvent | currency: 'GBP':true}}</strong></ion-label>
+      </ion-col>
+    </ion-row>
+    <button ion-button full outline color="secondary" (click)="boughtTheTickets()">Bought Tickets</button>
   </div>
-  
+
 
 </ion-content>

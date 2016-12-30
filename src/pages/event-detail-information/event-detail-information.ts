@@ -36,8 +36,12 @@ export class EventDetailInformationPage {
   eventCity: any;
   eventCountry: any;
   eventTitle: any;
+  eventIntialTicketPrice: any = 0;
+  eventActualTicketPrice: any = 0;
 
   invitedUsers: any;
+  numberOfAcceptUsers: number;
+  currentCostOfEvent: number;
 
   eventType: string;    // "MY_EVENT" or "INVITED_TO_EVENT"
   statusTrack: boolean;
@@ -140,11 +144,13 @@ export class EventDetailInformationPage {
           });
         }
 
+        // get the performer string if there is one
         let performerObj = eventData.performers
         if (performerObj != null) {
           that.performer = performerObj.performer.name;
         }
 
+        // and finally get all the other event information
         that.eventVenueName = eventData.venue_name;
         that.eventStartTime = eventData.start_time;
         that.eventVenueAddress = eventData.address;
@@ -163,29 +169,58 @@ export class EventDetailInformationPage {
       that.loadGoogleMaps();
     });
 
-    // ---------------------------------------------
-    // Get the invited users if I'm the creator
-    // ---------------------------------------------
-    if (this.eventType === "MY_EVENT") {
-      this.eventData.getInvitedUsers(this.firebaseEventId).on('value', data => {
-        if (data == null || typeof (data) == 'undefined') {
-          console.log("NO INVITES");
-        } else {
+    // get the rest of the event information from Firebase (ticket costs ...)
+    this.eventData.getEventDetail(this.firebaseEventId).on('value', data => {
+      this.eventIntialTicketPrice = data.val().initialTicketPrice;
+      this.eventActualTicketPrice = data.val().actualTicketPrice;
 
-          this.invitedUsers = [];
-          data.forEach(invitedUser => {
-            this.invitedUsers.push({
-              imageMed: invitedUser.val().imageMed,
-              inviteAccepted: invitedUser.val().inviteAccepted,
-              inviteeAvatarURL: invitedUser.val().inviteeAvatarURL,
-              inviteeName: invitedUser.val().inviteeName
+      // ---------------------------------------------
+      // Get the invited users if I'm the creator
+      // ---------------------------------------------
+      if (this.eventType === "MY_EVENT") {
+        this.eventData.getInvitedUsers(this.firebaseEventId).on('value', data => {
+          if (data == null || typeof (data) == 'undefined') {
+            console.log("NO INVITES");
+          } else {
+
+            this.invitedUsers = [];
+            this.numberOfAcceptUsers = 0;
+
+            data.forEach(invitedUser => {
+  
+              // work out the users background color based on the inviteAccepted value and count the ACCEPT users for use later in the ticketing details part
+              let backgroundColor = "red";          //  "ERROR"
+              if (invitedUser.val().inviteAccepted === "ACCEPT") {
+                backgroundColor = "lightgreen";
+                this.numberOfAcceptUsers++;
+              } else if (invitedUser.val().inviteAccepted === "TRACK") {
+                backgroundColor = "lightcyan";
+              } else if (invitedUser.val().inviteAccepted === "REJECT") {
+                backgroundColor = "lightcoral";
+              } else if (invitedUser.val().inviteAccepted === "NOT YET") {
+                backgroundColor = "lightgoldenrodyellow";
+              }
+
+              this.invitedUsers.push({
+                imageMed: invitedUser.val().imageMed,
+                inviteAccepted: invitedUser.val().inviteAccepted,
+                inviteeAvatarURL: invitedUser.val().inviteeAvatarURL,
+                inviteeName: invitedUser.val().inviteeName,
+                inviteeBackgroundColor: backgroundColor
+              });
             });
-          });
 
-          console.log(this.invitedUsers);
-        }
-      })
-    }
+            // calculate the current (initial) cost of the event base on ACCEPT users plus me.
+            this.currentCostOfEvent = (this.numberOfAcceptUsers +1 ) * this.eventIntialTicketPrice;
+
+            // console.log("Invited Guests");
+            // console.log(this.invitedUsers);
+          }
+
+        })
+      }
+    });
+
 
     // ---------------------------------------------
     // Get the acceptance details if I'm an invitee
@@ -261,6 +296,10 @@ export class EventDetailInformationPage {
       });
       toast.present();
     })
+  }
+
+  boughtTheTickets() {
+    console.log("buyTickets");
   }
 
   loadGoogleMaps() {

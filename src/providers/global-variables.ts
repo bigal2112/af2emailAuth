@@ -28,7 +28,7 @@ export class GlobalVariables {
 
   setCurrentUserDetals(): any {
     this.currentUserId = firebase.auth().currentUser.uid;
-    this.usersRef.child(this.currentUserId).on('value', data => {
+    return this.usersRef.child(this.currentUserId).on('value', data => {
       this.userDetails = data.val();
     });
   }

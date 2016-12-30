@@ -73,6 +73,7 @@ export class EventData {
               title: eventInfo.title,
               start_time: eventInfo.start_time,
               initialTicketPrice: ticketValue * 1.00,
+              actualTicketPrice: 0.00,
               performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
               image250: imageObj != null ? imageObj.block250.url : null,
               image188: imageObj != null ? imageObj.block188.url : null,
@@ -115,8 +116,8 @@ export class EventData {
   //   return this.eventsRef.orderByChild('date');
   // }
 
-  getEventDetail(eventId): any {
-    return this.eventsRef.child(eventId);
+  getEventDetail(firebaseEventId): any {
+    return this.eventsRef.child(firebaseEventId);
   }
 
   // addGuest(guestName, eventId, eventPrice, guestPicture = null): any {

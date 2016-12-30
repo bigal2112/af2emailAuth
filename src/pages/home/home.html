@@ -51,9 +51,6 @@
       </ion-grid>
     </ion-card>
 
-    <!--<div style="background-color: gray;" *ngIf="event?.eventType === 'TRACK'">
-    <div style="background-color: red;" *ngIf="event?.eventType === 'REJECT'">
-    <div style="background-color: seagreen;" *ngIf="event?.eventType === 'NOT YET'">-->
     <ion-list no-lines>
       <ion-item [ngStyle]="{'background-color': event.backgroundColor}" *ngFor="let event of eventList; let i = index" (click)="goToEventDetail(event.eventfulId, event.firebaseEventId, event.performer, event.eventType, event.firebaseInviteId)">
         <!--<div *ngIf="i != 0">-->
@@ -81,9 +78,6 @@
       </ion-item>
     </ion-list>
   </div>
-  <!--</div>
-</div>
-</div>-->
 
   <!-- if no events to display -->
   <div class="noEvents" *ngIf="firstEventPerformer == null && eventsCntr === 0">

@@ -44,7 +44,7 @@ page-event-detail-information {
         text-align: right;
     }
 
-    .invitedUsers {
+    .invitedGuests {
 
         .scroll-content {
             padding:0;
@@ -55,7 +55,7 @@ page-event-detail-information {
         }
 
         .label-md {
-            margin:2px 1px;
+            margin: 1px;
             text-align: center;
         }
 
@@ -64,6 +64,9 @@ page-event-detail-information {
             width: 80px;
             max-width: 80px;
             // border: 1px solid black;
+            // background-color: limegreen;
+            margin-right: 2px;
+            height: 73px;
         }
 
         ion-scroll {
@@ -117,6 +120,17 @@ page-event-detail-information {
             margin-left: 2px;
             margin-top: 15px;
             font-size: inherit;
+        }
+    }
+
+    .ticketDetails {
+        ion-label {
+            // font-size: 0.9em;
+            text-align: center;
+        }
+
+        .label-md {
+            margin: 2px;;
         }
     }
 

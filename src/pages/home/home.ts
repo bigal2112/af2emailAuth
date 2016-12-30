@@ -17,9 +17,7 @@ declare var EVDB: any;
 export class HomePage {
   public myEvents: any;
   public invitedEvents: any;
-  // public myEventsRetrieved: boolean;
-  // public invitedEventsRetrieved: boolean;
-
+  
   public eventList: any = [];
   public unorderedList: any = [];
   public loader: any;
@@ -41,8 +39,6 @@ export class HomePage {
   firstEventInviteAcceptedStatus: any;
   firstEventBackgroundColor: string;
 
-  testBackgroundColor: string = "myStyle={'background-color':'blue'}";
-
   that: any;
 
   constructor(public nav: NavController, public eventData: EventData, public globalVars: GlobalVariables, public loadingCtrl: LoadingController) {
@@ -58,7 +54,7 @@ export class HomePage {
     });
     this.loader.present();
 
-    this.that = this;
+    // this.that = this;
 
     // this.myEventsRetrieved = false;
     // this.invitedEventsRetrieved = false;
@@ -175,7 +171,7 @@ export class HomePage {
         });
         // console.log("Retrieving events list - complete");
         // console.log(this.eventList);
-        this.that.loader.dismiss();
+        this.loader.dismiss();
 
       });
     });
