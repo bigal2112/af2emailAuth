@@ -22,11 +22,12 @@
   <!--  Invited users - list of users that were invited to this event
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
-    <h3>People you invited to this event</h3>
+    <h2>Invited Guests</h2>
     <div class="invitedUsers">
       <ion-scroll scrollX="true" scrollY="true">
         <ion-row>
           <ion-col *ngFor="let user of invitedUsers">
+            <ion-label>{{user.inviteeName}}</ion-label>
             <img src="{{user.inviteeAvatarURL}}">
 
           </ion-col>
