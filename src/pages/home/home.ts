@@ -117,7 +117,7 @@ export class HomePage {
 
         // remove any invited to events where the tickets have already been bought
         this.invitedEventsList = this.invitedEventsList.filter((event) => {
-          return event.actualTicketPrice == null || event.actualTicketPrice == 0.00;
+          return event.actualTicketPrice == null || event.actualTicketPrice == 0.00 || event.inviteAcceptedStatus == "ACCEPT" ;
         })
 
         // console.log("and invitedEvents");
