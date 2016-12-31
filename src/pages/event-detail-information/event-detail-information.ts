@@ -330,11 +330,17 @@ export class EventDetailInformationPage {
             console.log('Saved clicked');
             this.eventActualTicketPrice = data.value;
 
-            // TODO : update Firebase with actual cost and bought datetime.
+            // show loading control
+            let loader = this.loadingCtrl.create({
+              content: "Updating balances...."
+            });
+            loader.present();
+
             this.ticketsBoughtDateTime = Date.now()
             this.eventData.updateFirebaseAfterTicketsBought(this.firebaseEventId, this.eventActualTicketPrice,
               this.numberOfAcceptUsers, this.ticketsBoughtDateTime, this.invitedUsers).then(() => {
                 console.log("UPDATE COMPLETED SUCCESSFULLY");
+                loader.dismiss();
               });
           }
         }

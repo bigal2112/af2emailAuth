@@ -19,15 +19,20 @@
   <button ion-button full outline color="secondary" (click)="openMapsApp()">Get directions</button>
   <hr>
 
-  <!--  Invited guests - list of users that were invited to this event
+  <!--  Invited guests/Who's Coming' - list of users that were invited to this event
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
-    <h2>Invited Guests</h2>
+    <h2 *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">Invited Guests</h2>
+    <h2 *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null">Who's Coming</h2>
     <div class="invitedGuests">
       <ion-scroll scrollX="true" scrollY="true">
         <ion-row>
           <div *ngFor="let user of invitedUsers">
-            <ion-col [ngStyle]="{'background-color': user.inviteeBackgroundColor}">
+            <ion-col *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null" [ngStyle]="{'background-color': user.inviteeBackgroundColor}">
+              <ion-label>{{user.inviteeName}}</ion-label>
+              <img src="{{user.inviteeAvatarURL}}">
+            </ion-col>
+            <ion-col *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null && user.inviteAccepted == 'ACCEPT'">
               <ion-label>{{user.inviteeName}}</ion-label>
               <img src="{{user.inviteeAvatarURL}}">
             </ion-col>
