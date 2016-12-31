@@ -18,8 +18,9 @@ export class HomePage {
   public myEvents: any;
   public invitedEvents: any;
   
-  public eventList: any = [];
-  public unorderedList: any = [];
+  public eventList: any;
+  public myEventsList: any;
+  public invitedEventsList: any;
   public loader: any;
   public eventsCntr: number;
   public numberOfInvitations: number;
@@ -31,6 +32,7 @@ export class HomePage {
   firstEventPerformer: any;
   firstEventTitle: any;
   firstEventPrice: any;
+  firstEventActualPrice: any;
   firstEventDate: any;
   firstEventImage250: any;
   firstEventImageMed: any;
@@ -68,15 +70,16 @@ export class HomePage {
         this.invitedEvents = data;
 
         // now we have all the events we need to combine them into one array
-        this.unorderedList = [];
+        this.myEventsList = [];
         this.myEvents.forEach(snap => {
-          this.unorderedList.push({
+          this.myEventsList.push({
             eventfulId: snap.val().eventId,
             eventType: "MY_EVENT",
             firebaseEventId: snap.key,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
+            actualTicketPrice: snap.val().actualTicketPrice,
             start_time: snap.val().start_time,
             image250: snap.val().image250,
             imageMed: snap.val().imageMed,
@@ -89,17 +92,20 @@ export class HomePage {
         // console.log("myEvents");
         // console.log(this.unorderedList);
 
+        this.invitedEventsList = [];
         this.numberOfInvitations = 0;
         this.invitedEvents.forEach(snap => {
+
           this.numberOfInvitations++;
 
-          this.unorderedList.push({
+          this.invitedEventsList.push({
             eventfulId: snap.val().eventId,
             eventType: "INVITED_TO_EVENT",
             firebaseEventId: snap.val().firebaseEventId,
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
+            actualTicketPrice: snap.val().actualTicketPrice,
             start_time: snap.val().start_time,
             image250: snap.val().image250,
             imageMed: snap.val().imageMed,
@@ -107,20 +113,27 @@ export class HomePage {
             firebaseInviteId: snap.key,
             inviteAcceptedStatus: snap.val().inviteAccepted
           });
+        });
+
+        // remove any invited to events where the tickets have already been bought
+        this.invitedEventsList = this.invitedEventsList.filter((event) => {
+          return event.actualTicketPrice == null || event.actualTicketPrice == 0.00;
         })
 
-        console.log("and invitedEvents");
-        console.log(this.unorderedList);
+        // console.log("and invitedEvents");
+        // console.log(this.unorderedList);
 
-        // sort the array by start_time
-        let orderedList = this.unorderedList.sort(this.sortByStartTimeDesc);
+        // concatenate both my events and invited event together and sort by start date
+        let unorderedList = this.myEventsList.concat(this.invitedEventsList);
+        let orderedList = unorderedList.sort(this.sortByStartTimeDesc);
 
-        // and remove any events that are in the past
+        // remove any events that are in the past
         orderedList = orderedList.filter((event) => {
           return Date.parse(event.start_time) >= Date.now();
         })
 
-        // now create the first itema dn eventsList from the sorted array
+
+        // now create the first item and eventList from the sorted array
         this.eventList = [];
         this.eventsCntr = 0;
         orderedList.forEach(event => {
@@ -142,6 +155,7 @@ export class HomePage {
             this.firstEventPerformer = event.performer;
             this.firstEventTitle = event.title;
             this.firstEventPrice = event.initialTicketPrice;
+            this.firstEventActualPrice = event.actualTicketPrice;
             this.firstEventDate = event.start_time;
             this.firstEventImage250 = event.image250;
             this.firstEventImageMed = event.imageMed;
@@ -157,6 +171,7 @@ export class HomePage {
               performer: event.performer,
               title: event.title,
               initialTicketPrice: event.initialTicketPrice,
+              actualTicketPrice: event.actualTicketPrice,
               start_time: event.start_time,
               image250: event.image250,
               imageMed: event.imageMed,

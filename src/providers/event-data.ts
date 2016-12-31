@@ -49,6 +49,7 @@ export class EventData {
       title: eventInfo.title,
       start_time: eventInfo.start_time,
       initialTicketPrice: ticketValue * 1.00,
+      actualTicketPrice: 0.00,
       performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
       image250: imageObj != null ? imageObj.block250.url : null,
       image188: imageObj != null ? imageObj.block188.url : null,
@@ -186,7 +187,8 @@ export class EventData {
     //  3. Update the balance of creator/user buy the new calculated cost of a ticket.
     //  4. Update the balance of the user buy the new calculated cost of a ticket.
     //  5. Update the balance of the creator buy the new calculated cost of a ticket times the number of ACCEPTed users.
-    //  6. Update the EVENTS node with the actual ticket cost and date bought.
+    //  6. Update the INVITES node with the actual ticket cost and date bought.
+    //  7. Update the EVENTS node with the actual ticket cost and date bought.
     //  
 
     //  1. Calculate each ACCEPTed users actual ticket cost based on totle cost / number of users.
@@ -234,7 +236,12 @@ export class EventData {
               this.balancesRef.child(user.inviteOwnerId).child('balance').transaction((balance: number) => {
                 balance += (this.actualTicketCost * -1);
                 return balance;
-              });
+              }).then((data) => {
+                //  6. Update the INVITES node with the actual ticket cost and date bought.
+                this.invitesRef.child(user.inviteFirebaseId).update({
+                  actualTicketPrice: this.actualTicketCost
+                })
+              })
             });
           });
 
@@ -242,7 +249,7 @@ export class EventData {
         });
       };    // if (user.inviteAccepted === "ACCEPT")
     });
-    //  6. Update the EVENTS node with the actual ticket cost and date bought.
+    //  7. Update the EVENTS node with the actual ticket cost and date bought.
     return this.eventsRef.child(firebaseEventId).update({
       actualTicketPrice: this.actualTicketCost,
       ticketsBoughtDateTime: Date.now()

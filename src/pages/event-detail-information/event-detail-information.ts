@@ -213,7 +213,8 @@ export class EventDetailInformationPage {
                 inviteeBackgroundColor: backgroundColor,
                 inviteFirebaseEventId: invitedUser.val().firebaseEventId,
                 inviteInviteeId: invitedUser.val().inviteeId,
-                inviteOwnerId: invitedUser.val().ownerId
+                inviteOwnerId: invitedUser.val().ownerId,
+                inviteFirebaseId: invitedUser.key
               });
             });
 
