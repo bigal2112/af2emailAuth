@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NavController, NavParams, LoadingController, ToastController, Platform } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController, Platform, AlertController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
 import { ConnectivityService } from '../../providers/connectivity-service';
@@ -38,10 +38,12 @@ export class EventDetailInformationPage {
   eventTitle: any;
   eventIntialTicketPrice: any = 0;
   eventActualTicketPrice: any = 0;
+  eventTicketsBoughtOn: any
 
   invitedUsers: any;
   numberOfAcceptUsers: number;
   currentCostOfEvent: number;
+  ticketsBoughtDateTime: any;
 
   eventType: string;    // "MY_EVENT" or "INVITED_TO_EVENT"
   statusTrack: boolean;
@@ -59,7 +61,8 @@ export class EventDetailInformationPage {
   private _isiOS: boolean;
 
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
-    public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController, public connectivityService: ConnectivityService, public platform: Platform) {
+    public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController,
+    public connectivityService: ConnectivityService, public platform: Platform, public alertCtrl: AlertController) {
 
     this._platform = platform;
     this._isAndroid = platform.is('android');
@@ -161,10 +164,10 @@ export class EventDetailInformationPage {
         that.eventLongitude = eventData.longitude;
       }
 
-      console.log("Event Data");
-      console.log(eventData);
-      console.log(that.eventLatitude);
-      console.log(that.eventLongitude);
+      // console.log("Event Data");
+      // console.log(eventData);
+      // console.log(that.eventLatitude);
+      // console.log(that.eventLongitude);
 
       that.loadGoogleMaps();
     });
@@ -173,6 +176,7 @@ export class EventDetailInformationPage {
     this.eventData.getEventDetail(this.firebaseEventId).on('value', data => {
       this.eventIntialTicketPrice = data.val().initialTicketPrice;
       this.eventActualTicketPrice = data.val().actualTicketPrice;
+      this.eventTicketsBoughtOn = data.val().ticketsBoughtDateTime;
 
       // ---------------------------------------------
       // Get the invited users if I'm the creator
@@ -187,7 +191,7 @@ export class EventDetailInformationPage {
             this.numberOfAcceptUsers = 0;
 
             data.forEach(invitedUser => {
-  
+
               // work out the users background color based on the inviteAccepted value and count the ACCEPT users for use later in the ticketing details part
               let backgroundColor = "red";          //  "ERROR"
               if (invitedUser.val().inviteAccepted === "ACCEPT") {
@@ -206,15 +210,18 @@ export class EventDetailInformationPage {
                 inviteAccepted: invitedUser.val().inviteAccepted,
                 inviteeAvatarURL: invitedUser.val().inviteeAvatarURL,
                 inviteeName: invitedUser.val().inviteeName,
-                inviteeBackgroundColor: backgroundColor
+                inviteeBackgroundColor: backgroundColor,
+                inviteFirebaseEventId: invitedUser.val().firebaseEventId,
+                inviteInviteeId: invitedUser.val().inviteeId,
+                inviteOwnerId: invitedUser.val().ownerId
               });
             });
 
             // calculate the current (initial) cost of the event base on ACCEPT users plus me.
-            this.currentCostOfEvent = (this.numberOfAcceptUsers +1 ) * this.eventIntialTicketPrice;
+            this.currentCostOfEvent = (this.numberOfAcceptUsers + 1) * this.eventIntialTicketPrice;
 
-            // console.log("Invited Guests");
-            // console.log(this.invitedUsers);
+            console.log("Invited Guests");
+            console.log(this.invitedUsers);
           }
 
         })
@@ -299,7 +306,41 @@ export class EventDetailInformationPage {
   }
 
   boughtTheTickets() {
-    console.log("buyTickets");
+    let prompt = this.alertCtrl.create({
+      title: 'Bought tickets',
+      message: "Enter the total value spent on all tickets (including yours) for the event.",
+      inputs: [
+        {
+          name: 'value',
+          placeholder: 'Total cost of event'
+          // value: this.ticketFaceValue
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            console.log('Saved clicked');
+            this.eventActualTicketPrice = data.value;
+
+            // TODO : update Firebase with actual cost and bought datetime.
+            this.ticketsBoughtDateTime = Date.now()
+            this.eventData.updateFirebaseAfterTicketsBought(this.firebaseEventId, this.eventActualTicketPrice,
+              this.numberOfAcceptUsers, this.ticketsBoughtDateTime, this.invitedUsers).then(() => {
+                console.log("UPDATE COMPLETED SUCCESSFULLY");
+              });
+          }
+        }
+      ]
+    });
+    prompt.present();
   }
 
   loadGoogleMaps() {
@@ -336,12 +377,12 @@ export class EventDetailInformationPage {
     else {
 
       if (this.connectivityService.isOnline()) {
-        console.log("showing map");
+        // console.log("showing map");
         this.initMap();
         this.enableMap();
       }
       else {
-        console.log("disabling map");
+        // console.log("disabling map");
         this.disableMap();
       }
 
@@ -355,7 +396,7 @@ export class EventDetailInformationPage {
 
     // Geolocation.getCurrentPosition().then((position) => {
 
-    console.log("Setting map position to " + this.eventLatitude + ", " + this.eventLongitude);
+    // console.log("Setting map position to " + this.eventLatitude + ", " + this.eventLongitude);
     let latLng = new google.maps.LatLng(this.eventLatitude, this.eventLongitude);
 
     let mapOptions = {
@@ -379,11 +420,11 @@ export class EventDetailInformationPage {
   }
 
   disableMap() {
-    console.log("disable map");
+    // console.log("disable map");
   }
 
   enableMap() {
-    console.log("enable map");
+    // console.log("enable map");
   }
 
   addConnectivityListeners() {
