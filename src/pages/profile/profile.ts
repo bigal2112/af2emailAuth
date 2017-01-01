@@ -41,9 +41,7 @@ export class ProfilePage {
       this.birthDate = this.userProfile.birthDate;
 
       this.ngZone.run(() => {
-        this.transactionsDB = [];
-        this.transactionsAll = [];
-
+        
         this.profileData.getUsersBalance(this.userFirebaseId).on('value', data => {
           this.myBalance = data.val().balance == null ? 0.00 : data.val().balance;
           if (this.myBalance >= 0) {
@@ -52,7 +50,7 @@ export class ProfilePage {
             this.myBalanceColor = "red"
           }
 
-          this.profileData.getUsersTransactions(this.userFirebaseId).on('value', data => {
+          this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
             this.transactionsCR = [];
 
             data.forEach(snap => {
@@ -63,23 +61,36 @@ export class ProfilePage {
               });
             });
 
-            let unorderedList = this.transactionsCR.concat(this.transactionsDB);
-            let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
+            this.profileData.getUsersTransactionsDB(this.userFirebaseId).on('value', data => {
+              this.transactionsDB = [];
 
-            orderedList.forEach(transaction => {
-              this.transactionsAll.push({
-                transCreatedOn: transaction.transCreatedOn,
-                transAmount: transaction.transAmount,
-                transColor: transaction.transColor
+              data.forEach(snap => {
+                this.transactionsDB.push({
+                  transCreatedOn: snap.val().transCreatedOn,
+                  transAmount: snap.val().transAmount * -1,
+                  transColor: "red"
+                });
               });
+
+              let unorderedList = this.transactionsCR.concat(this.transactionsDB);
+              let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
+
+              this.transactionsAll = [];
+              orderedList.forEach(transaction => {
+                this.transactionsAll.push({
+                  transCreatedOn: transaction.transCreatedOn,
+                  transAmount: transaction.transAmount,
+                  transColor: transaction.transColor
+                });
+              });
+
+              console.log("Transaction List");
+              console.log(this.transactionsAll);
+
+              this.loader.dismiss();
             });
 
-            console.log("Transaction List");
-            console.log(this.transactionsAll);
-
-            this.loader.dismiss();
           });
-
         });
       });
 
@@ -207,9 +218,9 @@ export class ProfilePage {
   }
 
   sortByCreatedOnDate(a, b) {
-    if (a.transCreatedOn < b.transCreatedOn)
-      return -1;
     if (a.transCreatedOn > b.transCreatedOn)
+      return -1;
+    if (a.transCreatedOn < b.transCreatedOn)
       return 1;
     return 0;
   }

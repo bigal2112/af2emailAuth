@@ -106,7 +106,11 @@ export class ProfileData {
     return this.balancesRef.child(firebaseUserId);
   }
 
-  getUsersTransactions(firebaseUserId) {
+  getUsersTransactionsCR(firebaseUserId) {
     return this.transactionsRef.orderByChild('transFromUserId').equalTo(firebaseUserId);
+  }
+
+  getUsersTransactionsDB(firebaseUserId) {
+    return this.transactionsRef.orderByChild('transToUserId').equalTo(firebaseUserId);
   }
 }

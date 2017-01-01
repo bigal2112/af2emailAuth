@@ -44,7 +44,7 @@
     <ion-item *ngFor="let transaction of transactionsAll">
       <ion-row>
         <ion-col class="floatLeft">
-          <h6>{{transaction.transCreatedOn | date:'MMM d'}}</h6>
+          <h6>{{transaction.transCreatedOn | date:'MMM d H:m'}}</h6>
         </ion-col>
         <ion-col class="floatRight">
           <h6 [style.color]="transaction.transColor">{{transaction.transAmount | currency: 'GBP':true}}</h6>
