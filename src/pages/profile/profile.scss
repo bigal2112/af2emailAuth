@@ -1,4 +1,5 @@
 page-profile {
+  
 
   // ion-item ion-label {
   //   margin: 0 !important;
@@ -16,9 +17,24 @@ page-profile {
 
     h2 {
         color: #808080;
-        margin-left: 8px;
         font-size: 1.5rem;
         font-weight: bold;
+    }
+  }
+
+  .transactionList {
+    background-color: #808080;
+
+    ion-item {
+      // border: 1px solid black;
+      min-height: 1rem;
+      padding-left: 0;
+      margin-top: 1px;
+      background-color: lightgray;
+    }
+
+    h6 {
+      font-size: 1.2rem;
     }
   }
 

@@ -13,6 +13,8 @@ export class ProfileData {
   users: any;
   avatarPictureRef: any;
   balancesRef: any;
+  transactionsRef: any;
+  
 
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any;
@@ -25,7 +27,8 @@ export class ProfileData {
     this.userProfile = firebase.database().ref('/userProfile');
     this.users = firebase.database().ref('/users');
     this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
-    this.balancesRef = firebase.database().ref('balances')
+    this.balancesRef = firebase.database().ref('balances');
+    this.transactionsRef = firebase.database().ref('transactions');
   }
 
   /**
@@ -101,5 +104,9 @@ export class ProfileData {
 
   getUsersBalance(firebaseUserId) {
     return this.balancesRef.child(firebaseUserId);
+  }
+
+  getUsersTransactions(firebaseUserId) {
+    return this.transactionsRef.orderByChild('transFromUserId').equalTo(firebaseUserId);
   }
 }

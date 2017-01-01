@@ -1,4 +1,4 @@
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController } from 'ionic-angular';
 import { Component, NgZone } from '@angular/core';
 import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
@@ -15,12 +15,22 @@ export class ProfilePage {
   myBalance: any;
   myBalanceColor: string;
   ngZone: any;
+  transactionsCR: any;
+  transactionsDB: any;
+  transactionsAll: any;
+  loader: any;
 
   constructor(public nav: NavController, public alertCtrl: AlertController, public profileData: ProfileData,
-    public authData: AuthData) {
+    public authData: AuthData, public loadingCtrl: LoadingController) {
 
     this.ngZone = new NgZone({ enableLongStackTrace: false });
     // console.log("profile.ts - Constructor");
+
+    // show loading control
+    this.loader = this.loadingCtrl.create({
+      content: "Retrieving your transactions...."
+    });
+    this.loader.present();
 
     this.profileData.getUserProfile().on('value', (data) => {
       this.userProfile = data.val();
@@ -31,17 +41,52 @@ export class ProfilePage {
       this.birthDate = this.userProfile.birthDate;
 
       this.ngZone.run(() => {
+        this.transactionsDB = [];
+        this.transactionsAll = [];
+
         this.profileData.getUsersBalance(this.userFirebaseId).on('value', data => {
-          this.myBalance = data.val().balance;
-          if(this.myBalance >= 0) {
+          this.myBalance = data.val().balance == null ? 0.00 : data.val().balance;
+          if (this.myBalance >= 0) {
             this.myBalanceColor = "green"
           } else {
             this.myBalanceColor = "red"
           }
+
+          this.profileData.getUsersTransactions(this.userFirebaseId).on('value', data => {
+            this.transactionsCR = [];
+
+            data.forEach(snap => {
+              this.transactionsCR.push({
+                transCreatedOn: snap.val().transCreatedOn,
+                transAmount: snap.val().transAmount,
+                transColor: "green"
+              });
+            });
+
+            let unorderedList = this.transactionsCR.concat(this.transactionsDB);
+            let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
+
+            orderedList.forEach(transaction => {
+              this.transactionsAll.push({
+                transCreatedOn: transaction.transCreatedOn,
+                transAmount: transaction.transAmount,
+                transColor: transaction.transColor
+              });
+            });
+
+            console.log("Transaction List");
+            console.log(this.transactionsAll);
+
+            this.loader.dismiss();
+          });
+
         });
       });
 
+
     });
+
+
 
   }
 
@@ -159,5 +204,13 @@ export class ProfilePage {
     }, error => {
       console.log("ERROR -> " + JSON.stringify(error));
     });
+  }
+
+  sortByCreatedOnDate(a, b) {
+    if (a.transCreatedOn < b.transCreatedOn)
+      return -1;
+    if (a.transCreatedOn > b.transCreatedOn)
+      return 1;
+    return 0;
   }
 }

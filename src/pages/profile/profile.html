@@ -40,15 +40,26 @@
     </ion-row>
   </ion-item>
 
-
+  <ion-list class="transactionList">
+    <ion-item *ngFor="let transaction of transactionsAll">
+      <ion-row>
+        <ion-col class="floatLeft">
+          <h6>{{transaction.transCreatedOn | date:'MMM d'}}</h6>
+        </ion-col>
+        <ion-col class="floatRight">
+          <h6 [style.color]="transaction.transColor">{{transaction.transAmount | currency: 'GBP':true}}</h6>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>
 
 
   <!--<ion-list>-->
-    <!--<ion-list-header>
+  <!--<ion-list-header>
       Personal Information
     </ion-list-header>-->
 
-    <!--<ion-item (click)="updateName()">
+  <!--<ion-item (click)="updateName()">
       <ion-grid>
         <ion-row>
           <ion-col width-50>
