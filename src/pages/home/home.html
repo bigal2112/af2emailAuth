@@ -27,6 +27,8 @@
         <h2>{{firstEventPerformer}}</h2>
         <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
         <p>{{firstEventActualPrice | currency: 'GBP':true}}</p>
+        <ion-icon *ngIf="firstEventActualPrice == 0.00 || firstEventActualPrice == null" color="secondary" name="unlock"></ion-icon>
+        <ion-icon *ngIf="firstEventActualPrice != 0.00 && firstEventActualPrice != null" color="danger" name="lock"></ion-icon>
       </ion-card-content>
       <!--<ion-grid *ngIf="firstEventType === 'MY_EVENT'">
         <ion-row>
@@ -71,7 +73,8 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              {{event?.actualTicketPrice | currency: 'GBP':true}}
+              <ion-icon *ngIf="event.actualTicketPrice == 0.00 || event.actualTicketPrice == null" color="secondary" name="unlock"></ion-icon>
+              <ion-icon *ngIf="event.actualTicketPrice != 0.00 && event.actualTicketPrice != null" color="danger" name="lock"></ion-icon>
             </ion-col>
             <!--<ion-col>
               {{event?.numberOfInvites}}

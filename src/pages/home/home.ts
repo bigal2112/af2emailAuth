@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 
 import { ProfilePage } from '../profile/profile';
@@ -17,7 +17,7 @@ declare var EVDB: any;
 export class HomePage {
   public myEvents: any;
   public invitedEvents: any;
-  
+
   public eventList: any;
   public myEventsList: any;
   public invitedEventsList: any;
@@ -42,8 +42,12 @@ export class HomePage {
   firstEventBackgroundColor: string;
 
   that: any;
+  ngZone: any;
 
   constructor(public nav: NavController, public eventData: EventData, public globalVars: GlobalVariables, public loadingCtrl: LoadingController) {
+
+    this.ngZone = new NgZone({ enableLongStackTrace: false });
+
 
     // initialise the current users global details
     this.globalVars.setCurrentUserDetals();
@@ -117,7 +121,7 @@ export class HomePage {
 
         // remove any invited to events where the tickets have already been bought
         this.invitedEventsList = this.invitedEventsList.filter((event) => {
-          return event.actualTicketPrice == null || event.actualTicketPrice == 0.00 || event.inviteAcceptedStatus == "ACCEPT" ;
+          return event.actualTicketPrice == null || event.actualTicketPrice == 0.00 || event.inviteAcceptedStatus == "ACCEPT";
         })
 
         // console.log("and invitedEvents");
@@ -132,57 +136,58 @@ export class HomePage {
           return Date.parse(event.start_time) >= Date.now();
         })
 
+        this.ngZone.run(() => {
+          // now create the first item and eventList from the sorted array
+          this.eventList = [];
+          this.eventsCntr = 0;
+          orderedList.forEach(event => {
 
-        // now create the first item and eventList from the sorted array
-        this.eventList = [];
-        this.eventsCntr = 0;
-        orderedList.forEach(event => {
+            // work out the list items background color base on the inviteAccepted value
+            let backgroundColor = "white";
+            if (event.inviteAcceptedStatus === "TRACK") {
+              backgroundColor = "lightcyan";
+            } else if (event.inviteAcceptedStatus === "REJECT") {
+              backgroundColor = "lightcoral";
+            } else if (event.inviteAcceptedStatus === "NOT YET") {
+              backgroundColor = "lightgoldenrodyellow";
+            }
 
-          // work out the list items background color base on the inviteAccepted value
-          let backgroundColor = "white";
-          if(event.inviteAcceptedStatus === "TRACK") {
-            backgroundColor = "lightcyan";
-          } else if(event.inviteAcceptedStatus === "REJECT") {
-            backgroundColor = "lightcoral";
-          } else if(event.inviteAcceptedStatus === "NOT YET") {
-            backgroundColor = "lightgoldenrodyellow";
-          }
+            if (this.eventsCntr === 0) {
+              this.firstEventEventfulId = event.eventfulId;
+              this.firstEventType = event.eventType;
+              this.firstEventFirebaseEventId = event.firebaseEventId;
+              this.firstEventPerformer = event.performer;
+              this.firstEventTitle = event.title;
+              this.firstEventPrice = event.initialTicketPrice;
+              this.firstEventActualPrice = event.actualTicketPrice;
+              this.firstEventDate = event.start_time;
+              this.firstEventImage250 = event.image250;
+              this.firstEventImageMed = event.imageMed;
+              this.firstEventNumberOfInvites = event.numberOfInvites;
+              this.firstEventFirebaseInviteId = event.firebaseInviteId;
+              this.firstEventInviteAcceptedStatus = event.inviteAcceptedStatus;
+              this.firstEventBackgroundColor = backgroundColor;
+            } else {
+              this.eventList.push({
+                eventfulId: event.eventfulId,
+                eventType: event.eventType,
+                firebaseEventId: event.firebaseEventId,
+                performer: event.performer,
+                title: event.title,
+                initialTicketPrice: event.initialTicketPrice,
+                actualTicketPrice: event.actualTicketPrice,
+                start_time: event.start_time,
+                image250: event.image250,
+                imageMed: event.imageMed,
+                numberOfInvites: event.numberOfInvites,
+                firebaseInviteId: event.firebaseInviteId,
+                inviteAcceptedStatus: event.inviteAcceptedStatus,
+                backgroundColor: backgroundColor
+              });
+            }
 
-          if (this.eventsCntr === 0) {
-            this.firstEventEventfulId = event.eventfulId;
-            this.firstEventType = event.eventType;
-            this.firstEventFirebaseEventId = event.firebaseEventId;
-            this.firstEventPerformer = event.performer;
-            this.firstEventTitle = event.title;
-            this.firstEventPrice = event.initialTicketPrice;
-            this.firstEventActualPrice = event.actualTicketPrice;
-            this.firstEventDate = event.start_time;
-            this.firstEventImage250 = event.image250;
-            this.firstEventImageMed = event.imageMed;
-            this.firstEventNumberOfInvites = event.numberOfInvites;
-            this.firstEventFirebaseInviteId = event.firebaseInviteId;
-            this.firstEventInviteAcceptedStatus = event.inviteAcceptedStatus;
-            this.firstEventBackgroundColor = backgroundColor;
-          } else {
-            this.eventList.push({
-              eventfulId: event.eventfulId,
-              eventType: event.eventType,
-              firebaseEventId: event.firebaseEventId,
-              performer: event.performer,
-              title: event.title,
-              initialTicketPrice: event.initialTicketPrice,
-              actualTicketPrice: event.actualTicketPrice,
-              start_time: event.start_time,
-              image250: event.image250,
-              imageMed: event.imageMed,
-              numberOfInvites: event.numberOfInvites,
-              firebaseInviteId: event.firebaseInviteId,
-              inviteAcceptedStatus: event.inviteAcceptedStatus,
-              backgroundColor: backgroundColor
-            });
-          }
-
-          this.eventsCntr++;
+            this.eventsCntr++;
+          });
         });
         // console.log("Retrieving events list - complete");
         // console.log(this.eventList);

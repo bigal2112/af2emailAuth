@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { NavController, NavParams, LoadingController, ToastController, Platform, AlertController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
@@ -60,9 +60,13 @@ export class EventDetailInformationPage {
   private _isAndroid: boolean;
   private _isiOS: boolean;
 
+  ngZone: any;
+
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
     public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController,
     public connectivityService: ConnectivityService, public platform: Platform, public alertCtrl: AlertController) {
+
+    this.ngZone = new NgZone({ enableLongStackTrace: false });
 
     this._platform = platform;
     this._isAndroid = platform.is('android');
@@ -187,42 +191,48 @@ export class EventDetailInformationPage {
             console.log("NO INVITES");
           } else {
 
-            this.invitedUsers = [];
-            this.numberOfAcceptUsers = 0;
 
-            data.forEach(invitedUser => {
 
-              // work out the users background color based on the inviteAccepted value and count the ACCEPT users for use later in the ticketing details part
-              let backgroundColor = "red";          //  "ERROR"
-              if (invitedUser.val().inviteAccepted === "ACCEPT") {
-                backgroundColor = "lightgreen";
-                this.numberOfAcceptUsers++;
-              } else if (invitedUser.val().inviteAccepted === "TRACK") {
-                backgroundColor = "lightcyan";
-              } else if (invitedUser.val().inviteAccepted === "REJECT") {
-                backgroundColor = "lightcoral";
-              } else if (invitedUser.val().inviteAccepted === "NOT YET") {
-                backgroundColor = "lightgoldenrodyellow";
-              }
+            this.ngZone.run(() => {
 
-              this.invitedUsers.push({
-                imageMed: invitedUser.val().imageMed,
-                inviteAccepted: invitedUser.val().inviteAccepted,
-                inviteeAvatarURL: invitedUser.val().inviteeAvatarURL,
-                inviteeName: invitedUser.val().inviteeName,
-                inviteeBackgroundColor: backgroundColor,
-                inviteFirebaseEventId: invitedUser.val().firebaseEventId,
-                inviteInviteeId: invitedUser.val().inviteeId,
-                inviteOwnerId: invitedUser.val().ownerId,
-                inviteFirebaseId: invitedUser.key
+              this.invitedUsers = [];
+              this.numberOfAcceptUsers = 0;
+
+              data.forEach(invitedUser => {
+
+                // work out the users background color based on the inviteAccepted value and count the ACCEPT users for use later in the ticketing details part
+                let backgroundColor = "red";          //  "ERROR"
+                if (invitedUser.val().inviteAccepted === "ACCEPT") {
+                  backgroundColor = "lightgreen";
+                  this.numberOfAcceptUsers++;
+                } else if (invitedUser.val().inviteAccepted === "TRACK") {
+                  backgroundColor = "lightcyan";
+                } else if (invitedUser.val().inviteAccepted === "REJECT") {
+                  backgroundColor = "lightcoral";
+                } else if (invitedUser.val().inviteAccepted === "NOT YET") {
+                  backgroundColor = "lightgoldenrodyellow";
+                }
+
+                this.invitedUsers.push({
+                  imageMed: invitedUser.val().imageMed,
+                  inviteAccepted: invitedUser.val().inviteAccepted,
+                  inviteeAvatarURL: invitedUser.val().inviteeAvatarURL,
+                  inviteeName: invitedUser.val().inviteeName,
+                  inviteeBackgroundColor: backgroundColor,
+                  inviteFirebaseEventId: invitedUser.val().firebaseEventId,
+                  inviteInviteeId: invitedUser.val().inviteeId,
+                  inviteOwnerId: invitedUser.val().ownerId,
+                  inviteFirebaseId: invitedUser.key
+                });
               });
+              // calculate the current (initial) cost of the event base on ACCEPT users plus me.
+              this.currentCostOfEvent = (this.numberOfAcceptUsers + 1) * this.eventIntialTicketPrice;
+
+              console.log("Invited Guests");
+              console.log(this.invitedUsers);
             });
 
-            // calculate the current (initial) cost of the event base on ACCEPT users plus me.
-            this.currentCostOfEvent = (this.numberOfAcceptUsers + 1) * this.eventIntialTicketPrice;
 
-            console.log("Invited Guests");
-            console.log(this.invitedUsers);
           }
 
         })
@@ -250,10 +260,6 @@ export class EventDetailInformationPage {
         }
       });
     }
-
-
-
-
   }
 
   updateAcceptanceStatus(statusClicked: string) {

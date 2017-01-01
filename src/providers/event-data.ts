@@ -148,7 +148,7 @@ export class EventData {
     return this.messagesRef.orderByChild('firebaseEventId').equalTo(firebaseEventId);
   }
 
-  addMessage(firebaseEventId: any, messageBody: any, userDetails: any): any {
+  addMessage(firebaseEventId: any, messageBody: any, ownerUsername: any): any {
     // console.log("firebaseEventId:" + firebaseEventId);
     // console.log("messageBody:" + messageBody);
     // console.log(userDetails);
@@ -158,7 +158,7 @@ export class EventData {
       messageBody: messageBody,
       messageCreatedOn: Date.now(),
       ownerId: this.globalVars.getCurrentUserId(),
-      ownerUsername: userDetails.username
+      ownerUsername: ownerUsername
     })
   }
 
@@ -190,6 +190,7 @@ export class EventData {
     //  6. Update the INVITES node with the actual ticket cost and date bought.
     //  7. Update the EVENTS node with the actual ticket cost and date bought.
     //  
+    this.userDetails = this.globalVars.getCurrentUserDetals();
 
     //  1. Calculate each ACCEPTed users actual ticket cost based on totle cost / number of users.
     let numberOfUsers = numberOfAcceptUsers + 1;
@@ -205,54 +206,60 @@ export class EventData {
       if (user.inviteAccepted === "ACCEPT") {
         console.log("Adding transaction for user " + user.inviteeName);
         // first create the user/user/event index value
-        let userUserEventIndex = user.ownerId < user.inviteeId ?
-          user.inviteOwnerId + "," + user.inviteInviteeId + "," + user.inviteFirebaseEventId :
-          user.inviteInviteeId + "," + user.inviteOwnerId + "," + user.inviteFirebaseEventId;
-        let userUserIndex = user.ownerId < user.inviteeId ?
-          user.inviteOwnerId + "," + user.inviteInviteeId :
-          user.inviteInviteeId + "," + user.inviteOwnerId;
+        // let userUserEventIndex = user.ownerId < user.inviteeId ?
+        //   user.inviteOwnerId + "," + user.inviteInviteeId + "," + user.inviteFirebaseEventId :
+        //   user.inviteInviteeId + "," + user.inviteOwnerId + "," + user.inviteFirebaseEventId;
+        let userFromToIndex = user.inviteOwnerId + user.inviteInviteeId;
+        let userToFromIndex = user.inviteInviteeId + user.inviteOwnerId;
 
-        console.log("Creating transaction for: " + userUserEventIndex);
         this.transactionsRef.push({
-          transUserUserEventIndex: userUserEventIndex,
-          transUserUserIndex: userUserIndex,
+          transFromUserId: user.inviteOwnerId,
+          transToUserId: user.inviteInviteeId,
+          transType: "EVENT",
           transCreatedOn: Date.now(),
           transAmount: this.actualTicketCost
         }).then((data) => {
           //  3. Update the balance of creator/user buy the new calculated cost of a ticket.
-          console.log("Updating balance for: " + userUserIndex);
-          this.balancesRef.child(userUserIndex).child('balance').transaction((balance: number) => {
-            balance += (this.actualTicketCost * -1);
+          this.balancesRef.child(userFromToIndex).child('balance').transaction((balance: number) => {
+            balance += (this.actualTicketCost * 1);
             return balance;
           }).then((data) => {
-            //  4. Update the balance of the user buy the new calculated cost of a ticket.
-            console.log("Updating balance for: " + user.inviteInviteeId);
-            this.balancesRef.child(user.inviteInviteeId).child('balance').transaction((balance: number) => {
+            //  3. Update the balance of user/creator buy the new calculated cost of a ticket.
+            this.balancesRef.child(userToFromIndex).child('balance').transaction((balance: number) => {
               balance += (this.actualTicketCost * -1);
               return balance;
             }).then((data) => {
-              //  5. Update the balance of the creator buy the new calculated cost of a ticket times the number of ACCEPTed users.
-              console.log("Updating balance for: " + user.inviteOwnerId);
-              this.balancesRef.child(user.inviteOwnerId).child('balance').transaction((balance: number) => {
+              //  4. Update the balance of the user by the new calculated cost of a ticket.
+              this.balancesRef.child(user.inviteInviteeId).child('balance').transaction((balance: number) => {
                 balance += (this.actualTicketCost * -1);
                 return balance;
               }).then((data) => {
-                //  6. Update the INVITES node with the actual ticket cost and date bought.
-                this.invitesRef.child(user.inviteFirebaseId).update({
-                  actualTicketPrice: this.actualTicketCost
-                })
-              })
+                //  5. Update the balance of the creator by the new calculated cost of a ticket times the number of ACCEPTed users.
+                this.balancesRef.child(user.inviteOwnerId).child('balance').transaction((balance: number) => {
+                  balance += (this.actualTicketCost * 1);
+                  return balance;
+                }).then((data) => {
+                  //  6. Update the INVITES node with the actual ticket cost and date bought.
+                  this.invitesRef.child(user.inviteFirebaseId).update({
+                    actualTicketPrice: this.actualTicketCost
+                  });
+                });
+              });
             });
           });
-
-
         });
-      };    // if (user.inviteAccepted === "ACCEPT")
+      } else {    // if (user.inviteAccepted === "ACCEPT")
+        this.invitesRef.child(user.inviteFirebaseId).remove();
+      };
     });
+
+    this.addMessage(firebaseEventId, "Tickets have now been bought", this.userDetails.username)
+
     //  7. Update the EVENTS node with the actual ticket cost and date bought.
     return this.eventsRef.child(firebaseEventId).update({
       actualTicketPrice: this.actualTicketCost,
       ticketsBoughtDateTime: Date.now()
-    })
+    });
+
   }
 }

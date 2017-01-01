@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
@@ -16,13 +16,14 @@ export class EventDetailMessagesPage {
   loader: any;
   currentUserDetails: any;
   newMessage: any;
-  
+  ngZone: any;
+
   constructor(public nav: NavController, public eventData: EventData, public globalVars: GlobalVariables, public loadingCtrl: LoadingController) {
 
-
+    this.ngZone = new NgZone({ enableLongStackTrace: false });
     this.firebaseEventId = this.globalVars.getFirebaseEventId();
     this.currentUserDetails = this.globalVars.getCurrentUserDetals();
-    
+
     // // show loading control
     this.loader = this.loadingCtrl.create({
       content: "Retrieving event messages...."
@@ -31,22 +32,25 @@ export class EventDetailMessagesPage {
 
     this.eventData.getEventMessages(this.firebaseEventId).on('value', data => {
       // console.log(data);
-      this.unorderedMessages = [];
-      this.eventMessages = [];
-      data.forEach(snap => {
-        this.unorderedMessages.push({
-          ownerId: snap.val().ownerId,
-          ownerUsername: snap.val().ownerUsername,
-          createdOn: snap.val().messageCreatedOn,
-          body: snap.val().messageBody
+
+      this.ngZone.run(() => {
+        this.unorderedMessages = [];
+        this.eventMessages = [];
+        data.forEach(snap => {
+          this.unorderedMessages.push({
+            ownerId: snap.val().ownerId,
+            ownerUsername: snap.val().ownerUsername,
+            createdOn: snap.val().messageCreatedOn,
+            body: snap.val().messageBody
+          });
         });
-      })
 
-      console.log(this.unorderedMessages);
+        console.log(this.unorderedMessages);
 
-      this.eventMessages = this.unorderedMessages.sort(this.sortByCreatedOnDesc);
-      console.log(this.eventMessages);
-
+        this.eventMessages = this.unorderedMessages.sort(this.sortByCreatedOnDesc);
+        console.log(this.eventMessages);
+      });   // this.ngZone.run()
+      
       this.loader.dismiss();
     });
   }
@@ -56,7 +60,7 @@ export class EventDetailMessagesPage {
 
     // if we have a message to add
     if (this.newMessage != null && typeof (this.newMessage) != 'undefined') {
-      this.eventData.addMessage(this.firebaseEventId, this.newMessage, this.currentUserDetails).then(() => {
+      this.eventData.addMessage(this.firebaseEventId, this.newMessage, this.currentUserDetails.username).then(() => {
         this.newMessage = "";
       });
     }
