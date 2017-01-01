@@ -9,10 +9,17 @@ page-profile {
   //   padding: 0;
   // }
 
-  ion-list-header {
+  .transactionHeader {
     background-color: #ECECEC;
     margin: 0;
-    padding: 10px 16px;
+    padding: 0;
+
+    h2 {
+        color: #808080;
+        margin-left: 8px;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
   }
 
   ion-item {
@@ -43,13 +50,13 @@ page-profile {
 
   .profileHeader {
     background: rgba(212,228,239,1);
-    background: -moz-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(212,228,239,1)), color-stop(97%, rgba(51,102,204,1)), color-stop(100%, rgba(51,102,204,1)));
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
-    background: -o-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
-    background: -ms-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
-    background: radial-gradient(ellipse at center, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', endColorstr='#3366cc', GradientType=1 );
+    // background: -moz-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
+    // background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(212,228,239,1)), color-stop(97%, rgba(51,102,204,1)), color-stop(100%, rgba(51,102,204,1)));
+    // background: -webkit-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
+    // background: -o-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
+    // background: -ms-radial-gradient(center, ellipse cover, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
+    // background: radial-gradient(ellipse at center, rgba(212,228,239,1) 0%, rgba(51,102,204,1) 97%, rgba(51,102,204,1) 100%);
+    // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4e4ef', endColorstr='#3366cc', GradientType=1 );
   }
 
   .avatarButtons {
@@ -84,4 +91,12 @@ page-profile {
     padding: 10px !important;
     max-width: 50% !important;
   }
+
+  .floatLeft {
+        text-align: left;
+    }
+    .floatRight {
+        text-align: right;
+    }
+
 }

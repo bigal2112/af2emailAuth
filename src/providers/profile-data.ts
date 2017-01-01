@@ -12,6 +12,7 @@ export class ProfileData {
   userProfile: any;
   users: any;
   avatarPictureRef: any;
+  balancesRef: any;
 
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any;
@@ -24,6 +25,7 @@ export class ProfileData {
     this.userProfile = firebase.database().ref('/userProfile');
     this.users = firebase.database().ref('/users');
     this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
+    this.balancesRef = firebase.database().ref('balances')
   }
 
   /**
@@ -95,5 +97,9 @@ export class ProfileData {
             this.users.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
           });
       }
+  }
+
+  getUsersBalance(firebaseUserId) {
+    return this.balancesRef.child(firebaseUserId);
   }
 }

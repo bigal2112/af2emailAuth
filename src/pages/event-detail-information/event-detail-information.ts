@@ -81,12 +81,6 @@ export class EventDetailInformationPage {
     this.firebaseInviteId = this.globalVars.getFirebaseInviteId();
     this.eventType = this.globalVars.getEventType();
 
-    // console.log("eventId:" + this.eventId);
-    // console.log("firebaseEventId:" + this.firebaseEventId);
-
-    // console.log("Search for:" + this.searchString);
-    // they've entered a search criteria, let's see what it brings back.....
-
     var oArgs = {
       app_key: "n7XgQ8mk3VVsc6Qn",
       id: this.eventId,

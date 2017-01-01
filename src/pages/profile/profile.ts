@@ -1,5 +1,5 @@
 import { NavController, AlertController } from 'ionic-angular';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
 import { Camera } from 'ionic-native';
@@ -10,19 +10,37 @@ import { Camera } from 'ionic-native';
 })
 export class ProfilePage {
   public userProfile: any;
+  public userFirebaseId: any;
   public birthDate: string;
+  myBalance: any;
+  myBalanceColor: string;
+  ngZone: any;
 
   constructor(public nav: NavController, public alertCtrl: AlertController, public profileData: ProfileData,
     public authData: AuthData) {
 
-      // console.log("profile.ts - Constructor");
-    
+    this.ngZone = new NgZone({ enableLongStackTrace: false });
+    // console.log("profile.ts - Constructor");
+
     this.profileData.getUserProfile().on('value', (data) => {
       this.userProfile = data.val();
+      this.userFirebaseId = data.key;
       // console.log("userProfile:");
       // console.log(this.userProfile);
-      
+
       this.birthDate = this.userProfile.birthDate;
+
+      this.ngZone.run(() => {
+        this.profileData.getUsersBalance(this.userFirebaseId).on('value', data => {
+          this.myBalance = data.val().balance;
+          if(this.myBalance >= 0) {
+            this.myBalanceColor = "green"
+          } else {
+            this.myBalanceColor = "red"
+          }
+        });
+      });
+
     });
 
   }

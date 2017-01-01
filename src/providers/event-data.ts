@@ -215,6 +215,8 @@ export class EventData {
         this.transactionsRef.push({
           transFromUserId: user.inviteOwnerId,
           transToUserId: user.inviteInviteeId,
+          transFromUserName: this.userDetails.username,
+          transToUsername: user.inviteeName,
           transType: "EVENT",
           transCreatedOn: Date.now(),
           transAmount: this.actualTicketCost

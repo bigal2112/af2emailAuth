@@ -29,12 +29,26 @@
     </div>
   </div>
 
-  <ion-list>
+  <ion-item class="transactionHeader">
+    <ion-row>
+      <ion-col width-50>
+        <h2 class="floatLeft">Balance</h2>
+      </ion-col>
+      <ion-col width-50>
+        <h2 class="floatRight" [style.color]="myBalanceColor">{{myBalance | currency: 'GBP':true}}</h2>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+
+
+
+
+  <!--<ion-list>-->
     <!--<ion-list-header>
       Personal Information
     </ion-list-header>-->
 
-    <ion-item (click)="updateName()">
+    <!--<ion-item (click)="updateName()">
       <ion-grid>
         <ion-row>
           <ion-col width-50>
@@ -89,5 +103,5 @@
         </ion-row>
       </ion-grid>
     </ion-item>
-  </ion-list>
+  </ion-list>-->
 </ion-content>
