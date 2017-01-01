@@ -217,6 +217,7 @@ export class EventData {
           transToUserId: user.inviteInviteeId,
           transFromUserName: this.userDetails.username,
           transToUsername: user.inviteeName,
+          transEventTitle: user.inviteEventTitle,
           transType: "EVENT",
           transCreatedOn: Date.now(),
           transAmount: this.actualTicketCost

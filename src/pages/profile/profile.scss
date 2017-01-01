@@ -27,7 +27,7 @@ page-profile {
 
     ion-item {
       // border: 1px solid black;
-      min-height: 1rem;
+      min-height: 3rem;
       padding-left: 0;
       margin-top: 1px;
       background-color: lightgray;
@@ -36,6 +36,15 @@ page-profile {
     h6 {
       font-size: 1.2rem;
     }
+
+    .eventTitle {
+      display: block;
+      overflow: hidden;
+      width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
   }
 
   ion-item {
@@ -89,9 +98,9 @@ page-profile {
     width: 45%;
   }
 
-  .icon-md {
-    padding-right: 1em;
-  }
+  // .icon-md {
+  //   padding-right: 1em;
+  // }
 
   .item-inner {
     border: none !important;

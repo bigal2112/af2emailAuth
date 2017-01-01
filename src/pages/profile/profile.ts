@@ -41,9 +41,16 @@ export class ProfilePage {
       this.birthDate = this.userProfile.birthDate;
 
       this.ngZone.run(() => {
-        
+
         this.profileData.getUsersBalance(this.userFirebaseId).on('value', data => {
-          this.myBalance = data.val().balance == null ? 0.00 : data.val().balance;
+          if (data.val() == null || typeof(data.val()) == 'undefined') {
+            this.myBalance = 0;
+            console.log("Balance:" + this.myBalance);
+          } else {
+            this.myBalance = data.val().balance;
+            console.log("Balance:" + this.myBalance);
+          }
+          
           if (this.myBalance >= 0) {
             this.myBalanceColor = "green"
           } else {
@@ -56,6 +63,7 @@ export class ProfilePage {
             data.forEach(snap => {
               this.transactionsCR.push({
                 transCreatedOn: snap.val().transCreatedOn,
+                transEventTitle: snap.val().transEventTitle,
                 transAmount: snap.val().transAmount,
                 transColor: "green"
               });
@@ -67,6 +75,7 @@ export class ProfilePage {
               data.forEach(snap => {
                 this.transactionsDB.push({
                   transCreatedOn: snap.val().transCreatedOn,
+                  transEventTitle: snap.val().transEventTitle,
                   transAmount: snap.val().transAmount * -1,
                   transColor: "red"
                 });
@@ -79,6 +88,7 @@ export class ProfilePage {
               orderedList.forEach(transaction => {
                 this.transactionsAll.push({
                   transCreatedOn: transaction.transCreatedOn,
+                  transEventTitle: transaction.transEventTitle,
                   transAmount: transaction.transAmount,
                   transColor: transaction.transColor
                 });
@@ -96,90 +106,87 @@ export class ProfilePage {
 
 
     });
-
-
-
   }
 
   logOut() {
     this.authData.logoutUser()
   }
 
-  updateName() {
-    let alert = this.alertCtrl.create({
-      message: "Enter a new username",
-      inputs: [
-        {
-          name: 'userName',
-          placeholder: 'Your username',
-          value: this.userProfile.username
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.profileData.updateName(data.userName);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+  // updateName() {
+  //   let alert = this.alertCtrl.create({
+  //     message: "Enter a new username",
+  //     inputs: [
+  //       {
+  //         name: 'userName',
+  //         placeholder: 'Your username',
+  //         value: this.userProfile.username
+  //       }
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //       },
+  //       {
+  //         text: 'Save',
+  //         handler: data => {
+  //           this.profileData.updateName(data.userName);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
-  updateDOB(birthDate) {
-    this.profileData.updateDOB(birthDate);
-  }
+  // updateDOB(birthDate) {
+  //   this.profileData.updateDOB(birthDate);
+  // }
 
-  updateEmail() {
-    let alert = this.alertCtrl.create({
-      inputs: [
-        {
-          name: 'newEmail',
-          placeholder: 'Your new email',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.profileData.updateEmail(data.newEmail);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+  // updateEmail() {
+  //   let alert = this.alertCtrl.create({
+  //     inputs: [
+  //       {
+  //         name: 'newEmail',
+  //         placeholder: 'Your new email',
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //       },
+  //       {
+  //         text: 'Save',
+  //         handler: data => {
+  //           this.profileData.updateEmail(data.newEmail);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
-  updatePassword() {
-    let alert = this.alertCtrl.create({
-      inputs: [
-        {
-          name: 'newPassword',
-          placeholder: 'Your new password',
-          type: 'password'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.profileData.updatePassword(data.newPassword);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+  // updatePassword() {
+  //   let alert = this.alertCtrl.create({
+  //     inputs: [
+  //       {
+  //         name: 'newPassword',
+  //         placeholder: 'Your new password',
+  //         type: 'password'
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //       },
+  //       {
+  //         text: 'Save',
+  //         handler: data => {
+  //           this.profileData.updatePassword(data.newPassword);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
   getAvatarFromCamera() {
     Camera.getPicture({
@@ -215,6 +222,10 @@ export class ProfilePage {
     }, error => {
       console.log("ERROR -> " + JSON.stringify(error));
     });
+  }
+
+  addPayment() {
+    console.log("Add payment clicked");
   }
 
   sortByCreatedOnDate(a, b) {

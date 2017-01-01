@@ -3,7 +3,8 @@ import { NavController, NavParams, LoadingController, ToastController, Platform,
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
 import { ConnectivityService } from '../../providers/connectivity-service';
-import { Geolocation } from 'ionic-native';
+// import { Geolocation } from 'ionic-native';
+import { LaunchNavigator, LaunchNavigatorOptions } from 'ionic-native';
 
 // declare these variables so the typescript doesn't balk.
 declare var EVDB: any;
@@ -59,6 +60,9 @@ export class EventDetailInformationPage {
   private _platform: Platform;
   private _isAndroid: boolean;
   private _isiOS: boolean;
+
+  destination:string;
+  start:string;
 
   ngZone: any;
 
@@ -216,7 +220,8 @@ export class EventDetailInformationPage {
                   inviteFirebaseEventId: invitedUser.val().firebaseEventId,
                   inviteInviteeId: invitedUser.val().inviteeId,
                   inviteOwnerId: invitedUser.val().ownerId,
-                  inviteFirebaseId: invitedUser.key
+                  inviteFirebaseId: invitedUser.key,
+                  inviteEventTitle: invitedUser.val().title
                 });
               });
               // calculate the current (initial) cost of the event base on ACCEPT users plus me.
@@ -464,18 +469,36 @@ export class EventDetailInformationPage {
 
   }
 
-  openMapsApp() {
-    // let coords = "loc:" + this.eventLatitude + "+" + this.eventLongitude;
-    let coords = this.eventLatitude + "," + this.eventLongitude;
+  // openMapsApp() {
+  //   // let coords = "loc:" + this.eventLatitude + "+" + this.eventLongitude;
+  //   let coords = this.eventLatitude + "," + this.eventLongitude;
 
-    if (this._isiOS) {
-      window.open("http://maps.apple.com/?q=" + coords, '_system');
-      return;
-    }
-    if (this._isAndroid) {
-      window.open("geo:" + coords);
-      return;
-    }
-    window.open("http://maps.google.com/?q=" + coords, '_system');
+  //   if (this._isiOS) {
+  //     window.open("http://maps.apple.com/?q=" + coords, '_system');
+  //     return;
+  //   }
+  //   if (this._isAndroid) {
+  //     window.open("geo:" + coords);
+  //     return;
+  //   }
+  //   window.open("http://maps.google.com/?q=" + coords, '_system');
+  // }
+
+  openMapsApp() {
+    this.start = "";
+    // this.destination = "Westminster, London, UK";
+
+    this.destination = this.eventLatitude + "," + this.eventLongitude;
+
+    let options: LaunchNavigatorOptions = {
+      start: this.start
+    };
+
+    LaunchNavigator.navigate(this.destination, options)
+        .then(
+            success => console.log('Launched navigator'),
+            error => alert('Error launching navigator: ' + error)
+    );
+    
   }
 }
