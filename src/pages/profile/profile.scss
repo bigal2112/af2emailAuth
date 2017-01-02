@@ -1,14 +1,12 @@
 page-profile {
-  
 
-  // ion-item ion-label {
-  //   margin: 0 !important;
-  // }
+  .profitable {
+    color: #22BB22;
+  }
 
-  // ion-list {
-  //   margin: 0;
-  //   padding: 0;
-  // }
+  .no-profit {
+    color: #FF0000;
+  }
 
   .transactionHeader {
     background-color: #ECECEC;
@@ -16,7 +14,7 @@ page-profile {
     padding: 0;
 
     h2 {
-        color: #808080;
+        // color: #808080;
         font-size: 1.5rem;
         font-weight: bold;
     }

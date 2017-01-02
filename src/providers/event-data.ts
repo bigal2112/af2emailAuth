@@ -195,24 +195,19 @@ export class EventData {
     //  1. Calculate each ACCEPTed users actual ticket cost based on totle cost / number of users.
     let numberOfUsers = numberOfAcceptUsers + 1;
     this.actualTicketCost = (actualCostOfEvent / numberOfUsers).toFixed(2);
-    console.log("numberOfUsers: " + numberOfUsers);
-    console.log("eachUsersCost: " + this.actualTicketCost);
+    // console.log("numberOfUsers: " + numberOfUsers);
+    // console.log("eachUsersCost: " + this.actualTicketCost);
 
     //  2. Add a new transaction for each ACCEPTed user.
     // ------------------------------------------------------------------------
     // TODO : find out whether we can do this in bulk rather than user by user
     // ------------------------------------------------------------------------
+    let transactionDate = Date.now();
+
     invitedUsersArray.forEach(user => {
       if (user.inviteAccepted === "ACCEPT") {
         console.log("Adding transaction for user " + user.inviteeName);
-        // first create the user/user/event index value
-        // let userUserEventIndex = user.ownerId < user.inviteeId ?
-        //   user.inviteOwnerId + "," + user.inviteInviteeId + "," + user.inviteFirebaseEventId :
-        //   user.inviteInviteeId + "," + user.inviteOwnerId + "," + user.inviteFirebaseEventId;
-        // let userFromToIndex = user.inviteOwnerId + user.inviteInviteeId;
-        // let userToFromIndex = user.inviteInviteeId + user.inviteOwnerId;
-        // let currentUserFirebaseId = this.globalVars.getCurrentUserId();
-
+        
         this.transactionsRef.push({
           transFromUserId: user.inviteOwnerId,
           transToUserId: user.inviteInviteeId,
@@ -220,7 +215,7 @@ export class EventData {
           transToUsername: user.inviteeName,
           transEventTitle: user.inviteEventTitle,
           transType: "EVENT",
-          transCreatedOn: Date.now(),
+          transCreatedOn: transactionDate,
           transAmount: this.actualTicketCost
         }).then((data) => {
           //  3. Update the balance of creator/user buy the new calculated cost of a ticket.

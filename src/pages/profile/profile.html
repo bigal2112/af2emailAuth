@@ -35,8 +35,13 @@
         <h2 class="floatLeft">Balance</h2>
       </ion-col>
       <ion-col width-50>
-        <h2 class="floatRight" [style.color]="myBalanceColor">{{myBalance | currency: 'GBP':true}}</h2>
+        <h2 class="floatRight" [class.profitable]="myBalance >= 0" [class.no-profit]="myBalance < 0">
+          {{myBalance | currency: 'GBP':true}}
+        </h2>
       </ion-col>
+      <!--<ion-col width-50>
+        <h2 class="floatRight" [style.color]="myBalanceColor">{{myBalance | currency: 'GBP':true}}</h2>
+      </ion-col>-->
     </ion-row>
   </ion-item>
 
@@ -44,14 +49,17 @@
     <ion-item *ngFor="let transaction of transactionsAll">
       <ion-row>
         <ion-col width-10 class="floatLeft">
-          <h6>{{transaction.transCreatedOn | date:'MMM d'}}</h6>
+          <h6>{{transaction?.transCreatedOn | date:'MMM d'}}</h6>
         </ion-col>
         <ion-col class="eventTitle">
-          <h6>{{transaction.transEventTitle}}</h6>
+          <h6>{{transaction?.transEventTitle}}</h6>
         </ion-col>
-        <ion-col width-20 class="floatRight">
-          <h6 [style.color]="transaction.transColor">{{transaction.transAmount | currency: 'GBP':true}}</h6>
+        <ion-col width-20 class="floatRight" [class.profitable]="transaction?.transAmount >= 0" [class.no-profit]="transaction?.transAmount < 0">
+          <h6>{{transaction?.transAmount | currency: 'GBP':true}}</h6>
         </ion-col>
+        <!--<ion-col width-20 class="floatRight">
+          <h6 [style.color]="transaction.transColor">{{transaction?.transAmount | currency: 'GBP':true}}</h6>
+        </ion-col>-->
       </ion-row>
     </ion-item>
   </ion-list>

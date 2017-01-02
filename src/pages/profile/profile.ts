@@ -13,7 +13,7 @@ export class ProfilePage {
   public userFirebaseId: any;
   public birthDate: string;
   myBalance: any;
-  myBalanceColor: string;
+  // myBalanceColor: string;
   ngZone: any;
   transactionsCR: any;
   transactionsDB: any;
@@ -44,11 +44,11 @@ export class ProfilePage {
 
         // get my balance and set the correct colour depending on it's value
         this.myBalance = this.userProfile.balance == null ? 0.00 : this.userProfile.balance
-        if (this.myBalance >= 0) {
-          this.myBalanceColor = "green"
-        } else {
-          this.myBalanceColor = "red"
-        }
+        // if (this.myBalance >= 0) {
+        //   this.myBalanceColor = "green"
+        // } else {
+        //   this.myBalanceColor = "red"
+        // }
 
         // get my credit transactions (the tickets I've bought)
         this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
@@ -58,8 +58,7 @@ export class ProfilePage {
             this.transactionsCR.push({
               transCreatedOn: snap.val().transCreatedOn,
               transEventTitle: snap.val().transEventTitle,
-              transAmount: snap.val().transAmount,
-              transColor: "green"
+              transAmount: snap.val().transAmount
             });
           });
 
@@ -71,8 +70,7 @@ export class ProfilePage {
               this.transactionsDB.push({
                 transCreatedOn: snap.val().transCreatedOn,
                 transEventTitle: snap.val().transEventTitle,
-                transAmount: snap.val().transAmount * -1,
-                transColor: "red"
+                transAmount: snap.val().transAmount * -1
               });
             });
 
@@ -86,8 +84,7 @@ export class ProfilePage {
               this.transactionsAll.push({
                 transCreatedOn: transaction.transCreatedOn,
                 transEventTitle: transaction.transEventTitle,
-                transAmount: transaction.transAmount,
-                transColor: transaction.transColor
+                transAmount: transaction.transAmount
               });
             });
 
