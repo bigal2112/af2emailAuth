@@ -12,7 +12,7 @@ export class EventData {
   public invitesRef: any;
   public messagesRef: any;
   public transactionsRef: any;
-  public balancesRef: any;
+  // public balancesRef: any;
   public usersRef: any;
   public userDetails: any;
 
@@ -27,7 +27,7 @@ export class EventData {
     this.invitesRef = firebase.database().ref('invites');
     this.messagesRef = firebase.database().ref('messages')
     this.transactionsRef = firebase.database().ref('transactions')
-    this.balancesRef = firebase.database().ref('balances')
+    // this.balancesRef = firebase.database().ref('balances')
   }
 
   createEvent(eventInfo: any, ticketValue: any, guestList: any): any {
@@ -209,8 +209,9 @@ export class EventData {
         // let userUserEventIndex = user.ownerId < user.inviteeId ?
         //   user.inviteOwnerId + "," + user.inviteInviteeId + "," + user.inviteFirebaseEventId :
         //   user.inviteInviteeId + "," + user.inviteOwnerId + "," + user.inviteFirebaseEventId;
-        let userFromToIndex = user.inviteOwnerId + user.inviteInviteeId;
-        let userToFromIndex = user.inviteInviteeId + user.inviteOwnerId;
+        // let userFromToIndex = user.inviteOwnerId + user.inviteInviteeId;
+        // let userToFromIndex = user.inviteInviteeId + user.inviteOwnerId;
+        // let currentUserFirebaseId = this.globalVars.getCurrentUserId();
 
         this.transactionsRef.push({
           transFromUserId: user.inviteOwnerId,
@@ -223,22 +224,22 @@ export class EventData {
           transAmount: this.actualTicketCost
         }).then((data) => {
           //  3. Update the balance of creator/user buy the new calculated cost of a ticket.
-          this.balancesRef.child(userFromToIndex).child('balance').transaction((balance: number) => {
+          this.usersRef.child(user.inviteOwnerId).child('balances').child(user.inviteInviteeId).child('balance').transaction((balance: number) => {
             balance += (this.actualTicketCost * 1);
             return balance;
           }).then((data) => {
             //  3. Update the balance of user/creator buy the new calculated cost of a ticket.
-            this.balancesRef.child(userToFromIndex).child('balance').transaction((balance: number) => {
+            this.usersRef.child(user.inviteInviteeId).child('balances').child(user.inviteOwnerId).child('balance').transaction((balance: number) => {
               balance += (this.actualTicketCost * -1);
               return balance;
             }).then((data) => {
               //  4. Update the balance of the user by the new calculated cost of a ticket.
-              this.balancesRef.child(user.inviteInviteeId).child('balance').transaction((balance: number) => {
+              this.usersRef.child(user.inviteInviteeId).child('balance').transaction((balance: number) => {
                 balance += (this.actualTicketCost * -1);
                 return balance;
               }).then((data) => {
                 //  5. Update the balance of the creator by the new calculated cost of a ticket times the number of ACCEPTed users.
-                this.balancesRef.child(user.inviteOwnerId).child('balance').transaction((balance: number) => {
+                this.usersRef.child(user.inviteOwnerId).child('balance').transaction((balance: number) => {
                   balance += (this.actualTicketCost * 1);
                   return balance;
                 }).then((data) => {

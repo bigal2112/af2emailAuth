@@ -12,7 +12,7 @@ export class ProfileData {
   userProfile: any;
   users: any;
   avatarPictureRef: any;
-  balancesRef: any;
+  // balancesRef: any;
   transactionsRef: any;
   
 
@@ -27,7 +27,7 @@ export class ProfileData {
     this.userProfile = firebase.database().ref('/userProfile');
     this.users = firebase.database().ref('/users');
     this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
-    this.balancesRef = firebase.database().ref('balances');
+    // this.balancesRef = firebase.database().ref('balances');
     this.transactionsRef = firebase.database().ref('transactions');
   }
 
@@ -39,6 +39,11 @@ export class ProfileData {
   getUserProfile(): any {
     this.currentUser = firebase.auth().currentUser;
     return this.userProfile.child(this.currentUser.uid);
+  }
+
+  getUserDetails(): any {
+    this.currentUser = firebase.auth().currentUser;
+    return this.users.child(this.currentUser.uid);
   }
 
   /**
@@ -103,7 +108,8 @@ export class ProfileData {
   }
 
   getUsersBalance(firebaseUserId) {
-    return this.balancesRef.child(firebaseUserId);
+    console.log("Returning balance for : " + firebaseUserId);
+    return this.users.child(firebaseUserId).child('balance');
   }
 
   getUsersTransactionsCR(firebaseUserId) {

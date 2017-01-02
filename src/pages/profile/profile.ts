@@ -32,74 +32,69 @@ export class ProfilePage {
     });
     this.loader.present();
 
-    this.profileData.getUserProfile().on('value', (data) => {
-      this.userProfile = data.val();
-      this.userFirebaseId = data.key;
-      // console.log("userProfile:");
-      // console.log(this.userProfile);
+    this.ngZone.run(() => {
 
-      this.birthDate = this.userProfile.birthDate;
+      this.profileData.getUserDetails().on('value', (data) => {
+        this.userProfile = data.val();
+        this.userFirebaseId = data.key;
+        // console.log("userProfile:");
+        // console.log(this.userProfile);
 
-      this.ngZone.run(() => {
+        // this.birthDate = this.userProfile.birthDate;
 
-        this.profileData.getUsersBalance(this.userFirebaseId).on('value', data => {
-          if (data.val() == null || typeof(data.val()) == 'undefined') {
-            this.myBalance = 0;
-            console.log("Balance:" + this.myBalance);
-          } else {
-            this.myBalance = data.val().balance;
-            console.log("Balance:" + this.myBalance);
-          }
-          
-          if (this.myBalance >= 0) {
-            this.myBalanceColor = "green"
-          } else {
-            this.myBalanceColor = "red"
-          }
+        // get my balance and set the correct colour depending on it's value
+        this.myBalance = this.userProfile.balance == null ? 0.00 : this.userProfile.balance
+        if (this.myBalance >= 0) {
+          this.myBalanceColor = "green"
+        } else {
+          this.myBalanceColor = "red"
+        }
 
-          this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
-            this.transactionsCR = [];
+        // get my credit transactions (the tickets I've bought)
+        this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
+          this.transactionsCR = [];
+
+          data.forEach(snap => {
+            this.transactionsCR.push({
+              transCreatedOn: snap.val().transCreatedOn,
+              transEventTitle: snap.val().transEventTitle,
+              transAmount: snap.val().transAmount,
+              transColor: "green"
+            });
+          });
+
+          // get my debit transactions (the tickets I've been bought)
+          this.profileData.getUsersTransactionsDB(this.userFirebaseId).on('value', data => {
+            this.transactionsDB = [];
 
             data.forEach(snap => {
-              this.transactionsCR.push({
+              this.transactionsDB.push({
                 transCreatedOn: snap.val().transCreatedOn,
                 transEventTitle: snap.val().transEventTitle,
-                transAmount: snap.val().transAmount,
-                transColor: "green"
+                transAmount: snap.val().transAmount * -1,
+                transColor: "red"
               });
             });
 
-            this.profileData.getUsersTransactionsDB(this.userFirebaseId).on('value', data => {
-              this.transactionsDB = [];
+            // concatenate the transactions lists and sort by transaction date
+            let unorderedList = this.transactionsCR.concat(this.transactionsDB);
+            let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
 
-              data.forEach(snap => {
-                this.transactionsDB.push({
-                  transCreatedOn: snap.val().transCreatedOn,
-                  transEventTitle: snap.val().transEventTitle,
-                  transAmount: snap.val().transAmount * -1,
-                  transColor: "red"
-                });
+            // pop the transactions into the display array
+            this.transactionsAll = [];
+            orderedList.forEach(transaction => {
+              this.transactionsAll.push({
+                transCreatedOn: transaction.transCreatedOn,
+                transEventTitle: transaction.transEventTitle,
+                transAmount: transaction.transAmount,
+                transColor: transaction.transColor
               });
-
-              let unorderedList = this.transactionsCR.concat(this.transactionsDB);
-              let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
-
-              this.transactionsAll = [];
-              orderedList.forEach(transaction => {
-                this.transactionsAll.push({
-                  transCreatedOn: transaction.transCreatedOn,
-                  transEventTitle: transaction.transEventTitle,
-                  transAmount: transaction.transAmount,
-                  transColor: transaction.transColor
-                });
-              });
-
-              console.log("Transaction List");
-              console.log(this.transactionsAll);
-
-              this.loader.dismiss();
             });
 
+            // console.log("Transaction List");
+            // console.log(this.transactionsAll);
+
+            this.loader.dismiss();
           });
         });
       });

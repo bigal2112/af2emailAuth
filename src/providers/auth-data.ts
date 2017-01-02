@@ -41,7 +41,7 @@ export class AuthData {
                     .then((authenticatedUser) => {
                         // we're in and authenticated to save some user details into thier userProfile
                         this.userProfile.child(authenticatedUser.uid).set({ email: newEmail, username: newUserName, avatarURL: "https://firebasestorage.googleapis.com/v0/b/af2emailauth.appspot.com/o/guestProfile%2Fdefault-avatar.png?alt=media&token=affcce1a-4b2f-44c8-b73c-0bd3e5f6b209" });
-                        this.users.child(authenticatedUser.uid).set({ email: newEmail, username: newUserName, avatarURL: "https://firebasestorage.googleapis.com/v0/b/af2emailauth.appspot.com/o/guestProfile%2Fdefault-avatar.png?alt=media&token=affcce1a-4b2f-44c8-b73c-0bd3e5f6b209" });
+                        this.users.child(authenticatedUser.uid).set({ email: newEmail, username: newUserName, balance: 0.00, avatarURL: "https://firebasestorage.googleapis.com/v0/b/af2emailauth.appspot.com/o/guestProfile%2Fdefault-avatar.png?alt=media&token=affcce1a-4b2f-44c8-b73c-0bd3e5f6b209" });
                     })
             });
     }
