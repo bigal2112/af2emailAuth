@@ -257,7 +257,7 @@ export class EventData {
       };
     });
 
-    this.addMessage(firebaseEventId, "Tickets have now been bought", this.userDetails.username)
+    this.addMessage(firebaseEventId, "Tickets for this event have now been bought", this.userDetails.username)
 
     //  7. Update the EVENTS node with the actual ticket cost and date bought.
     return this.eventsRef.child(firebaseEventId).update({
