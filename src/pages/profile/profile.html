@@ -47,7 +47,7 @@
   </ion-item>
 
   <ion-list class="transactionList">
-    <ion-item *ngFor="let transaction of transactionsAll">
+    <ion-item *ngFor="let transaction of transactionsAll" (click)="showTransactionDetails(transaction)">
       <ion-row>
         <ion-col width-10 class="floatLeft">
           <h6>{{transaction?.transCreatedOn | date:'MMM d'}}</h6>

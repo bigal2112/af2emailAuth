@@ -160,4 +160,10 @@ export class ProfileData {
       });
     });
   }
+
+  updatePaymentStatus(transFirebaseId: any, newStatus: string) {
+    return this.transactionsRef.child(transFirebaseId).update({
+      transStatus: newStatus
+    });
+  }
 }

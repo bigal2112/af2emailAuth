@@ -73,6 +73,7 @@ export class ProfilePage {
             eventTitle = snap.val().transEventTitle
           }
           this.transactionsCR.push({
+            transFirebaseId: snap.key,
             transCreatedOn: snap.val().transCreatedOn,
             transEventTitle: eventTitle,
             transAmount: snap.val().transAmount,
@@ -98,6 +99,7 @@ export class ProfilePage {
               eventTitle = snap.val().transEventTitle
             }
             this.transactionsDB.push({
+              transFirebaseId: snap.key,
               transCreatedOn: snap.val().transCreatedOn,
               transEventTitle: eventTitle,
               transAmount: snap.val().transAmount * -1,
@@ -114,6 +116,7 @@ export class ProfilePage {
             this.transactionsAll = [];
             orderedList.forEach(transaction => {
               this.transactionsAll.push({
+                transFirebaseId: transaction.transFirebaseId,
                 transCreatedOn: transaction.transCreatedOn,
                 transEventTitle: transaction.transEventTitle,
                 transAmount: transaction.transAmount,
@@ -250,6 +253,39 @@ export class ProfilePage {
     console.log("Add payment clicked");
     let paymentsModal = this.modalCtrl.create(PaymentAddPage);
     paymentsModal.present();
+  }
+
+  showTransactionDetails(transaction) {
+    console.log(transaction);
+    // if the transaction is an outstanding payment AND the transaction amount is > 0 (a payment TO me)
+    if(transaction.transStatus === "OUTSTANDING" && transaction.transAmount > 0) {
+      // show an alert to either accept or reject the payment
+      let changeStatusAlert = this.alertCtrl.create({
+      title: 'Payment pending!',
+      message: "If you received this payment then accept it, otherwise reject it."+'\n'+"Touch anywhere outside this alert to dismiss it.",
+      buttons: [
+        {
+          text: 'Accept',
+          handler: data => {
+            console.log('ACCEPTED');
+            this.profileData.updatePaymentStatus(transaction.transFirebaseId, "ACCEPTED").then(() => {
+              console.log("Status Updated");
+            });
+          }
+        },
+        {
+          text: 'Reject',
+          handler: data => {
+            console.log('REJECTED');
+            this.profileData.updatePaymentStatus(transaction.transFirebaseId, "REJECTED").then(() => {
+              console.log("Status Updated");
+            });
+          }
+        }
+      ]
+    });
+    changeStatusAlert.present();
+    }
   }
 
   sortByCreatedOnDate(a, b) {
