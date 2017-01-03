@@ -26,7 +26,7 @@
       <ion-card-content>
         <h2>{{firstEventPerformer}}</h2>
         <p>{{firstEventDate | date:'EEE MMM d, y - HH:mm'}}</p>
-        <p>{{firstEventActualPrice | currency: 'GBP':true}}</p>
+        <!--<p>{{firstEventActualPrice | currency: 'GBP':true}}</p>-->
         <ion-icon *ngIf="firstEventActualPrice == 0.00 || firstEventActualPrice == null" color="secondary" name="unlock"></ion-icon>
         <ion-icon *ngIf="firstEventActualPrice != 0.00 && firstEventActualPrice != null" color="danger" name="lock"></ion-icon>
       </ion-card-content>
@@ -61,8 +61,16 @@
           <img *ngIf="event?.imageMed == null" src="/img/no-picture-available.jpg" />
           <img *ngIf="event?.imageMed != null" src="{{event?.imageMed}}" />
         </ion-thumbnail>
-        <h2>{{event?.performer}}</h2>
         <ion-grid>
+          <ion-row>
+            <ion-col width-90>
+              <h2>{{event?.performer}}</h2>
+            </ion-col>
+            <ion-col width-10>
+              <ion-icon *ngIf="event.actualTicketPrice == 0.00 || event.actualTicketPrice == null" color="secondary" name="unlock"></ion-icon>
+              <ion-icon *ngIf="event.actualTicketPrice != 0.00 && event.actualTicketPrice != null" color="danger" name="lock"></ion-icon>
+            </ion-col>
+          </ion-row>
           <ion-row>
             <ion-col width-50 class="floatLeft">
               <p>{{event?.start_time | date:'mediumDate'}}</p>
@@ -71,15 +79,15 @@
               <p>{{event?.initialTicketPrice | currency: 'GBP':true}}</p>
             </ion-col>
           </ion-row>
-          <ion-row>
+          <!--<ion-row>
             <ion-col>
               <ion-icon *ngIf="event.actualTicketPrice == 0.00 || event.actualTicketPrice == null" color="secondary" name="unlock"></ion-icon>
               <ion-icon *ngIf="event.actualTicketPrice != 0.00 && event.actualTicketPrice != null" color="danger" name="lock"></ion-icon>
-            </ion-col>
+            </ion-col>-->
             <!--<ion-col>
               {{event?.numberOfInvites}}
             </ion-col>-->
-          </ion-row>
+          <!--</ion-row>-->
         </ion-grid>
         <!--</div>-->
       </ion-item>

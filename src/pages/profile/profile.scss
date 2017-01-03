@@ -1,11 +1,11 @@
 page-profile {
 
   .profitable {
-    color: #22BB22;
+    color: #00cc00;
   }
 
   .no-profit {
-    color: #FF0000;
+    color: #ff0000;
   }
 
   .transactionHeader {
@@ -25,7 +25,7 @@ page-profile {
 
     ion-item {
       // border: 1px solid black;
-      min-height: 3rem;
+      min-height: 4rem;
       padding-left: 0;
       margin-top: 1px;
       background-color: lightgray;
@@ -118,8 +118,25 @@ page-profile {
   .floatLeft {
         text-align: left;
     }
-    .floatRight {
+  .floatRight {
         text-align: right;
+        padding-right: 0;
     }
+
+  .transactionStatus {
+    max-width: 4%;
+    text-align: left;
+    padding-top: 6px;
+  }
+
+  .balanceStatus {
+    max-width: 4%;
+    text-align: left;
+    padding-top: 8px;
+  }
+
+  .item-md.item-block .item-inner {
+    padding-right: 0;
+  }
 
 }

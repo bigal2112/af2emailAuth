@@ -1,8 +1,9 @@
-import { NavController, AlertController, LoadingController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
 import { Component, NgZone } from '@angular/core';
 import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
 import { Camera } from 'ionic-native';
+import { PaymentAddPage } from '../payment-add/payment-add';
 
 @Component({
   selector: 'page-profile',
@@ -19,9 +20,10 @@ export class ProfilePage {
   transactionsDB: any;
   transactionsAll: any;
   loader: any;
+  outstandingTransactionExists: boolean;
 
   constructor(public nav: NavController, public alertCtrl: AlertController, public profileData: ProfileData,
-    public authData: AuthData, public loadingCtrl: LoadingController) {
+    public authData: AuthData, public loadingCtrl: LoadingController, public modalCtrl: ModalController) {
 
     this.ngZone = new NgZone({ enableLongStackTrace: false });
     // console.log("profile.ts - Constructor");
@@ -32,71 +34,99 @@ export class ProfilePage {
     });
     this.loader.present();
 
-    this.ngZone.run(() => {
 
-      this.profileData.getUserDetails().on('value', (data) => {
-        this.userProfile = data.val();
-        this.userFirebaseId = data.key;
-        // console.log("userProfile:");
-        // console.log(this.userProfile);
 
-        // this.birthDate = this.userProfile.birthDate;
+    this.profileData.getUserDetails().on('value', (data) => {
+      this.userProfile = data.val();
+      this.userFirebaseId = data.key;
+      // console.log("userProfile:");
+      // console.log(this.userProfile);
 
-        // get my balance and set the correct colour depending on it's value
-        this.myBalance = this.userProfile.balance == null ? 0.00 : this.userProfile.balance
-        // if (this.myBalance >= 0) {
-        //   this.myBalanceColor = "green"
-        // } else {
-        //   this.myBalanceColor = "red"
-        // }
+      // this.birthDate = this.userProfile.birthDate;
 
-        // get my credit transactions (the tickets I've bought)
-        this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
-          this.transactionsCR = [];
+      // get my balance and set the correct colour depending on it's value
+      this.myBalance = this.userProfile.balance == null ? 0.00 : this.userProfile.balance
+      // if (this.myBalance >= 0) {
+      //   this.myBalanceColor = "green"
+      // } else {
+      //   this.myBalanceColor = "red"
+      // }
+
+
+      // get my credit transactions (the tickets I've bought or payments I've received)
+      this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
+        this.transactionsCR = [];
+
+        this.outstandingTransactionExists = false;
+
+        data.forEach(snap => {
+          // work out the event title depending on the type of transaction it is.
+          // if it's a payment then the transEventTitle will hold the method i.e CASH, PAYPAL
+          // so we can use this as the start of the title
+          let eventTitle = "";
+          if (snap.val().transType === "PAYMENT") {
+            eventTitle = snap.val().transEventTitle + " payment to " + snap.val().transToUserName;
+            if(snap.val().transStatus == "OUTSTANDING") {
+              this.outstandingTransactionExists = true;
+            }
+          } else {
+            eventTitle = snap.val().transEventTitle
+          }
+          this.transactionsCR.push({
+            transCreatedOn: snap.val().transCreatedOn,
+            transEventTitle: eventTitle,
+            transAmount: snap.val().transAmount,
+            transStatus: snap.val().transStatus
+          });
+        });
+
+        // get my debit transactions (the tickets I've been bought)
+        this.profileData.getUsersTransactionsDB(this.userFirebaseId).on('value', data => {
+          this.transactionsDB = [];
 
           data.forEach(snap => {
-            this.transactionsCR.push({
+            // work out the event title depending on the type of transaction it is.
+            // if it's a payment then the transEventTitle will hold the method i.e CASH, PAYPAL
+            // so we can use this as the start of the title
+            let eventTitle = "";
+            if (snap.val().transType === "PAYMENT") {
+              eventTitle = snap.val().transEventTitle + " payment from " + snap.val().transFromUserName;
+              if(snap.val().transStatus == "OUTSTANDING") {
+              this.outstandingTransactionExists = true;
+            }
+            } else {
+              eventTitle = snap.val().transEventTitle
+            }
+            this.transactionsDB.push({
               transCreatedOn: snap.val().transCreatedOn,
-              transEventTitle: snap.val().transEventTitle,
-              transAmount: snap.val().transAmount
+              transEventTitle: eventTitle,
+              transAmount: snap.val().transAmount * -1,
+              transStatus: snap.val().transStatus
             });
           });
 
-          // get my debit transactions (the tickets I've been bought)
-          this.profileData.getUsersTransactionsDB(this.userFirebaseId).on('value', data => {
-            this.transactionsDB = [];
+          // concatenate the transactions lists and sort by transaction date
+          let unorderedList = this.transactionsCR.concat(this.transactionsDB);
+          let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
 
-            data.forEach(snap => {
-              this.transactionsDB.push({
-                transCreatedOn: snap.val().transCreatedOn,
-                transEventTitle: snap.val().transEventTitle,
-                transAmount: snap.val().transAmount * -1
-              });
-            });
-
-            // concatenate the transactions lists and sort by transaction date
-            let unorderedList = this.transactionsCR.concat(this.transactionsDB);
-            let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
-
+          this.ngZone.run(() => {
             // pop the transactions into the display array
             this.transactionsAll = [];
             orderedList.forEach(transaction => {
               this.transactionsAll.push({
                 transCreatedOn: transaction.transCreatedOn,
                 transEventTitle: transaction.transEventTitle,
-                transAmount: transaction.transAmount
+                transAmount: transaction.transAmount,
+                transStatus: transaction.transStatus
               });
             });
-
-            // console.log("Transaction List");
-            // console.log(this.transactionsAll);
-
-            this.loader.dismiss();
           });
+          // console.log("Transaction List");
+          // console.log(this.transactionsAll);
+
+          this.loader.dismiss();
         });
       });
-
-
     });
   }
 
@@ -218,6 +248,8 @@ export class ProfilePage {
 
   addPayment() {
     console.log("Add payment clicked");
+    let paymentsModal = this.modalCtrl.create(PaymentAddPage);
+    paymentsModal.present();
   }
 
   sortByCreatedOnDate(a, b) {

@@ -6,6 +6,7 @@ import { GlobalVariables } from '../providers/global-variables';
 @Injectable()
 export class EventData {
   public currentUser: any;
+  public rootRef: any;
   public eventsRef: any;
   public nextEvent: any;
   public guestsRef: any;
@@ -22,6 +23,7 @@ export class EventData {
 
   constructor(public userData: UserData, public globalVars: GlobalVariables) {
     this.currentUser = firebase.auth().currentUser.uid;
+    this.rootRef = firebase.database();
     this.usersRef = firebase.database().ref('users');
     this.eventsRef = firebase.database().ref('events');
     this.invitesRef = firebase.database().ref('invites');
@@ -192,11 +194,9 @@ export class EventData {
     //  
     this.userDetails = this.globalVars.getCurrentUserDetals();
 
-    //  1. Calculate each ACCEPTed users actual ticket cost based on totle cost / number of users.
+    //  1. Calculate each ACCEPTed users actual ticket cost based on total cost / number of users.
     let numberOfUsers = numberOfAcceptUsers + 1;
     this.actualTicketCost = (actualCostOfEvent / numberOfUsers).toFixed(2);
-    // console.log("numberOfUsers: " + numberOfUsers);
-    // console.log("eachUsersCost: " + this.actualTicketCost);
 
     //  2. Add a new transaction for each ACCEPTed user.
     // ------------------------------------------------------------------------
@@ -207,12 +207,39 @@ export class EventData {
     invitedUsersArray.forEach(user => {
       if (user.inviteAccepted === "ACCEPT") {
         console.log("Adding transaction for user " + user.inviteeName);
-        
+
+        // let newTransactionRef = this.transactionsRef.push()
+        // let newTransactionKey = newTransactionRef.key();
+
+        // let updatedData = {};
+
+        // updatedData[this.transactionsRef + newTransactionKey] = {
+        //   transFromUserId: user.inviteOwnerId,
+        //   transToUserId: user.inviteInviteeId,
+        //   transFromUserName: this.userDetails.username,
+        //   transToUsername: user.inviteeName,
+        //   transEventTitle: user.inviteEventTitle,
+        //   transType: "EVENT",
+        //   transCreatedOn: transactionDate,
+        //   transAmount: this.actualTicketCost
+        // };
+        // //  3. Update the balance of creator/user buy the new calculated cost of a ticket.
+        // updatedData[this.usersRef.child(user.inviteOwnerId).child('balances').child(user.inviteInviteeId).child('balance')] = {
+        //   username: user.username,
+        //   avatarURL: user.avatarURL
+        // };
+
+        // this.rootRef.update(updatedData, function (error) {
+        //   if (error) {
+        //     console.log("Error updating data:", error);
+        //   }
+        // });
+
         this.transactionsRef.push({
           transFromUserId: user.inviteOwnerId,
           transToUserId: user.inviteInviteeId,
           transFromUserName: this.userDetails.username,
-          transToUsername: user.inviteeName,
+          transToUserName: user.inviteeName,
           transEventTitle: user.inviteEventTitle,
           transType: "EVENT",
           transCreatedOn: transactionDate,

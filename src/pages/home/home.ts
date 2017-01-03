@@ -1,5 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
+import { Splashscreen } from 'ionic-native';
 
 import { ProfilePage } from '../profile/profile';
 import { EventSearchPage } from '../event-search/event-search';
@@ -55,10 +56,10 @@ export class HomePage {
     this.numberOfInvitations = 0;
 
     // show loading control
-    this.loader = this.loadingCtrl.create({
-      content: "Retrieving your events...."
-    });
-    this.loader.present();
+    // this.loader = this.loadingCtrl.create({
+    //   content: "Retrieving your events...."
+    // });
+    // this.loader.present();
 
     // this.that = this;
 
@@ -191,7 +192,8 @@ export class HomePage {
         });
         // console.log("Retrieving events list - complete");
         // console.log(this.eventList);
-        this.loader.dismiss();
+        // this.loader.dismiss();
+        Splashscreen.hide();
 
       });
     });

@@ -1,0 +1,53 @@
+<!--
+  Generated template for the PaymentAdd page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Add Payment</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()">CANCEL</button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar>
+    <ion-item>
+      <ion-label color="primary">Payment Amount</ion-label>
+      <ion-input type="number" [(ngModel)]="paymentAmount"></ion-input>
+    </ion-item>
+    <!--<ion-item>
+      <ion-label color="primary">Payment Type</ion-label>
+      <ion-input type="text" [(ngModel)]="paymentType"></ion-input>
+    </ion-item>-->
+    <ion-item>
+      <ion-label>Payment Type</ion-label>
+      <ion-select [(ngModel)]="paymentType">
+        <ion-option value="Cash" selected="true">CASH</ion-option>
+        <ion-option value="PayPal">PAYPAL</ion-option>
+        <ion-option value="Internet">INTERNET</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list radio-group>
+    <ion-item *ngFor="let user of userList; let i of index">
+      <ion-avatar item-left>
+        <img src="{{user?.avatarURL}}">
+      </ion-avatar>
+      <ion-label>{{user.username}}</ion-label>
+      <<ion-radio value="{{user?.username}}" (click)="userRadioClicked(i)"></ion-radio>>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <button ion-button block color="secondary" (click)="sendPayment()">Pay</button>
+</ion-footer>

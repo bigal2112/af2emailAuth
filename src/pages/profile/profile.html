@@ -31,13 +31,14 @@
 
   <ion-item class="transactionHeader">
     <ion-row>
-      <ion-col width-50>
+      <ion-col>
         <h2 class="floatLeft">Balance</h2>
       </ion-col>
-      <ion-col width-50>
-        <h2 class="floatRight" [class.profitable]="myBalance >= 0" [class.no-profit]="myBalance < 0">
-          {{myBalance | currency: 'GBP':true}}
-        </h2>
+      <ion-col width-50 class="floatRight" [class.profitable]="myBalance >= 0" [class.no-profit]="myBalance < 0">
+        <h2>{{myBalance | currency: 'GBP':true}}</h2>
+      </ion-col>
+      <ion-col class="balanceStatus">
+        <h2 *ngIf="outstandingTransactionExists">*</h2>
       </ion-col>
       <!--<ion-col width-50>
         <h2 class="floatRight" [style.color]="myBalanceColor">{{myBalance | currency: 'GBP':true}}</h2>
@@ -57,6 +58,10 @@
         <ion-col width-20 class="floatRight" [class.profitable]="transaction?.transAmount >= 0" [class.no-profit]="transaction?.transAmount < 0">
           <h6>{{transaction?.transAmount | currency: 'GBP':true}}</h6>
         </ion-col>
+        <ion-col class="transactionStatus">
+          <h2 *ngIf="transaction?.transStatus=='OUTSTANDING'">*</h2>
+        </ion-col>
+
         <!--<ion-col width-20 class="floatRight">
           <h6 [style.color]="transaction.transColor">{{transaction?.transAmount | currency: 'GBP':true}}</h6>
         </ion-col>-->

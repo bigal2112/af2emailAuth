@@ -1,0 +1,21 @@
+page-payment-add {
+
+    .sendPaymentButton {
+        position: absolute; 
+        bottom: 0px; 
+        width: 100%
+    }
+
+    .text-input-md {
+        text-align: right;
+    }
+
+    ion-footer {
+        background-color: gray;
+        padding: 2px 50px;
+    }
+
+    .item-input .label-md, .item-select .label-md, .item-datetime .label-md {
+        color: gray;
+    }
+}

@@ -1,9 +1,6 @@
-/**
-* This should come as no surprise, we need to import Injectable so we can use this provider as an injectable.
-* We also need to import firebase so we can talk to our DB.
-*/
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
+import { GlobalVariables } from '../providers/global-variables';
 
 
 @Injectable()
@@ -14,16 +11,14 @@ export class ProfileData {
   avatarPictureRef: any;
   // balancesRef: any;
   transactionsRef: any;
-  
+
 
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any;
+  userDetails: any;
 
-
-  constructor() {
-    /**
-    * Here we create the references 
-    */
+  constructor(public globalVars: GlobalVariables) {
+    this.currentUser = firebase.auth().currentUser;
     this.userProfile = firebase.database().ref('/userProfile');
     this.users = firebase.database().ref('/users');
     this.avatarPictureRef = firebase.storage().ref('/userAvatars/');
@@ -98,13 +93,13 @@ export class ProfileData {
 
   updateAvatar(imageData: any) {
     if (imageData != null) {
-        this.avatarPictureRef.child(this.currentUser.uid).child('avatar.png')
-          .putString(imageData, 'base64', { contentType: 'image/png' })
-          .then((savedPicture) => {
-            this.userProfile.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
-            this.users.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
-          });
-      }
+      this.avatarPictureRef.child(this.currentUser.uid).child('avatar.png')
+        .putString(imageData, 'base64', { contentType: 'image/png' })
+        .then((savedPicture) => {
+          this.userProfile.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
+          this.users.child(this.currentUser.uid).child('avatarURL').set(savedPicture.downloadURL);
+        });
+    }
   }
 
   getUsersBalance(firebaseUserId) {
@@ -118,5 +113,51 @@ export class ProfileData {
 
   getUsersTransactionsDB(firebaseUserId) {
     return this.transactionsRef.orderByChild('transToUserId').equalTo(firebaseUserId);
+  }
+
+  makePayment(paymentToUser: any, paymentType: any, paymentAmount: number) {
+    let nicePaymentAmount = (paymentAmount * 1).toFixed(2);
+
+    console.log(paymentToUser);
+    console.log(nicePaymentAmount);
+    console.log(paymentType);
+
+    this.userDetails = this.globalVars.getCurrentUserDetals();
+
+    this.transactionsRef.push({
+      transFromUserId: this.currentUser.uid,
+      transToUserId: paymentToUser.id,
+      transFromUserName: this.userDetails.username,
+      transToUserName: paymentToUser.username,
+      transEventTitle: paymentType,
+      transType: "PAYMENT",
+      transStatus: "OUTSTANDING",
+      transCreatedOn: Date.now(),
+      transAmount: paymentAmount * -1
+    }).then((data) => {
+      //  3. Update the balance of creator/user buy the new calculated cost of a ticket.
+      this.users.child(this.currentUser.uid).child('balances').child(paymentToUser.id).child('balance').transaction((balance: number) => {
+        balance += (paymentAmount * -1);
+        return balance;
+      }).then((data) => {
+        //  3. Update the balance of user/creator buy the new calculated cost of a ticket.
+        this.users.child(paymentToUser.id).child('balances').child(this.currentUser.uid).child('balance').transaction((balance: number) => {
+          balance += (paymentAmount * 1);
+          return balance;
+        }).then((data) => {
+          //  4. Update the balance of the user by the new calculated cost of a ticket.
+          this.users.child(paymentToUser.id).child('balance').transaction((balance: number) => {
+            balance += (paymentAmount * 1);
+            return balance;
+          }).then((data) => {
+            //  5. Update the balance of the creator by the new calculated cost of a ticket times the number of ACCEPTed users.
+            this.users.child(this.currentUser.uid).child('balance').transaction((balance: number) => {
+              balance += (paymentAmount * -1);
+              return balance;
+            })
+          });
+        });
+      });
+    });
   }
 }

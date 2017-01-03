@@ -13,6 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { SignupPage } from '../pages/sign-up/sign-up';
+import { PaymentAddPage } from '../pages/payment-add/payment-add';
 
 import { ModalUserListPage } from '../pages/modal-user-list/modal-user-list';
 
@@ -56,6 +57,7 @@ const myFirebaseAuthConfig = {
     ProfilePage,
     ResetPasswordPage,
     SignupPage,
+    PaymentAddPage,
     ModalUserListPage,
     TimeSince
   ],
@@ -77,6 +79,7 @@ const myFirebaseAuthConfig = {
     ProfilePage,
     ResetPasswordPage,
     SignupPage,
+    PaymentAddPage,
     ModalUserListPage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
