@@ -61,22 +61,24 @@ export class ProfilePage {
           // work out the event title depending on the type of transaction it is.
           // if it's a payment then the transEventTitle will hold the method i.e CASH, PAYPAL
           // so we can use this as the start of the title
-          // let eventTitle = "";
-          // if (snap.val().transType === "PAYMENT") {
-          //   eventTitle = snap.val().transEventTitle + " payment to " + snap.val().transToUserName;
-          //   if(snap.val().transStatus == "OUTSTANDING") {
-          //     this.outstandingTransactionExists = true;
-          //   }
-          // } else {
-          //   eventTitle = snap.val().transEventTitle
-          // }
+          let eventTitle = "";
+          if (snap.val().transType === "PAYMENT") {
+            eventTitle = snap.val().transEventTitle + " payment to " + snap.val().transToUserName;
+          } else {
+            eventTitle = snap.val().transEventTitle
+          }
           this.transactionsCR.push({
             transFirebaseId: snap.key,
+            transFromUserId: snap.val().transFromUserId,
+            transFromUserName: snap.val().transFromUserName,
+            transToUserId: snap.val().transToUserId,
+            transToUserName: snap.val().transToUserName,
             transCreatedOn: snap.val().transCreatedOn,
-            transEventTitle: snap.val().transEventTitle,
+            transEventTitle: eventTitle,
             transAmount: snap.val().transAmount,
             transStatus: snap.val().transStatus,
-            transType: snap.val().transType
+            transType: snap.val().transType,
+            transRejectedReason: snap.val().transRejectedReason
           });
         });
 
@@ -88,22 +90,24 @@ export class ProfilePage {
             // work out the event title depending on the type of transaction it is.
             // if it's a payment then the transEventTitle will hold the method i.e CASH, PAYPAL
             // so we can use this as the start of the title
-            // let eventTitle = "";
-            // if (snap.val().transType === "PAYMENT") {
-            //   eventTitle = snap.val().transEventTitle + " payment from " + snap.val().transFromUserName;
-            //   if(snap.val().transStatus == "OUTSTANDING") {
-            //   this.outstandingTransactionExists = true;
-            // }
-            // } else {
-            //   eventTitle = snap.val().transEventTitle
-            // }
+            let eventTitle = "";
+            if (snap.val().transType === "PAYMENT") {
+              eventTitle = snap.val().transEventTitle + " payment from " + snap.val().transFromUserName;
+            } else {
+              eventTitle = snap.val().transEventTitle
+            }
             this.transactionsDB.push({
               transFirebaseId: snap.key,
+              transFromUserId: snap.val().transFromUserId,
+              transFromUserName: snap.val().transFromUserName,
+              transToUserId: snap.val().transToUserId,
+              transToUserName: snap.val().transToUserName,
               transCreatedOn: snap.val().transCreatedOn,
-              transEventTitle: snap.val().transEventTitle,
+              transEventTitle: eventTitle,
               transAmount: snap.val().transAmount * -1,
               transStatus: snap.val().transStatus,
-              transType: snap.val().transType
+              transType: snap.val().transType,
+              transRejectedReason: snap.val().transRejectedReason
             });
           });
 
@@ -120,21 +124,21 @@ export class ProfilePage {
             orderedList.forEach(transaction => {
 
               let eventTitle = "";
-              if (transaction.transType === "PAYMENT") {
-                eventTitle = transaction.transEventTitle + " payment from " + transaction.transFromUserName;
-                if (transaction.transStatus == "OUTSTANDING") {
-                  this.outstandingTransactionExists = true;
-                }
-              } else {
-                eventTitle = transaction.transEventTitle
+              if (transaction.transType === "PAYMENT" && transaction.transStatus == "OUTSTANDING") {
+                this.outstandingTransactionExists = true;
               }
 
               this.transactionsAll.push({
                 transFirebaseId: transaction.transFirebaseId,
+                transFromUserId: transaction.transFromUserId,
+                transFromUserName: transaction.transFromUserName,
+                transToUserId: transaction.transToUserId,
+                transToUserName: transaction.transToUserName,
                 transCreatedOn: transaction.transCreatedOn,
-                transEventTitle: eventTitle,
+                transEventTitle: transaction.transEventTitle,
                 transAmount: transaction.transAmount,
-                transStatus: transaction.transStatus
+                transStatus: transaction.transStatus,
+                transRejectedReason: transaction.transRejectedReason
               });
             });
           });
@@ -282,7 +286,7 @@ export class ProfilePage {
             text: 'Accept',
             handler: data => {
               console.log('ACCEPTED');
-              this.profileData.updatePaymentStatus(transaction.transFirebaseId, "ACCEPTED").then(() => {
+              this.profileData.updatePaymentStatus(transaction.transFirebaseId, "ACCEPTED", null, null, null, null).then(() => {
                 console.log("Status Updated");
               });
             }
@@ -291,14 +295,52 @@ export class ProfilePage {
             text: 'Reject',
             handler: data => {
               console.log('REJECTED');
-              this.profileData.updatePaymentStatus(transaction.transFirebaseId, "REJECTED").then(() => {
-                console.log("Status Updated");
+
+              let rejectedReasonPrompt = this.alertCtrl.create({
+                title: 'Rejected payment!',
+                message: "Enter a reason you have rejected the payment",
+                inputs: [
+                  {
+                    name: 'reason',
+                    placeholder: 'Reason'
+                  },
+                ],
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    handler: data => {
+                      console.log('Cancel clicked');
+                    }
+                  },
+                  {
+                    text: 'Send',
+                    handler: data => {
+                      console.log('Send clicked');
+
+                      this.profileData.updatePaymentStatus(transaction.transFirebaseId, "REJECTED", data.reason, transaction.transAmount, transaction.transFromUserId, transaction.transToUserId).then(() => {
+                        console.log("Status Updated");
+                      });
+                    }
+                  }
+                ]
               });
+              rejectedReasonPrompt.present();
+
+
             }
           }
         ]
       });
       changeStatusAlert.present();
+    } else if (transaction.transStatus === "REJECTED") {
+
+      let msg = "Your payment was rejected by " + transaction.transToUserName + " because '" + transaction.transRejectedReason + "'. If this is not the case then go punch their lights out...."
+      let alert = this.alertCtrl.create({
+        title: 'Rejected payment!',
+        subTitle: msg,
+        buttons: ['OK']
+      });
+      alert.present();
     }
   }
 

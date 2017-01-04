@@ -161,9 +161,39 @@ export class ProfileData {
     });
   }
 
-  updatePaymentStatus(transFirebaseId: any, newStatus: string) {
+  updatePaymentStatus(transFirebaseId: any, newStatus: string, rejectedReason: String, transAmount: any, fromUserId: any, toUserId: any): any {
     return this.transactionsRef.child(transFirebaseId).update({
-      transStatus: newStatus
+      transStatus: newStatus,
+      transRejectedReason: rejectedReason,
+      transRejectedOn: Date.now()
+    }).then((data) => {
+
+      // if it's a rejection of a payment then we need to remove the transaction amount from all the balances as well
+      if (newStatus === "REJECTED") {
+        //  3. Update the balance of creator/user buy the new calculated cost of a ticket.
+        this.users.child(fromUserId).child('balances').child(toUserId).child('balance').transaction((balance: number) => {
+          balance += (transAmount * 1);
+          return balance;
+        }).then((data) => {
+          //  3. Update the balance of user/creator buy the new calculated cost of a ticket.
+          this.users.child(toUserId).child('balances').child(fromUserId).child('balance').transaction((balance: number) => {
+            balance += (transAmount * -1);
+            return balance;
+          }).then((data) => {
+            //  4. Update the balance of the user by the new calculated cost of a ticket.
+            this.users.child(toUserId).child('balance').transaction((balance: number) => {
+              balance += (transAmount * -1);
+              return balance;
+            }).then((data) => {
+              //  5. Update the balance of the creator by the new calculated cost of a ticket times the number of ACCEPTed users.
+              this.users.child(fromUserId).child('balance').transaction((balance: number) => {
+                balance += (transAmount * 1);
+                return balance;
+              });
+            });
+          });
+        });
+      }
     });
   }
 }

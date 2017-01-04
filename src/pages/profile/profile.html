@@ -49,7 +49,7 @@
 
   <ion-list class="transactionList">
     <ion-item *ngFor="let transaction of transactionsAll" (click)="showTransactionDetails(transaction)">
-      <ion-row>
+      <ion-row [class.rejected-transaction]="transaction?.transStatus=='REJECTED'"> 
         <ion-col width-10 class="floatLeft">
           <h6>{{transaction?.transCreatedOn | date:'MMM d'}}</h6>
         </ion-col>
@@ -63,10 +63,6 @@
           <!--<h6 *ngIf="transaction?.transStatus=='OUTSTANDING'">!</h6>-->
           <ion-badge *ngIf="transaction?.transStatus=='OUTSTANDING'" [class.profitable]="transaction?.transAmount >= 0" [class.no-profit]="transaction?.transAmount < 0">!</ion-badge>
         </ion-col>
-
-        <!--<ion-col width-20 class="floatRight">
-          <h6 [style.color]="transaction.transColor">{{transaction?.transAmount | currency: 'GBP':true}}</h6>
-        </ion-col>-->
       </ion-row>
     </ion-item>
   </ion-list>

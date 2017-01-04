@@ -8,6 +8,10 @@ page-profile {
     color: #ff0000;
   }
 
+  .rejected-transaction {
+    text-decoration: line-through;
+  }
+
   .transactionHeader {
     background-color: #ECECEC;
     margin: 0;
