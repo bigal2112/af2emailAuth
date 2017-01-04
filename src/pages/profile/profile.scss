@@ -1,7 +1,7 @@
 page-profile {
 
   .profitable {
-    color: #00cc00;
+    color: black;
   }
 
   .no-profit {
@@ -124,19 +124,29 @@ page-profile {
     }
 
   .transactionStatus {
-    max-width: 4%;
+    max-width: 5%;
     text-align: left;
-    padding-top: 6px;
+    
+    
   }
 
   .balanceStatus {
-    max-width: 4%;
+    max-width: 5%;
     text-align: left;
-    padding-top: 8px;
+    // padding-top: 8px;
   }
 
   .item-md.item-block .item-inner {
     padding-right: 0;
   }
+
+  ion-badge {
+      padding: 3px 3px;
+      
+    }
+
+    .badge-md {
+      background-color: #ffff00;
+    }
 
 }

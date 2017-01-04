@@ -57,27 +57,26 @@ export class ProfilePage {
       this.profileData.getUsersTransactionsCR(this.userFirebaseId).on('value', data => {
         this.transactionsCR = [];
 
-        this.outstandingTransactionExists = false;
-
         data.forEach(snap => {
           // work out the event title depending on the type of transaction it is.
           // if it's a payment then the transEventTitle will hold the method i.e CASH, PAYPAL
           // so we can use this as the start of the title
-          let eventTitle = "";
-          if (snap.val().transType === "PAYMENT") {
-            eventTitle = snap.val().transEventTitle + " payment to " + snap.val().transToUserName;
-            if(snap.val().transStatus == "OUTSTANDING") {
-              this.outstandingTransactionExists = true;
-            }
-          } else {
-            eventTitle = snap.val().transEventTitle
-          }
+          // let eventTitle = "";
+          // if (snap.val().transType === "PAYMENT") {
+          //   eventTitle = snap.val().transEventTitle + " payment to " + snap.val().transToUserName;
+          //   if(snap.val().transStatus == "OUTSTANDING") {
+          //     this.outstandingTransactionExists = true;
+          //   }
+          // } else {
+          //   eventTitle = snap.val().transEventTitle
+          // }
           this.transactionsCR.push({
             transFirebaseId: snap.key,
             transCreatedOn: snap.val().transCreatedOn,
-            transEventTitle: eventTitle,
+            transEventTitle: snap.val().transEventTitle,
             transAmount: snap.val().transAmount,
-            transStatus: snap.val().transStatus
+            transStatus: snap.val().transStatus,
+            transType: snap.val().transType
           });
         });
 
@@ -89,21 +88,22 @@ export class ProfilePage {
             // work out the event title depending on the type of transaction it is.
             // if it's a payment then the transEventTitle will hold the method i.e CASH, PAYPAL
             // so we can use this as the start of the title
-            let eventTitle = "";
-            if (snap.val().transType === "PAYMENT") {
-              eventTitle = snap.val().transEventTitle + " payment from " + snap.val().transFromUserName;
-              if(snap.val().transStatus == "OUTSTANDING") {
-              this.outstandingTransactionExists = true;
-            }
-            } else {
-              eventTitle = snap.val().transEventTitle
-            }
+            // let eventTitle = "";
+            // if (snap.val().transType === "PAYMENT") {
+            //   eventTitle = snap.val().transEventTitle + " payment from " + snap.val().transFromUserName;
+            //   if(snap.val().transStatus == "OUTSTANDING") {
+            //   this.outstandingTransactionExists = true;
+            // }
+            // } else {
+            //   eventTitle = snap.val().transEventTitle
+            // }
             this.transactionsDB.push({
               transFirebaseId: snap.key,
               transCreatedOn: snap.val().transCreatedOn,
-              transEventTitle: eventTitle,
+              transEventTitle: snap.val().transEventTitle,
               transAmount: snap.val().transAmount * -1,
-              transStatus: snap.val().transStatus
+              transStatus: snap.val().transStatus,
+              transType: snap.val().transType
             });
           });
 
@@ -112,13 +112,27 @@ export class ProfilePage {
           let orderedList = unorderedList.sort(this.sortByCreatedOnDate);
 
           this.ngZone.run(() => {
+            this.myBalance = this.userProfile.balance == null ? 0.00 : this.userProfile.balance;
+
             // pop the transactions into the display array
             this.transactionsAll = [];
+            this.outstandingTransactionExists = false;
             orderedList.forEach(transaction => {
+
+              let eventTitle = "";
+              if (transaction.transType === "PAYMENT") {
+                eventTitle = transaction.transEventTitle + " payment from " + transaction.transFromUserName;
+                if (transaction.transStatus == "OUTSTANDING") {
+                  this.outstandingTransactionExists = true;
+                }
+              } else {
+                eventTitle = transaction.transEventTitle
+              }
+
               this.transactionsAll.push({
                 transFirebaseId: transaction.transFirebaseId,
                 transCreatedOn: transaction.transCreatedOn,
-                transEventTitle: transaction.transEventTitle,
+                transEventTitle: eventTitle,
                 transAmount: transaction.transAmount,
                 transStatus: transaction.transStatus
               });
@@ -258,33 +272,33 @@ export class ProfilePage {
   showTransactionDetails(transaction) {
     console.log(transaction);
     // if the transaction is an outstanding payment AND the transaction amount is > 0 (a payment TO me)
-    if(transaction.transStatus === "OUTSTANDING" && transaction.transAmount > 0) {
+    if (transaction.transStatus === "OUTSTANDING" && transaction.transAmount > 0) {
       // show an alert to either accept or reject the payment
       let changeStatusAlert = this.alertCtrl.create({
-      title: 'Payment pending!',
-      message: "If you received this payment then accept it, otherwise reject it."+'\n'+"Touch anywhere outside this alert to dismiss it.",
-      buttons: [
-        {
-          text: 'Accept',
-          handler: data => {
-            console.log('ACCEPTED');
-            this.profileData.updatePaymentStatus(transaction.transFirebaseId, "ACCEPTED").then(() => {
-              console.log("Status Updated");
-            });
+        title: 'Payment pending!',
+        message: "If you received this payment then accept it, otherwise reject it." + '\n' + "Touch anywhere outside this alert to dismiss it.",
+        buttons: [
+          {
+            text: 'Accept',
+            handler: data => {
+              console.log('ACCEPTED');
+              this.profileData.updatePaymentStatus(transaction.transFirebaseId, "ACCEPTED").then(() => {
+                console.log("Status Updated");
+              });
+            }
+          },
+          {
+            text: 'Reject',
+            handler: data => {
+              console.log('REJECTED');
+              this.profileData.updatePaymentStatus(transaction.transFirebaseId, "REJECTED").then(() => {
+                console.log("Status Updated");
+              });
+            }
           }
-        },
-        {
-          text: 'Reject',
-          handler: data => {
-            console.log('REJECTED');
-            this.profileData.updatePaymentStatus(transaction.transFirebaseId, "REJECTED").then(() => {
-              console.log("Status Updated");
-            });
-          }
-        }
-      ]
-    });
-    changeStatusAlert.present();
+        ]
+      });
+      changeStatusAlert.present();
     }
   }
 

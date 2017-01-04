@@ -38,7 +38,8 @@
         <h2>{{myBalance | currency: 'GBP':true}}</h2>
       </ion-col>
       <ion-col class="balanceStatus">
-        <h2 *ngIf="outstandingTransactionExists">*</h2>
+        <!--<h2 *ngIf="outstandingTransactionExists">X</h2>-->
+        <ion-badge *ngIf="outstandingTransactionExists" [class.profitable]="myBalance >= 0" [class.no-profit]="myBalance < 0">!</ion-badge>
       </ion-col>
       <!--<ion-col width-50>
         <h2 class="floatRight" [style.color]="myBalanceColor">{{myBalance | currency: 'GBP':true}}</h2>
@@ -59,7 +60,8 @@
           <h6>{{transaction?.transAmount | currency: 'GBP':true}}</h6>
         </ion-col>
         <ion-col class="transactionStatus">
-          <h2 *ngIf="transaction?.transStatus=='OUTSTANDING'">*</h2>
+          <!--<h6 *ngIf="transaction?.transStatus=='OUTSTANDING'">!</h6>-->
+          <ion-badge *ngIf="transaction?.transStatus=='OUTSTANDING'" [class.profitable]="transaction?.transAmount >= 0" [class.no-profit]="transaction?.transAmount < 0">!</ion-badge>
         </ion-col>
 
         <!--<ion-col width-20 class="floatRight">
