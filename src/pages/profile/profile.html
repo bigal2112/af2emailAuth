@@ -67,11 +67,6 @@
     </ion-item>
   </ion-list>
 
-  <ion-fab bottom right>
-    <button ion-fab (click)="addPayment()"><ion-icon name="add"></ion-icon></button>
-  </ion-fab>
-
-
   <!--<ion-list>-->
   <!--<ion-list-header>
       Personal Information
@@ -134,3 +129,7 @@
     </ion-item>
   </ion-list>-->
 </ion-content>
+
+<ion-footer>
+  <button ion-button block color="secondary" (click)="addPayment()">Make a Payment</button>
+</ion-footer>
