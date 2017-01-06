@@ -34,8 +34,6 @@ export class ProfilePage {
     });
     this.loader.present();
 
-
-
     this.profileData.getUserDetails().on('value', (data) => {
       this.userProfile = data.val();
       this.userFirebaseId = data.key;
@@ -123,7 +121,6 @@ export class ProfilePage {
             this.outstandingTransactionExists = false;
             orderedList.forEach(transaction => {
 
-              let eventTitle = "";
               if (transaction.transType === "PAYMENT" && transaction.transStatus == "OUTSTANDING") {
                 this.outstandingTransactionExists = true;
               }
@@ -334,7 +331,14 @@ export class ProfilePage {
       changeStatusAlert.present();
     } else if (transaction.transStatus === "REJECTED") {
 
-      let msg = "Your payment was rejected by " + transaction.transToUserName + " because '" + transaction.transRejectedReason + "'. If this is not the case then go punch their lights out...."
+      // a rejected payment.
+      // if we were the ones rejecting the payment then show a slightly different messsage to if we were the one that was rejected
+      let msg = ""
+      if(transaction.transToUserId === this.userFirebaseId) {
+        msg = msg = "You rejected this payment because '" + transaction.transRejectedReason + "'."
+      } else {
+        msg = "Your payment was rejected by " + transaction.transToUserName + " because '" + transaction.transRejectedReason + "'."
+      }
       let alert = this.alertCtrl.create({
         title: 'Rejected payment!',
         subTitle: msg,
