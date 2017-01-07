@@ -1,5 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { ViewController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 declare var google;
 
@@ -13,7 +14,7 @@ export class ModalCityListPage {
   autocomplete: any;
   service: any;
 
-  constructor(public viewCtrl: ViewController, private zone: NgZone) {
+  constructor(public viewCtrl: ViewController, private zone: NgZone, public storage: Storage) {
     this.service = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
     this.autocomplete = {
@@ -26,6 +27,7 @@ export class ModalCityListPage {
   }
  
   chooseItem(item: any) {
+    this.storage.set('search_location', item);
     this.viewCtrl.dismiss(item);
   }
   

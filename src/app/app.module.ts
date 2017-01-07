@@ -30,6 +30,7 @@ import { TimeSince } from '../pipes/time-since';
 
 // Import the AF2 Module
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
+import { Storage } from '@ionic/storage';
 
 // AF2 Settings
 export const firebaseConfig = {
@@ -93,6 +94,7 @@ const myFirebaseAuthConfig = {
     UserData,
     CityData,
     GlobalVariables,
-    ConnectivityService],
+    ConnectivityService,
+    Storage],
 })
 export class AppModule { }

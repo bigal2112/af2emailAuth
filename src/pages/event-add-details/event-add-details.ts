@@ -21,7 +21,7 @@ export class EventAddDetailsPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     public modalCtrl: ModalController, public eventData: EventData, public toastCtrl: ToastController, public globalVars: GlobalVariables) {
     this.eventInfo = this.navParams.get('eventInfo')
-    console.log(this.eventInfo);
+    // console.log(this.eventInfo);
 
     // clear out the guest list to start with
     this.globalVars.setGuestList([]);
@@ -63,13 +63,13 @@ export class EventAddDetailsPage {
           text: 'Cancel',
           role: 'cancel',
           handler: data => {
-            console.log('Cancel clicked');
+            // console.log('Cancel clicked');
           }
         },
         {
           text: 'Save',
           handler: data => {
-            console.log('Saved clicked');
+            // console.log('Saved clicked');
             this.ticketFaceValue = data.value;
           }
         }

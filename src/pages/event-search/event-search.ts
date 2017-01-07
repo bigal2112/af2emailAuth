@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController, ModalController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
 import { ModalCityListPage } from '../modal-city-list/modal-city-list';
 
@@ -12,13 +14,18 @@ declare var EVDB: any;
 })
 export class EventSearchPage {
   public searchString: String;
-  public searchCity: String = "London";
+  public searchCity: String;
   public searchResults: any = [];
   public eventsList: any;
   public loader: any;
   public resultsCounter: number;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public modalCtrl: ModalController) { }
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController,
+    public modalCtrl: ModalController, public storage: Storage) { 
+      storage.get('search_location').then((val) => {
+       this.searchCity = val;
+     })
+    }
 
   ionViewDidLoad() {
 
@@ -64,14 +71,14 @@ export class EventSearchPage {
 
       // go get the results from Eventful
       EVDB.API.call("json/events/search", oArgs, function (oData) {
-        console.log(oData.events);
+        // console.log(oData.events);
 
         // if no results returned then inform user and clear any previous searchResults.
         if (typeof (oData.events) == 'undefined' || oData.events == null) {
           that.loader.dismiss();
           that.searchResults = [];
 
-          console.log("ALERT - no results")
+          // console.log("ALERT - no results")
           let alert = that.alertCtrl.create({
             title: 'No events found',
             subTitle: 'Your search returned no results.',
@@ -142,7 +149,7 @@ export class EventSearchPage {
 
           // finally put the data into the searchResults array and remove the loader
           that.searchResults = rawList;
-          console.log(that.searchResults);
+          // console.log(that.searchResults);
           that.loader.dismiss();
         }
       });
