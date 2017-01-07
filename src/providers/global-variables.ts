@@ -11,11 +11,24 @@ export class GlobalVariables {
   public firebaseEventId: any;
   public firebaseInviteID: any;
   public eventType: string;
+  public guestList: any;
 
   constructor() {
-    console.log('Hello GlobalVariables Provider');
+    // console.log('Hello GlobalVariables Provider');
     this.usersRef = firebase.database().ref('/users');
     this.setCurrentUserDetals;
+  }
+
+  getGuestList() {
+    // console.log("Returning guest list")
+    // console.log(this.guestList);
+    return this.guestList;
+  }
+
+  setGuestList(newGuestList) {
+    // console.log("Setting guest list")
+    // console.log(newGuestList);
+    this.guestList = newGuestList;
   }
 
   getCurrentUserDetals(): any {

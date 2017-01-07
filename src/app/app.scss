@@ -14,16 +14,11 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-    ion-modal {
-        top: 10% !important;
-        left: 7%!important;
-        width: 86%!important;
-        height: 80%!important;
-        border: 1px solid #333333;
-
-        
-    }
-
-    .md .modal-wrapper {
-            background-color: red;
-        }
+ion-modal {
+    top: 10% !important;
+    left: 7%!important;
+    width: 86%!important;
+    height: 80%!important;
+    border: 1px solid #333333;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}

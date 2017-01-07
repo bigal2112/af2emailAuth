@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, ModalController, ToastController } from 'ionic-angular';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
 import { EventData } from '../../providers/event-data';
+import { GlobalVariables } from '../../providers/global-variables';
 
 @Component({
   selector: 'page-event-add-details',
@@ -18,9 +19,12 @@ export class EventAddDetailsPage {
   public chosenUsers: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-    public modalCtrl: ModalController, public eventData: EventData, public toastCtrl: ToastController) {
+    public modalCtrl: ModalController, public eventData: EventData, public toastCtrl: ToastController, public globalVars: GlobalVariables) {
     this.eventInfo = this.navParams.get('eventInfo')
     console.log(this.eventInfo);
+
+    // clear out the guest list to start with
+    this.globalVars.setGuestList([]);
     
     // get the performs image
     let imageObj = this.eventInfo.image;
@@ -76,12 +80,12 @@ export class EventAddDetailsPage {
 
   showUsersModal() {
     let usersModal = this.modalCtrl.create(ModalUserListPage);
-    usersModal.onDidDismiss(data => {
+    usersModal.onDidDismiss(() => {
       // clear the chosen users
       this.chosenUsers = [];
 
       // go through the returned user list and add ONLY the chosen user to the chosen user list
-      data.forEach(user => {
+      this.globalVars.getGuestList().forEach(user => {
         if (user.chosen) {
           this.chosenUsers.push(user);
         }

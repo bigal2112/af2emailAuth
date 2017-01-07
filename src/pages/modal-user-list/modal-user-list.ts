@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, LoadingController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
+import { GlobalVariables } from '../../providers/global-variables';
 import firebase from 'firebase';
 
 /*
@@ -18,14 +19,19 @@ export class ModalUserListPage {
   public userList: any;
   public currentUserID: any;
   public loader: any;
+  public guestList: any;
 
-  constructor(public viewCtrl: ViewController, public userData: UserData, public loadingCtrl: LoadingController) {
+  constructor(public viewCtrl: ViewController, public userData: UserData, public loadingCtrl: LoadingController, public globalVars: GlobalVariables) {
 
-     // show loading control
+    // show loading control
     this.loader = this.loadingCtrl.create({
       content: "Retrieving available users...."
     });
     this.loader.present();
+
+    // get the current guest list
+    this.guestList = [];
+    this.guestList = this.globalVars.getGuestList();
 
     // get the current users ID for use in the next bit
     this.currentUserID = firebase.auth().currentUser.uid;
@@ -41,21 +47,46 @@ export class ModalUserListPage {
 
         // if the ID is the same as the current users ID then ignore, otherwise proceed
         if (this.currentUserID != snap.key) {
+          let alreadyChosen = this.alreadyInTheGuestList(snap.key);
           rawList.push({
             id: snap.key,
             username: snap.val().username,
             avatarURL: snap.val().avatarURL,
-            chosen: false
+            chosen: alreadyChosen
           });
         }
       });
+      // set the list for the HTML loop
       this.userList = rawList;
+      // console.log("User List");
+      // console.log(this.userList);
+
+      // remove the loader
       this.loader.dismiss();
     });
   }
 
   closeModal() {
-    this.viewCtrl.dismiss(this.userList);
+    // save the list in the gloabl variable as well
+    this.globalVars.setGuestList(this.userList);
+    this.viewCtrl.dismiss();
   }
 
+  alreadyInTheGuestList(userId: string): boolean {
+    // console.log("User ID: " + userId);
+
+    let cntr = 0;
+    let foundIt = false;
+    let guestListSize = this.guestList.length;
+
+    while (cntr < guestListSize && !foundIt) {
+      if (this.guestList[cntr].id === userId && this.guestList[cntr].chosen) {
+        // console.log("Returning TRUE");
+        foundIt = true;
+      }
+
+      cntr++;
+    }
+    return foundIt;
+  }
 }
