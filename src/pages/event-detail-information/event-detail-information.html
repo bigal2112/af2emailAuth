@@ -25,7 +25,7 @@
     <h2 *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">Invited Guests</h2>
     <h2 *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null">Who's Coming</h2>
     <div class="invitedGuests">
-      <ion-scroll scrollX="true" scrollY="true">
+      <ion-scroll scrollX="true" >
         <ion-row>
           <div *ngFor="let user of invitedUsers">
             <ion-col *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null" [ngStyle]="{'background-color': user.inviteeBackgroundColor}">

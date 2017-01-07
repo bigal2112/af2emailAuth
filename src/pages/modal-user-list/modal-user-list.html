@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>User List</ion-title>
+    <ion-title>Guests</ion-title>
 
     <ion-buttons end>
       <button ion-button (click)="closeModal()">CLOSE</button>
@@ -10,8 +10,8 @@
 
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
+<ion-content>
+  <ion-list no-lines>
     <ion-item *ngFor="let user of userList" (click)="toggleUserCheckbox(user.id)">
       <ion-avatar item-left>
         <img src="{{user.avatarURL}}">

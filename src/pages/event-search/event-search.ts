@@ -11,6 +11,7 @@ declare var EVDB: any;
 })
 export class EventSearchPage {
   public searchString: String;
+  public searchCity: String = "London";
   public searchResults: any = [];
   public eventsList: any;
   public loader: any;
@@ -35,7 +36,7 @@ export class EventSearchPage {
         keywords: this.searchString,
         image_sizes: "block250,block188,medium",
         page_size: 100,
-        location: "London, United Kingdom",
+        location: this.searchCity, // "London, United Kingdom",
         within: "30",
         units: "mi",
         category: "music",
