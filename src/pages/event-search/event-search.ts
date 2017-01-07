@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
+import { ModalCityListPage } from '../modal-city-list/modal-city-list';
 
 // declare this variable so the typescript doesn't balk at EVDB
 declare var EVDB: any;
@@ -17,14 +18,14 @@ export class EventSearchPage {
   public loader: any;
   public resultsCounter: number;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) { }
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public modalCtrl: ModalController) { }
 
   ionViewDidLoad() {
 
   }
 
   searchForEvent() {
-    
+
     if (typeof (this.searchString) == 'undefined' || this.searchString === null) {
       console.log("Place alert here");
     } else {
@@ -160,6 +161,19 @@ export class EventSearchPage {
         eventInfo: this.eventsList
       });
     }
+  }
+
+  pickAnotherCity() {
+
+    let modal = this.modalCtrl.create(ModalCityListPage);
+    modal.onDidDismiss(data => {
+      if (data != null && typeof (data) != 'undefined') {
+        this.searchCity = data;
+      }
+
+    });
+    modal.present();
+
   }
 
 }

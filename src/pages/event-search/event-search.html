@@ -33,16 +33,18 @@
     </ion-item>
   </ion-list>
 
+<button ion-button (click)="pickAnotherCity()">Pick Another City</button>
 </ion-content>
 
 <ion-footer>
   <ion-item>
-    <ion-label>City</ion-label>
-    <ion-select [(ngModel)]="searchCity">
+    <ion-label>City: {{searchCity}}</ion-label>
+    <!--<ion-select [(ngModel)]="searchCity">
       <ion-option value="London">London</ion-option>
       <ion-option value="Edinburgh">Edinburgh</ion-option>
       <ion-option value="Prague">Prague</ion-option>
       <ion-option value="Toronto">Toronto</ion-option>
-    </ion-select>
+    </ion-select>-->
+    
   </ion-item>
 </ion-footer>

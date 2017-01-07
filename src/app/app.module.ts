@@ -16,12 +16,14 @@ import { SignupPage } from '../pages/sign-up/sign-up';
 import { PaymentAddPage } from '../pages/payment-add/payment-add';
 
 import { ModalUserListPage } from '../pages/modal-user-list/modal-user-list';
+import { ModalCityListPage } from '../pages/modal-city-list/modal-city-list';
 
 // Importing provider
 import { AuthData } from '../providers/auth-data';
 import { EventData } from '../providers/event-data';
 import { ProfileData } from '../providers/profile-data';
 import { UserData } from '../providers/user-data';
+import { CityData } from '../providers/city-data';
 import { GlobalVariables } from '../providers/global-variables';
 import { ConnectivityService } from '../providers/connectivity-service';
 import { TimeSince } from '../pipes/time-since';
@@ -59,6 +61,7 @@ const myFirebaseAuthConfig = {
     SignupPage,
     PaymentAddPage,
     ModalUserListPage,
+    ModalCityListPage,
     TimeSince
   ],
   imports: [
@@ -80,13 +83,15 @@ const myFirebaseAuthConfig = {
     ResetPasswordPage,
     SignupPage,
     PaymentAddPage,
-    ModalUserListPage
+    ModalUserListPage,
+    ModalCityListPage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthData,
     EventData,
     ProfileData,
     UserData,
+    CityData,
     GlobalVariables,
     ConnectivityService],
 })
