@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController, ModalController, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
@@ -7,8 +7,9 @@ import { ModalCityListPage } from '../modal-city-list/modal-city-list';
 import { ModalFavouriteLocationsPage } from '../modal-favourite-locations/modal-favourite-locations';
 import { Geolocation } from 'ionic-native';
 
-// declare this variable so the typescript doesn't balk at EVDB
+// declare this variable so the typescript doesn't balk
 declare var EVDB: any;
+declare var google: any;
 
 @Component({
   selector: 'page-event-search',
@@ -23,7 +24,7 @@ export class EventSearchPage {
   public resultsCounter: number;
 
   constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController,
-    public modalCtrl: ModalController, public storage: Storage) {
+    public modalCtrl: ModalController, public storage: Storage, public toastCtrl: ToastController) {
 
     // this.storage.set('favourite_locations', []);
 
@@ -31,23 +32,44 @@ export class EventSearchPage {
       this.searchCity = val;
 
       // ------------------------------------------------------------------------------
-      // MAKE SURE TO UNCOMMENT THIS IF STATEMENMT ONCE YOU HAVE THE GEOCODING WORKING
+      // MAKE SURE TO UNCOMMENT THIS IF STATEMENT ONCE YOU HAVE THE GEOCODING WORKING
       // ------------------------------------------------------------------------------
-
       // if (this.searchCity == null || typeof (this.searchCity) == 'undefined') {
-      console.log("GET MY APPROX LOCATION FROM GEOCODING");
-      Geolocation.getCurrentPosition().then((position) => {
-        console.log("Lat: " + position.coords.latitude + " Lng: " + position.coords.longitude);
+
+      let options = { timeout: 10000, enableHighAccuracy: true };
+      Geolocation.getCurrentPosition(options).then((position) => {
+        // console.log("Lat: " + position.coords.latitude + " Lng: " + position.coords.longitude);
+
+        let geocoder = new google.maps.Geocoder();
+        let latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        
+        let that = this;
+        geocoder.geocode({ location: latlng }, function (results, status) {
+          if (status == 'OK') {
+            let toast = that.toastCtrl.create({
+              message: 'Current location : ' + results[1].formatted_address,
+              duration: 2000,
+              position: 'middle'
+            });
+            toast.present();
+          } else {
+            let alert = that.alertCtrl.create({
+              title: 'Wannago cannot find your location',
+              subTitle: status,
+              buttons: ['OK']
+            });
+            alert.present();
+          }
+        });
       });
       // };
     });
   };
 
-  searchForEvent() {
 
-    if (typeof (this.searchString) == 'undefined' || this.searchString === null) {
-      console.log("Place alert here");
-    } else {
+  searchForEvent() {
+    if (typeof (this.searchString) != 'undefined' && this.searchString != null) {
+     
       // console.log("Search for:" + this.searchString);
       // they've entered a search criteria, let's see what it brings back.....
 
@@ -56,10 +78,10 @@ export class EventSearchPage {
         keywords: this.searchString,
         image_sizes: "block250,block188,medium",
         page_size: 100,
-        location: this.searchCity, // "London, United Kingdom",
+        location: this.searchCity, 
         within: "30",
         units: "mi",
-        category: "music",
+        // category: "music",
         date: "future",
         sort_order: "date"
       };
