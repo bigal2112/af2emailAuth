@@ -37,12 +37,8 @@
 
 <ion-footer>
   <ion-item>
-    <button ion-button item-left (click)='showFavouriteLocations()'>
-        <ion-icon name="heart" colour="danger"></ion-icon>
-      </button>
-    <ion-label>{{searchCity}}</ion-label>
-    <button ion-button item-right (click)='searchForLocations()'>
-        <ion-icon name="search"></ion-icon>
-      </button>
+    <h4>{{searchCity}}</h4>
+    <button ion-button item-right (click)='searchForLocations()'><ion-icon name="search"></ion-icon></button>
+    <button ion-button item-right (click)='showFavouriteLocations()' color="danger"><ion-icon name="heart" ></ion-icon></button>
   </ion-item>
 </ion-footer>

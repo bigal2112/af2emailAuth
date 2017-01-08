@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
 import { ModalCityListPage } from '../modal-city-list/modal-city-list';
+import { ModalFavouriteLocationsPage } from '../modal-favourite-locations/modal-favourite-locations';
 import { Geolocation } from 'ionic-native';
 
 // declare this variable so the typescript doesn't balk at EVDB
@@ -24,7 +25,7 @@ export class EventSearchPage {
   constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController,
     public modalCtrl: ModalController, public storage: Storage) {
 
-      // this.storage.set('favourite_locations', []);
+    // this.storage.set('favourite_locations', []);
 
     storage.get('search_location').then((val) => {
       this.searchCity = val;
@@ -41,10 +42,6 @@ export class EventSearchPage {
       // };
     });
   };
-
-  ionViewDidLoad() {
-
-  }
 
   searchForEvent() {
 
@@ -195,6 +192,7 @@ export class EventSearchPage {
         // --------------------------------------------------------------
         // TODO: preform events search if the search string is not empty
         // --------------------------------------------------------------
+        this.searchForEvent();
       }
 
     });
@@ -203,12 +201,20 @@ export class EventSearchPage {
   }
 
   showFavouriteLocations() {
-    this.storage.get('favourite_locations').then((data) => {
-      console.log("showFavouriteLocations");
-      console.log(data);
+
+    let modal = this.modalCtrl.create(ModalFavouriteLocationsPage);
+    modal.onDidDismiss(data => {
+      if (data != null && typeof (data) != 'undefined') {
+        this.searchCity = data;
+        console.log("PERFORM EVENT SEARCH");
+        // --------------------------------------------------------------
+        // TODO: preform events search if the search string is not empty
+        // --------------------------------------------------------------
+        this.searchForEvent();
+      }
+
     });
-
-
+    modal.present();
   }
 
 }
