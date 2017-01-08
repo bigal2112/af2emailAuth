@@ -21,4 +21,21 @@ ion-modal {
     height: 80%!important;
     border: 1px solid #333333;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+    // Close Button
+    .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {color : whitesmoke;}
+
+    // Header
+    .toolbar-background {background-color:  #333333;}
+    .toolbar-title {color: whitesmoke;  font-size: 1.7rem;}
+    .toolbar {min-height: 50px;}
+
+    // Main modal
+    .content-md {background-color:whitesmoke;}
+
+    // Scrolling list to bring it inline with the bottom of the header
+    .scroll-content {margin-top: 50px !important;}
+    
+    // List items
+    .item-md{background-color: whitesmoke;}
 }

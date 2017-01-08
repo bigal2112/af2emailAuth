@@ -29,8 +29,11 @@
         <ion-row>
           <div *ngFor="let user of invitedUsers">
             <ion-col *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null" [ngStyle]="{'background-color': user.inviteeBackgroundColor}">
+              
               <ion-label>{{user.inviteeName}}</ion-label>
-              <img src="{{user.inviteeAvatarURL}}">
+              <img src="{{user.inviteeAvatarURL}}"><span style="position:absolute; top:5; left:10"><ion-badge>x</ion-badge></span>
+              
+              
             </ion-col>
             <ion-col *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null && user.inviteAccepted == 'ACCEPT'">
               <ion-label>{{user.inviteeName}}</ion-label>
