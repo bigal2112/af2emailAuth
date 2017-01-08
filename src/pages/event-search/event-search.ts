@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
 import { ModalCityListPage } from '../modal-city-list/modal-city-list';
+import { Geolocation } from 'ionic-native';
 
 // declare this variable so the typescript doesn't balk at EVDB
 declare var EVDB: any;
@@ -21,11 +22,25 @@ export class EventSearchPage {
   public resultsCounter: number;
 
   constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController,
-    public modalCtrl: ModalController, public storage: Storage) { 
-      storage.get('search_location').then((val) => {
-       this.searchCity = val;
-     })
-    }
+    public modalCtrl: ModalController, public storage: Storage) {
+
+      // this.storage.set('favourite_locations', []);
+
+    storage.get('search_location').then((val) => {
+      this.searchCity = val;
+
+      // ------------------------------------------------------------------------------
+      // MAKE SURE TO UNCOMMENT THIS IF STATEMENMT ONCE YOU HAVE THE GEOCODING WORKING
+      // ------------------------------------------------------------------------------
+
+      // if (this.searchCity == null || typeof (this.searchCity) == 'undefined') {
+      console.log("GET MY APPROX LOCATION FROM GEOCODING");
+      Geolocation.getCurrentPosition().then((position) => {
+        console.log("Lat: " + position.coords.latitude + " Lng: " + position.coords.longitude);
+      });
+      // };
+    });
+  };
 
   ionViewDidLoad() {
 
@@ -170,16 +185,29 @@ export class EventSearchPage {
     }
   }
 
-  pickAnotherCity() {
+  searchForLocations() {
 
     let modal = this.modalCtrl.create(ModalCityListPage);
     modal.onDidDismiss(data => {
       if (data != null && typeof (data) != 'undefined') {
         this.searchCity = data;
+        console.log("PERFORM EVENT SEARCH");
+        // --------------------------------------------------------------
+        // TODO: preform events search if the search string is not empty
+        // --------------------------------------------------------------
       }
 
     });
     modal.present();
+
+  }
+
+  showFavouriteLocations() {
+    this.storage.get('favourite_locations').then((data) => {
+      console.log("showFavouriteLocations");
+      console.log(data);
+    });
+
 
   }
 
