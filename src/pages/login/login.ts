@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Splashscreen } from 'ionic-native';
 import { Facebook } from 'ionic-native';
 
 import { HomePage } from '../home/home';
@@ -27,6 +28,8 @@ export class LoginPage {
   constructor(public nav: NavController, public authData: AuthData,
     public formBuilder: FormBuilder, public alertCtrl: AlertController,
     public loadingCtrl: LoadingController) {
+
+    Splashscreen.hide();
 
     this.userProfile = firebase.database().ref('userProfile');
 
