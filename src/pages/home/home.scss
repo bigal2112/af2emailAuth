@@ -21,10 +21,6 @@ page-home {
         margin-left: 0;
     }
 
-    // .item [item-right], .item [item-left] {
-    //     margin: 0;
-    // }
-
     img {
         border: 1px solid black;
     }
@@ -48,6 +44,15 @@ page-home {
     ion-footer {
         background-color: gray;
         padding: 2px 50px;
+    }
+
+    .bar-button-md {
+        height: 32px;
+        width: 32px;
+        border-radius: 5px;
+        font-size: 1.7rem;
+        background-color: #333333;
+        color: whitesmoke;
     }
 
 }
