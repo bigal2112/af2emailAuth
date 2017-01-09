@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController, ModalController, ToastController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController, ModalController, ToastController, PopoverController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
@@ -24,7 +24,7 @@ export class EventSearchPage {
   public resultsCounter: number;
 
   constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public alertCtrl: AlertController,
-    public modalCtrl: ModalController, public storage: Storage, public toastCtrl: ToastController) {
+    public modalCtrl: ModalController, public storage: Storage, public toastCtrl: ToastController, public popoverCtrl: PopoverController) {
 
     // this.storage.set('favourite_locations', []);
 
@@ -205,9 +205,8 @@ export class EventSearchPage {
   }
 
   searchForLocations() {
-
-    let modal = this.modalCtrl.create(ModalCityListPage);
-    modal.onDidDismiss(data => {
+    let popover = this.popoverCtrl.create(ModalCityListPage);
+    popover.onDidDismiss(data => {
       if (data != null && typeof (data) != 'undefined') {
         this.searchCity = data;
         console.log("PERFORM EVENT SEARCH");
@@ -216,16 +215,14 @@ export class EventSearchPage {
         // --------------------------------------------------------------
         this.searchForEvent();
       }
-
     });
-    modal.present();
+    popover.present();
 
   }
 
   showFavouriteLocations() {
-
-    let modal = this.modalCtrl.create(ModalFavouriteLocationsPage);
-    modal.onDidDismiss(data => {
+    let popover = this.popoverCtrl.create(ModalFavouriteLocationsPage);
+    popover.onDidDismiss(data => {
       if (data != null && typeof (data) != 'undefined') {
         this.searchCity = data;
         console.log("PERFORM EVENT SEARCH");
@@ -234,9 +231,8 @@ export class EventSearchPage {
         // --------------------------------------------------------------
         this.searchForEvent();
       }
-
     });
-    modal.present();
+    popover.present();
   }
 
 }

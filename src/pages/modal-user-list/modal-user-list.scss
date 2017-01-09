@@ -1,33 +1,7 @@
 page-modal-user-list {
 
-    // Close Button
-    .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
-        color : whitesmoke;
-    }
-
-    // Header
-    .toolbar-background {
-        background-color:  #333333;
-    }
-    .toolbar-title {
-        color: whitesmoke;
-    }
-    .toolbar {
-        min-height: 50px;
-    }
-
-    // Main modal
-    .content-md {
-        background-color:whitesmoke;
-    }
-
-    // Scrolling list to bring it inline with the bottom of the header
-    .scroll-content {
-        margin-top: 50px !important;
-    }
-    
-    // List items
-    .item-md{
-        background-color: whitesmoke;
+    // removes the extra padding at the bottom of the list that made the lastr entry look bigger than the rest of them.
+    .list-md {
+        margin: 0;
     }
 }

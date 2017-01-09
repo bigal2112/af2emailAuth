@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ModalController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController, ToastController } from 'ionic-angular';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
@@ -19,7 +19,7 @@ export class EventAddDetailsPage {
   public chosenUsers: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-    public modalCtrl: ModalController, public eventData: EventData, public toastCtrl: ToastController, public globalVars: GlobalVariables) {
+    public popoverCtrl: PopoverController, public eventData: EventData, public toastCtrl: ToastController, public globalVars: GlobalVariables) {
     this.eventInfo = this.navParams.get('eventInfo')
     // console.log(this.eventInfo);
 
@@ -79,8 +79,8 @@ export class EventAddDetailsPage {
   }
 
   showUsersModal() {
-    let usersModal = this.modalCtrl.create(ModalUserListPage);
-    usersModal.onDidDismiss(() => {
+    let popover = this.popoverCtrl.create(ModalUserListPage);
+    popover.onDidDismiss(() => {
       // clear the chosen users
       this.chosenUsers = [];
 
@@ -92,7 +92,7 @@ export class EventAddDetailsPage {
       })
     });
     // show the modal
-    usersModal.present();
+    popover.present();
   }
 
   addEvent() {

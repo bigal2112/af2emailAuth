@@ -14,7 +14,33 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-ion-modal {
+// ion-modal {
+//     top: 10% !important;
+//     left: 7%!important;
+//     width: 86%!important;
+//     height: 80%!important;
+//     border: 1px solid #333333;
+//     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+
+//     // Close Button
+//     .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {color : whitesmoke;}
+
+//     // Header
+//     .toolbar-background {background-color:  #333333;}
+//     .toolbar-title {color: whitesmoke;  font-size: 1.7rem;}
+//     .toolbar {min-height: 50px;}
+
+//     // Main modal
+//     .content-md {background-color:whitesmoke;}
+
+//     // Scrolling list to bring it inline with the bottom of the header
+//     .scroll-content {margin-top: 50px !important;}
+    
+//     // List items
+//     .item-md{background-color: whitesmoke;}
+// }
+
+.popover-md .popover-content {
     top: 10% !important;
     left: 7%!important;
     width: 86%!important;
@@ -23,7 +49,12 @@ ion-modal {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 
     // Close Button
-    .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {color : whitesmoke;}
+    .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
+        color : #333333; 
+        font-size: 2rem; 
+        border: 1px solid whitesmoke;
+        background-color: whitesmoke
+    }
 
     // Header
     .toolbar-background {background-color:  #333333;}
@@ -33,8 +64,9 @@ ion-modal {
     // Main modal
     .content-md {background-color:whitesmoke;}
 
-    // Scrolling list to bring it inline with the bottom of the header
-    .scroll-content {margin-top: 50px !important;}
+    // Scrolling list to bring it inline with the bottom of the header.
+    // this can be overriding in the pages SCSS file to accomodate further components in the header (like a searchbar)
+    .scroll-content {margin-top: 50px;}
     
     // List items
     .item-md{background-color: whitesmoke;}

@@ -1,3 +1,7 @@
 page-modal-favourite-locations {
 
+    // removes the extra padding at the bottom of the list that made the lastr entry look bigger than the rest of them.
+    .list-md {
+        margin: 0;
+    }
 }
