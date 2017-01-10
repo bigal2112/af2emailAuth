@@ -22,20 +22,24 @@
   <!--  Invited guests/Who's Coming' - list of users that were invited to this event
         OWNER -->
   <div *ngIf="eventType === 'MY_EVENT'">
-    <h2 *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">Invited Guests</h2>
-    <h2 *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null">Who's Coming</h2>
+    <div *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">
+      <h2>Invited Guests</h2>
+    </div>
+    <div *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null">
+      <h2>Who's Coming</h2>
+    </div>
     <div class="invitedGuests">
-      <ion-scroll scrollX="true" >
+      <ion-scroll scrollX="true">
         <ion-row>
           <div *ngFor="let user of invitedUsers">
             <ion-col *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">
-              
+
               <!--<ion-label>{{user.inviteeName}}</ion-label>-->
               <img src="{{user.inviteeAvatarURL}}">
               <ion-badge class="ACCEPT" *ngIf="user.inviteAccepted == 'ACCEPT'">✔</ion-badge>
               <ion-badge class="REJECT" *ngIf="user.inviteAccepted == 'REJECT'">✘</ion-badge>
               <ion-badge class="TRACK" *ngIf="user.inviteAccepted == 'TRACK'">?</ion-badge>
-            
+
             </ion-col>
             <ion-col *ngIf="eventActualTicketPrice != 0.00 && eventActualTicketPrice != null && user.inviteAccepted == 'ACCEPT'">
               <ion-label>{{user.inviteeName}}</ion-label>
@@ -45,7 +49,7 @@
         </ion-row>
       </ion-scroll>
     </div>
-    <hr>
+    <button *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null" ion-button block outline color="dark" (click)="updateInvitedGuests()">Update Invited Guests</button>
   </div>
 
 

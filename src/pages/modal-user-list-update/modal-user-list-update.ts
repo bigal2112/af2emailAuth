@@ -5,16 +5,16 @@ import { GlobalVariables } from '../../providers/global-variables';
 import firebase from 'firebase';
 
 /*
-  Generated class for the ModalUserList page.
+  Generated class for the ModalUserListUpdate page.
 
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
 @Component({
-  selector: 'page-modal-user-list',
-  templateUrl: 'modal-user-list.html'
+  selector: 'page-modal-user-list-update',
+  templateUrl: 'modal-user-list-update.html'
 })
-export class ModalUserListPage {
+export class ModalUserListUpdatePage {
 
   public userList: any;
   public currentUserID: any;
@@ -82,7 +82,7 @@ export class ModalUserListPage {
     let guestListSize = this.guestList.length;
 
     while (cntr < guestListSize && !foundIt) {
-      if (this.guestList[cntr].id === userId && this.guestList[cntr].chosen) {
+      if (this.guestList[cntr].inviteInviteeId === userId) {
         // console.log("Returning TRUE");
         foundIt = true;
       }

@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild, NgZone } from '@angular/core';
-import { NavController, NavParams, LoadingController, ToastController, Platform, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController, Platform, AlertController, PopoverController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
 import { ConnectivityService } from '../../providers/connectivity-service';
-// import { Geolocation } from 'ionic-native';
+import { ModalUserListUpdatePage } from '../modal-user-list-update/modal-user-list-update';
 import { LaunchNavigator, LaunchNavigatorOptions } from 'ionic-native';
 
 // declare these variables so the typescript doesn't balk.
@@ -68,7 +68,7 @@ export class EventDetailInformationPage {
 
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
     public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController,
-    public connectivityService: ConnectivityService, public platform: Platform, public alertCtrl: AlertController) {
+    public connectivityService: ConnectivityService, public platform: Platform, public alertCtrl: AlertController, public popoverCtrl: PopoverController) {
 
     this.ngZone = new NgZone({ enableLongStackTrace: false });
 
@@ -229,11 +229,11 @@ export class EventDetailInformationPage {
 
               console.log("Invited Guests");
               console.log(this.invitedUsers);
+
+              // save the invited guest list for later use.
+              this.globalVars.setGuestList(this.invitedUsers);
             });
-
-
           }
-
         })
       }
     });
@@ -469,21 +469,6 @@ export class EventDetailInformationPage {
 
   }
 
-  // openMapsApp() {
-  //   // let coords = "loc:" + this.eventLatitude + "+" + this.eventLongitude;
-  //   let coords = this.eventLatitude + "," + this.eventLongitude;
-
-  //   if (this._isiOS) {
-  //     window.open("http://maps.apple.com/?q=" + coords, '_system');
-  //     return;
-  //   }
-  //   if (this._isAndroid) {
-  //     window.open("geo:" + coords);
-  //     return;
-  //   }
-  //   window.open("http://maps.google.com/?q=" + coords, '_system');
-  // }
-
   openMapsApp() {
     this.start = "";
     // this.destination = "Westminster, London, UK";
@@ -500,5 +485,27 @@ export class EventDetailInformationPage {
             error => alert('Error launching navigator: ' + error)
     );
     
+  }
+
+  updateInvitedGuests() {
+    let popover = this.popoverCtrl.create(ModalUserListUpdatePage);
+    popover.onDidDismiss(() => {
+      // clear the chosen users
+      this.invitedUsers = [];
+
+      // go through the returned user list and add ONLY the chosen user to the chosen user list
+      console.log("Returned Users List");
+      this.globalVars.getGuestList().forEach(user => {
+        console.log(user);
+        if (user.chosen) {
+          this.invitedUsers.push(user);
+        }
+      })
+
+      console.log("Returned Guest List");
+      console.log(this.invitedUsers);
+    });
+    // show the modal
+    popover.present();
   }
 }

@@ -1,0 +1,23 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Update Invites</ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()"><ion-icon name="close-circle"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list no-lines>
+    <ion-item *ngFor="let user of userList" (click)="toggleUserCheckbox(user.id)">
+      <ion-avatar item-left>
+        <img src="{{user.avatarURL}}">
+      </ion-avatar>
+      <ion-label>{{user.username}}</ion-label>
+      <ion-checkbox color="dark" item-right [(ngModel)]="user.chosen">></ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

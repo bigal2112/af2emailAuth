@@ -47,13 +47,14 @@
     height: 80%!important;
     border: 1px solid #333333;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    background-color: whitesmoke;
 
     // Close Button
     .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
         color : #333333; 
         font-size: 2rem; 
         border: 1px solid whitesmoke;
-        background-color: whitesmoke
+        background-color: whitesmoke;
     }
 
     // Header

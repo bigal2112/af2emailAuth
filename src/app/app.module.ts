@@ -16,6 +16,7 @@ import { SignupPage } from '../pages/sign-up/sign-up';
 import { PaymentAddPage } from '../pages/payment-add/payment-add';
 
 import { ModalUserListPage } from '../pages/modal-user-list/modal-user-list';
+import { ModalUserListUpdatePage } from '../pages/modal-user-list-update/modal-user-list-update';
 import { ModalCityListPage } from '../pages/modal-city-list/modal-city-list';
 import { ModalFavouriteLocationsPage } from '../pages/modal-favourite-locations/modal-favourite-locations';
 
@@ -63,6 +64,7 @@ const myFirebaseAuthConfig = {
     SignupPage,
     PaymentAddPage,
     ModalUserListPage,
+    ModalUserListUpdatePage,
     ModalCityListPage,
     ModalFavouriteLocationsPage,
     TimeSince
@@ -87,6 +89,7 @@ const myFirebaseAuthConfig = {
     SignupPage,
     PaymentAddPage,
     ModalUserListPage,
+    ModalUserListUpdatePage,
     ModalCityListPage,
     ModalFavouriteLocationsPage
   ],
