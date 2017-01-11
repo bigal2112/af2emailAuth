@@ -25,7 +25,7 @@ export class EventAddDetailsPage {
 
     // clear out the guest list to start with
     this.globalVars.setGuestList([]);
-    
+
     // get the performs image
     let imageObj = this.eventInfo.image;
 
@@ -96,10 +96,28 @@ export class EventAddDetailsPage {
   }
 
   addEvent() {
-    
+
     // check to see whether any guests have been invited.
     if (this.chosenUsers == null || this.chosenUsers.length === 0) {
-      console.log("Billy no mates");
+      let confirm = this.alertCtrl.create({
+      title: 'No guests chosen?',
+      message: "You haven't chosen any guests for this event. Do you still want to add it?",
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            console.log("I've got some friends, honest!!!")
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.createEvent();
+          }
+        }
+      ]
+    });
+    confirm.present();
     } else {
 
       // --------------------------------------------------------------------
@@ -113,17 +131,21 @@ export class EventAddDetailsPage {
         });
         alert.present();
       } else {
-        this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, this.chosenUsers).then(() => {
-          this.navCtrl.pop();
-
-          let toast = this.toastCtrl.create({
-            message: 'Event was added successfully',
-            duration: 2000
-          });
-          toast.present();
-        });
+        this.createEvent();
       }
     }
+  }
+
+  createEvent() {
+    this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, this.chosenUsers).then(() => {
+      this.navCtrl.pop();
+
+      let toast = this.toastCtrl.create({
+        message: 'Event was added successfully',
+        duration: 2000
+      });
+      toast.present();
+    });
   }
 
 }
