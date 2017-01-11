@@ -70,7 +70,6 @@ export class ModalUserListPage {
 
   closeModal() {
     // save the list in the gloabl variable as well
-    this.globalVars.setGuestList(this.userList);
     this.viewCtrl.dismiss();
   }
 
@@ -90,5 +89,12 @@ export class ModalUserListPage {
       cntr++;
     }
     return foundIt;
+  }
+
+
+  addGuests() {
+    // save the list in the global variable as well
+    this.globalVars.setGuestList(this.userList);
+    this.viewCtrl.dismiss();
   }
 }
