@@ -36,8 +36,9 @@
 
               <!--<ion-label>{{user.inviteeName}}</ion-label>-->
               <img src="{{user.inviteeAvatarURL}}">
-              <ion-badge class="ACCEPT" *ngIf="user.inviteAccepted == 'ACCEPT'">✔</ion-badge>
-              <ion-badge class="REJECT" *ngIf="user.inviteAccepted == 'REJECT'">✘</ion-badge>
+              <!--<ion-badge class="ACCEPT" *ngIf="user.inviteAccepted == 'ACCEPT'">✔</ion-badge>-->
+              <ion-badge class="ACCEPT" *ngIf="user.inviteAccepted == 'ACCEPT'"><ion-icon name="checkmark"></ion-icon></ion-badge>
+              <ion-badge class="REJECT" *ngIf="user.inviteAccepted == 'REJECT'"><ion-icon name="close"></ion-icon></ion-badge>
               <ion-badge class="TRACK" *ngIf="user.inviteAccepted == 'TRACK'">?</ion-badge>
 
             </ion-col>
