@@ -33,6 +33,7 @@ export class HomePage {
   firstEventPerformer: any;
   firstEventTitle: any;
   firstEventPrice: any;
+  firstEventDeadline: any;
   firstEventActualPrice: any;
   firstEventDate: any;
   firstEventImage250: any;
@@ -84,6 +85,7 @@ export class HomePage {
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
+            deadline: snap.val().ticketDeadline,
             actualTicketPrice: snap.val().actualTicketPrice,
             start_time: snap.val().start_time,
             image250: snap.val().image250,
@@ -110,6 +112,7 @@ export class HomePage {
             performer: snap.val().performer,
             title: snap.val().title,
             initialTicketPrice: snap.val().initialTicketPrice,
+            deadline: snap.val().ticketDeadline,
             actualTicketPrice: snap.val().actualTicketPrice,
             start_time: snap.val().start_time,
             image250: snap.val().image250,
@@ -160,6 +163,7 @@ export class HomePage {
               this.firstEventPerformer = event.performer;
               this.firstEventTitle = event.title;
               this.firstEventPrice = event.initialTicketPrice;
+              this.firstEventDeadline = event.deadline;
               this.firstEventActualPrice = event.actualTicketPrice;
               this.firstEventDate = event.start_time;
               this.firstEventImage250 = event.image250;
@@ -176,6 +180,7 @@ export class HomePage {
                 performer: event.performer,
                 title: event.title,
                 initialTicketPrice: event.initialTicketPrice,
+                deadline: event.deadline,
                 actualTicketPrice: event.actualTicketPrice,
                 start_time: event.start_time,
                 image250: event.image250,
@@ -190,8 +195,8 @@ export class HomePage {
             this.eventsCntr++;
           });
         });
-        // console.log("Retrieving events list - complete");
-        // console.log(this.eventList);
+        console.log("Retrieving events list - complete");
+        console.log(this.eventList);
         // this.loader.dismiss();
         Splashscreen.hide();
 
