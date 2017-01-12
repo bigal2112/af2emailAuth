@@ -54,7 +54,8 @@ export class ModalUserListPage {
             id: snap.key,
             username: snap.val().username,
             avatarURL: snap.val().avatarURL,
-            chosen: alreadyChosen
+            chosen: alreadyChosen,
+            gratis: false
           });
         }
       });
@@ -96,5 +97,27 @@ export class ModalUserListPage {
     // save the list in the global variable as well
     this.globalVars.setGuestList(this.userList);
     this.viewCtrl.dismiss();
+  }
+
+  toggleChosenState (index) {
+    console.log("toggleChosenState: " + this.userList[index].username);
+    this.userList[index].chosen = !this.userList[index].chosen;
+
+    // if we have just unselected chosen then automatically unselect
+    // gratis as the guest can't have a freebie if their not going.
+    if(!this.userList[index].chosen) {
+      this.userList[index].gratis = false;
+    }
+  }
+
+  toggleGratisState(index) {
+    console.log("toggleGratisState: " + this.userList[index].username);
+    this.userList[index].gratis = !this.userList[index].gratis;
+
+    // if we have just selected gratis then automatically select
+    // chosen as the guest must be going if their getting a freebie
+    if(this.userList[index].gratis) {
+      this.userList[index].chosen = true;
+    }
   }
 }

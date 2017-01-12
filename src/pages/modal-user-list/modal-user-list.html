@@ -12,12 +12,31 @@
 
 <ion-content>
   <ion-list no-lines>
-    <ion-item *ngFor="let user of userList" (click)="toggleUserCheckbox(user.id)">
-      <ion-avatar item-left>
-        <img src="{{user.avatarURL}}">
-      </ion-avatar>
-      <ion-label>{{user.username}}</ion-label>
-      <ion-checkbox color="dark" item-right [(ngModel)]="user.chosen">></ion-checkbox>
+    <ion-item *ngFor="let user of userList; let i = index">
+      <!--<ion-grid>-->
+      <ion-row center>
+
+        <ion-col width-66>
+          <ion-row center>
+            <ion-col width-33>
+              <ion-avatar item-left><img src="{{user.avatarURL}}"></ion-avatar>
+            </ion-col>
+            <ion-col width-66>
+              <h6>{{user.username}}</h6>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+
+        <ion-col width-33>
+          <ion-buttons end>
+            <button ion-button *ngIf="user.chosen" class="selected" (click)="toggleChosenState(i)"><ion-icon name="thumbs-up"></ion-icon></button>
+            <button ion-button *ngIf="!user.chosen" class="unselected" (click)="toggleChosenState(i)"><ion-icon name="thumbs-up"></ion-icon></button>
+            <button ion-button *ngIf="user.gratis" class="selected" (click)="toggleGratisState(i)"> <ion-icon name="happy"></ion-icon></button>
+            <button ion-button *ngIf="!user.gratis" class="unselected" (click)="toggleGratisState(i)"> <ion-icon name="happy"></ion-icon></button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <!--</ion-grid>-->
     </ion-item>
   </ion-list>
 </ion-content>

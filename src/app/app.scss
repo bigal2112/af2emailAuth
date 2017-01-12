@@ -67,8 +67,31 @@
 
     // Scrolling list to bring it inline with the bottom of the header.
     // this can be overriding in the pages SCSS file to accomodate further components in the header (like a searchbar)
-    .scroll-content {margin-top: 50px;}
+    .scroll-content {margin-top: 50px; margin-left: 0;}
     
     // List items
-    .item-md{background-color: whitesmoke;}
+    .item-md{
+        background-color: whitesmoke; 
+        padding-left: 5px;
+        }
+
+    .label-md {
+        margin: 5px 0;
+    }
+
+    .button-md {
+        margin: 0;
+        padding: 0 0.9em;
+        // background-color: lightslategray;
+
+        
+    }
+
+    .selected {
+            background-color: green;
+        }
+
+        .unselected {
+            background-color: slategrey;
+        }
 }
