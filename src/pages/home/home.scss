@@ -17,6 +17,16 @@ page-home {
         padding: 0
     }
 
+    .lockIcon {
+        text-align: right;
+    }
+
+    .performer {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     div.item-inner {
         margin-left: 0;
     }

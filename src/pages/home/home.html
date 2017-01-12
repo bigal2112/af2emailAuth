@@ -64,10 +64,10 @@
         </ion-thumbnail>
         <ion-grid>
           <ion-row>
-            <ion-col width-90>
+            <ion-col width-90 class="performer">
               <h2>{{event?.performer}}</h2>
             </ion-col>
-            <ion-col width-10>
+            <ion-col width-10 class="lockIcon">
               <ion-icon *ngIf="event.actualTicketPrice == 0.00 || event.actualTicketPrice == null" color="secondary" name="unlock"></ion-icon>
               <ion-icon *ngIf="event.actualTicketPrice != 0.00 && event.actualTicketPrice != null" color="danger" name="lock"></ion-icon>
             </ion-col>
@@ -83,7 +83,7 @@
               <p>{{event?.start_time | date:'HH:mm'}}</p>
             </ion-col>
           </ion-row>
-
+          
           <ion-row>
             <ion-col width-33 class="floatLeft">
               <p>Cost:</p>
