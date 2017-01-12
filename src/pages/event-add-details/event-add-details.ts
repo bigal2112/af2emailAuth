@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, PopoverController, ToastController } from 'ionic-angular';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
+import { ModalGetTicketDetailsPage } from '../modal-get-ticket-details/modal-get-ticket-details';
 import { EventData } from '../../providers/event-data';
 import { GlobalVariables } from '../../providers/global-variables';
 
@@ -14,6 +15,7 @@ export class EventAddDetailsPage {
   public groupImage250: any;
   public performer: any;
   public ticketFaceValue: any;
+  public ticketDeadline: any;
   public allUsers: any
   public currentUserID: any;
   public chosenUsers: any;
@@ -40,42 +42,25 @@ export class EventAddDetailsPage {
       this.performer = performerObj.performer.name;
     }
 
-    this.ticketFaceValue = 0.00
+    this.ticketFaceValue = null;
+    this.ticketDeadline = null;
 
-    // -------------------------------------
-    // TODO - show currently invited guests
-    // -------------------------------------
+    // -----------------------------------------------------------------------
+    // TODO - show currently invited guests avatars (like event details page)
+    // -----------------------------------------------------------------------
   }
 
-  editTicketFaceValue() {
-    let prompt = this.alertCtrl.create({
-      title: 'Ticket Face Value',
-      message: "Enter the face value of 1 ticket for the event.",
-      inputs: [
-        {
-          name: 'value',
-          placeholder: 'Value',
-          value: this.ticketFaceValue
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            // console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            // console.log('Saved clicked');
-            this.ticketFaceValue = data.value;
-          }
-        }
-      ]
+  editTicketDetails() {
+    let popover = this.popoverCtrl.create(ModalGetTicketDetailsPage, {ticketFacevalue: this.ticketFaceValue, ticketDeadline: this.ticketDeadline});
+    popover.onDidDismiss((data) => {
+      if (data != null && typeof (data) != 'undefined') {
+        // user has updated the values
+        this.ticketFaceValue = data.returnData[0].ticketFacevalue;
+        this.ticketDeadline = data.returnData[0].ticketDeadline;
+      }
     });
-    prompt.present();
+    // show the modal
+    popover.present();
   }
 
   showUsersModal() {
@@ -100,28 +85,40 @@ export class EventAddDetailsPage {
     // check to see whether any guests have been invited.
     if (this.chosenUsers == null || this.chosenUsers.length === 0) {
       let confirm = this.alertCtrl.create({
-      title: 'No guests chosen?',
-      message: "You haven't chosen any guests for this event. Do you still want to add it?",
-      buttons: [
-        {
-          text: 'No',
-          handler: () => {
-            console.log("I've got some friends, honest!!!")
+        title: 'No guests chosen?',
+        message: "You haven't chosen any guests for this event. Do you still want to add it?",
+        buttons: [
+          {
+            text: 'No',
+            handler: () => {
+              console.log("I've got some friends, honest!!!")
+            }
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              // --------------------------------------------------------------------
+              // TODO : it could be the case there IS no ticket value i.e. a freebie
+              // --------------------------------------------------------------------
+              if (this.ticketFaceValue === 0) {
+                let alert = this.alertCtrl.create({
+                  title: 'No Ticket Value',
+                  subTitle: "You've forgot to enter a ticket value.",
+                  buttons: ['OK']
+                });
+                alert.present();
+              } else {
+                this.createEvent();
+              }
+            }
           }
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.createEvent();
-          }
-        }
-      ]
-    });
-    confirm.present();
+        ]
+      });
+      confirm.present();
     } else {
 
       // --------------------------------------------------------------------
-      // TODO : if could be the case there IS no ticket value i.e. a freebie
+      // TODO : it could be the case there IS no ticket value i.e. a freebie
       // --------------------------------------------------------------------
       if (this.ticketFaceValue === 0) {
         let alert = this.alertCtrl.create({
@@ -137,7 +134,7 @@ export class EventAddDetailsPage {
   }
 
   createEvent() {
-    this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, this.chosenUsers).then(() => {
+    this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, new Date(this.ticketDeadline).getTime(), this.chosenUsers).then(() => {
       this.navCtrl.pop();
 
       let toast = this.toastCtrl.create({

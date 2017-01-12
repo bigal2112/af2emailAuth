@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Ticket Details</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="dismiss()"><ion-icon name="close-circle"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form (submit)="saveTicketDetails()" novalidate>
+
+    <ion-item>
+      <ion-label floating>Face Value</ion-label>
+      <ion-input [(ngModel)]="ticketFacevalue" name="ticketFacevalue" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Deadline</ion-label>
+      <ion-datetime displayFormat="DD MMM YY  HH:mm" pickerFormat="DD MMM YY  HH:mm" name="ticketDeadline" [(ngModel)]="ticketDeadline"></ion-datetime>
+      <!--<ion-input [(ngModel)]="ticketDeadline" name="ticketDeadline" type="date" placeholder="Deadline"></ion-input>-->
+    </ion-item>
+
+    <button ion-button block type="submit">Update</button>
+  </form>
+
+</ion-content>

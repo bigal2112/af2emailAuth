@@ -20,10 +20,11 @@
   <h6>{{eventInfo.venue_name}}, {{eventInfo.city_name}}</h6>
   <hr>
 
-  <div class="ticketInformation">
+  <div class="ticketInformation" (click)="editTicketDetails()">
     <h2>Ticket Information</h2>
-
-    <h5 (click)="editTicketFaceValue()"><strong>Face value: </strong>{{ticketFaceValue | currency: 'GBP':true}}</h5>
+    <h5><strong>Face value: </strong>{{ticketFaceValue | currency: 'GBP':true}}</h5>
+    <h5 *ngIf="ticketDeadline==null"><strong>Deadline:   </strong>Not set</h5>
+    <h5 *ngIf="ticketDeadline!=null"><strong>Deadline:   </strong>{{ticketDeadline | date:'EEE MMM d, y - HH:mm'}}</h5>
 
   </div>
   <hr>

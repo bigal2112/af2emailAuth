@@ -32,7 +32,7 @@ export class EventData {
     // this.balancesRef = firebase.database().ref('balances')
   }
 
-  createEvent(eventInfo: any, ticketValue: any, guestList: any): any {
+  createEvent(eventInfo: any, ticketValue: any, deadline: any, guestList: any): any {
 
     // console.log("createEvent");
     // console.log(eventInfo);
@@ -51,6 +51,7 @@ export class EventData {
       title: eventInfo.title,
       start_time: eventInfo.start_time,
       initialTicketPrice: ticketValue * 1.00,
+      ticketDeadline: deadline,
       actualTicketPrice: 0.00,
       performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
       image250: imageObj != null ? imageObj.block250.url : null,
@@ -84,6 +85,7 @@ export class EventData {
               title: eventInfo.title,
               start_time: eventInfo.start_time,
               initialTicketPrice: ticketValue * 1.00,
+              ticketDeadline: deadline,
               actualTicketPrice: 0.00,
               performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
               image250: imageObj != null ? imageObj.block250.url : null,

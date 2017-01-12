@@ -19,6 +19,7 @@ import { ModalUserListPage } from '../pages/modal-user-list/modal-user-list';
 import { ModalUserListUpdatePage } from '../pages/modal-user-list-update/modal-user-list-update';
 import { ModalCityListPage } from '../pages/modal-city-list/modal-city-list';
 import { ModalFavouriteLocationsPage } from '../pages/modal-favourite-locations/modal-favourite-locations';
+import { ModalGetTicketDetailsPage } from '../pages/modal-get-ticket-details/modal-get-ticket-details';
 
 // Importing provider
 import { AuthData } from '../providers/auth-data';
@@ -67,6 +68,7 @@ const myFirebaseAuthConfig = {
     ModalUserListUpdatePage,
     ModalCityListPage,
     ModalFavouriteLocationsPage,
+    ModalGetTicketDetailsPage,
     TimeSince
   ],
   imports: [
@@ -91,7 +93,8 @@ const myFirebaseAuthConfig = {
     ModalUserListPage,
     ModalUserListUpdatePage,
     ModalCityListPage,
-    ModalFavouriteLocationsPage
+    ModalFavouriteLocationsPage,
+    ModalGetTicketDetailsPage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthData,
