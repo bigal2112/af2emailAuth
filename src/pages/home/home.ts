@@ -16,6 +16,12 @@ declare var EVDB: any;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  // Constant Variables
+  public ONE_DAY: number = 86400000;   //  86,400,000
+  public TWO_DAYS: number = 172800000; // 172,800,000
+  // 155,102,717 
+  public A_WEEK: number = 604800000;   // 604,800,000
+
   public myEvents: any;
   public invitedEvents: any;
 
@@ -42,6 +48,7 @@ export class HomePage {
   firstEventFirebaseInviteId: any;
   firstEventInviteAcceptedStatus: any;
   firstEventBackgroundColor: string;
+  firstEventDeadlineColour: string;
 
   that: any;
   ngZone: any;
@@ -135,68 +142,95 @@ export class HomePage {
         let unorderedList = this.myEventsList.concat(this.invitedEventsList);
         let orderedList = unorderedList.sort(this.sortByStartTimeDesc);
 
-        // remove any events that are in the past
+        // remove any events that are in the past 
         orderedList = orderedList.filter((event) => {
           return Date.parse(event.start_time) >= Date.now();
         })
 
+        let that = this;
         this.ngZone.run(() => {
           // now create the first item and eventList from the sorted array
           this.eventList = [];
           this.eventsCntr = 0;
+
           orderedList.forEach(event => {
 
-            // work out the list items background color base on the inviteAccepted value
-            let backgroundColor = "white";
-            if (event.inviteAcceptedStatus === "TRACK") {
-              backgroundColor = "lightcyan";
-            } else if (event.inviteAcceptedStatus === "REJECT") {
-              backgroundColor = "lightcoral";
-            } else if (event.inviteAcceptedStatus === "NOT YET") {
-              backgroundColor = "lightgoldenrodyellow";
-            }
-
-            if (this.eventsCntr === 0) {
-              this.firstEventEventfulId = event.eventfulId;
-              this.firstEventType = event.eventType;
-              this.firstEventFirebaseEventId = event.firebaseEventId;
-              this.firstEventPerformer = event.performer;
-              this.firstEventTitle = event.title;
-              this.firstEventPrice = event.initialTicketPrice;
-              this.firstEventDeadline = event.deadline;
-              this.firstEventActualPrice = event.actualTicketPrice;
-              this.firstEventDate = event.start_time;
-              this.firstEventImage250 = event.image250;
-              this.firstEventImageMed = event.imageMed;
-              this.firstEventNumberOfInvites = event.numberOfInvites;
-              this.firstEventFirebaseInviteId = event.firebaseInviteId;
-              this.firstEventInviteAcceptedStatus = event.inviteAcceptedStatus;
-              this.firstEventBackgroundColor = backgroundColor;
+            // if the deadline as passed and the event was not ACCEPTed then do not add the event
+            if (event.deadline <= Date.now() && event.inviteAcceptedStatus != "ACCEPT" && event.eventType === "INVITED_TO_EVENT") {
+              console.log(event.performer + " - removed as deadline has passed");
             } else {
-              this.eventList.push({
-                eventfulId: event.eventfulId,
-                eventType: event.eventType,
-                firebaseEventId: event.firebaseEventId,
-                performer: event.performer,
-                title: event.title,
-                initialTicketPrice: event.initialTicketPrice,
-                deadline: event.deadline,
-                actualTicketPrice: event.actualTicketPrice,
-                start_time: event.start_time,
-                image250: event.image250,
-                imageMed: event.imageMed,
-                numberOfInvites: event.numberOfInvites,
-                firebaseInviteId: event.firebaseInviteId,
-                inviteAcceptedStatus: event.inviteAcceptedStatus,
-                backgroundColor: backgroundColor
-              });
-            }
 
-            this.eventsCntr++;
+              // work out the list items background color base on the inviteAccepted value
+              let backgroundColor = "white";
+              if (event.inviteAcceptedStatus === "TRACK") {
+                backgroundColor = "lightcyan";
+              } else if (event.inviteAcceptedStatus === "REJECT") {
+                backgroundColor = "lightcoral";
+              } else if (event.inviteAcceptedStatus === "NOT YET") {
+                backgroundColor = "lightgoldenrodyellow";
+              }
+
+              // if it's an invite then see if we need to colour code the deadline date
+              let deadlineColour = "#666";
+              let msToDeadline = event.deadline - Date.now();
+              if (event.eventType === "INVITED_TO_EVENT") {
+
+                if (msToDeadline <= this.ONE_DAY) {
+                  deadlineColour = "red";
+                } else if (msToDeadline <= this.TWO_DAYS) {
+                  deadlineColour = "orange";
+                } else if (msToDeadline <= this.A_WEEK) {
+                  deadlineColour = "green";
+                }
+              }
+
+              // if it's the first event then populate the first event variables
+             if (this.eventsCntr === 0) {
+                this.firstEventEventfulId = event.eventfulId;
+                this.firstEventType = event.eventType;
+                this.firstEventFirebaseEventId = event.firebaseEventId;
+                this.firstEventPerformer = event.performer;
+                this.firstEventTitle = event.title;
+                this.firstEventPrice = event.initialTicketPrice;
+                this.firstEventDeadline = event.deadline;
+                this.firstEventActualPrice = event.actualTicketPrice;
+                this.firstEventDate = event.start_time;
+                this.firstEventImage250 = event.image250;
+                this.firstEventImageMed = event.imageMed;
+                this.firstEventNumberOfInvites = event.numberOfInvites;
+                this.firstEventFirebaseInviteId = event.firebaseInviteId;
+                this.firstEventInviteAcceptedStatus = event.inviteAcceptedStatus;
+                this.firstEventBackgroundColor = backgroundColor;
+                this.firstEventDeadlineColour = deadlineColour;
+              } else {
+                // otherwise puch the event onto the eventlist
+                this.eventList.push({
+                  eventfulId: event.eventfulId,
+                  eventType: event.eventType,
+                  firebaseEventId: event.firebaseEventId,
+                  performer: event.performer,
+                  title: event.title,
+                  initialTicketPrice: event.initialTicketPrice,
+                  deadline: event.deadline,
+                  actualTicketPrice: event.actualTicketPrice,
+                  start_time: event.start_time,
+                  image250: event.image250,
+                  imageMed: event.imageMed,
+                  numberOfInvites: event.numberOfInvites,
+                  firebaseInviteId: event.firebaseInviteId,
+                  inviteAcceptedStatus: event.inviteAcceptedStatus,
+                  backgroundColor: backgroundColor,
+                  deadlineColour: deadlineColour
+                });
+              }
+
+              this.eventsCntr++;
+            }
           });
+
         });
-        console.log("Retrieving events list - complete");
-        console.log(this.eventList);
+        // console.log("Retrieving events list - complete");
+        // console.log(this.eventList);
         // this.loader.dismiss();
         Splashscreen.hide();
 
