@@ -40,6 +40,7 @@ export class EventDetailInformationPage {
   eventIntialTicketPrice: any = 0;
   eventActualTicketPrice: any = 0;
   eventTicketsBoughtOn: any
+  eventDeadline: any;
 
   invitedUsers: any;
   numberOfAcceptUsers: number;
@@ -179,6 +180,7 @@ export class EventDetailInformationPage {
       this.eventIntialTicketPrice = data.val().initialTicketPrice;
       this.eventActualTicketPrice = data.val().actualTicketPrice;
       this.eventTicketsBoughtOn = data.val().ticketsBoughtDateTime;
+      this.eventDeadline = data.val().ticketDeadline;
 
       // ---------------------------------------------
       // Get the invited users if I'm the creator

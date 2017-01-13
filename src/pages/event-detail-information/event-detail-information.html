@@ -94,6 +94,13 @@
         <ion-label>Actual: {{eventActualTicketPrice | currency: 'GBP':true}}</ion-label>
       </ion-col>
     </ion-row>
+    <ion-row *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">
+
+      <ion-col>
+        <ion-label><strong>Deadline: {{eventDeadline | date:'EEE MMM d, y - HH:mm'}}</strong></ion-label>
+      </ion-col>
+      
+    </ion-row>
     <ion-row>
       <ion-col *ngIf="eventActualTicketPrice == 0.00 || eventActualTicketPrice == null">
         <ion-label><strong>Estimate event cost: {{currentCostOfEvent | currency: 'GBP':true}}</strong></ion-label>
