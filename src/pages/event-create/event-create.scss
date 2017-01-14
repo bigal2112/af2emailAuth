@@ -1,3 +1,24 @@
 page-event-create {
 
+    h2 {
+        color: #808080;
+        margin: 5px;
+        font-size: 1.9rem;
+        text-align: center;
+    }
+    
+    ion-footer {
+        // padding: 3px 90px;
+        text-align: center;
+        padding-top: 3px;
+
+        .button-md {
+            height: 45px;
+        }
+    }
+
+    .guestDiv {
+        background-color: #f0f0f0;
+    }
+
 }

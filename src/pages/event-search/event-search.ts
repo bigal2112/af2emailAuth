@@ -35,7 +35,7 @@ export class EventSearchPage {
       // ------------------------------------------------------------------------------
       // MAKE SURE TO UNCOMMENT THIS IF STATEMENT ONCE YOU HAVE THE GEOCODING WORKING
       // ------------------------------------------------------------------------------
-      // if (this.searchCity == null || typeof (this.searchCity) == 'undefined') {
+      if (this.searchCity == null || typeof (this.searchCity) == 'undefined') {
 
       let options = { timeout: 10000, enableHighAccuracy: true };
       Geolocation.getCurrentPosition(options).then((position) => {
@@ -63,7 +63,7 @@ export class EventSearchPage {
           }
         });
       });
-      // };
+      };
     });
   };
 

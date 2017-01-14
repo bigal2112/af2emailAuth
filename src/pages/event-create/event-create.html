@@ -4,38 +4,48 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-item>
-    <ion-label stacked>Performers</ion-label>
-    <ion-input [(ngModel)]="formData.performers" type="text" placeholder="Performer"></ion-input>
+    <ion-label color="primary" fixed>Title</ion-label>
+    <ion-input [(ngModel)]="formData.title" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Performer</ion-label>
+    <ion-input [(ngModel)]="formData.performers" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Start</ion-label>
+    <ion-datetime displayFormat="D-MMM-YY hh:mm" pickerFormat="DD MMM YYYY hh:mm" min="2017" max="2020-10-31" [(ngModel)]="formData.start_time"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Image</ion-label>
+    <ion-input [(ngModel)]="formData.imageURL" type="text"></ion-input>
+    <button ion-button item-right (click)='openBrowser()'><ion-icon name="browsers"></ion-icon></button>
   </ion-item>
 
   <ion-item>
-    <ion-label stacked>Title</ion-label>
-    <ion-input [(ngModel)]="formData.title" type="text" placeholder="Title"></ion-input>
+    <ion-label color="primary" fixed>Price</ion-label>
+    <ion-input [(ngModel)]="eventInitialPrice" type="number"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Deadline</ion-label>
+    <ion-datetime displayFormat="D-MMM-YY hh:mm" pickerFormat="DD MMM YYYY hh:mm" min="2017" max="2020-10-31" [(ngModel)]="eventDeadline"></ion-datetime>
   </ion-item>
 
-  <ion-item>
-    <ion-label>Start Time</ion-label>
-    <ion-datetime displayFormat="D-MMM-YY h:mm a" pickerFormat="DD MMM YYYY h:mm" max="2020-10-31" [(ngModel)]="formData.start_time"></ion-datetime>
-  </ion-item>
+  <div class="guestDiv">
+    <h2>Guests</h2>
+    <ion-list>
+      <ion-item *ngFor="let user of chosenUsers">
+        <div *ngIf="user?.chosen">
+          <h2>{{user?.username}}</h2>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
 
-  <ion-item>
-    <ion-label stacked>Price</ion-label>
-    <ion-input [(ngModel)]="eventInitialPrice" type="number" placeholder="Price"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label>Deadline</ion-label>
-    <ion-datetime displayFormat="D-MMM-YY h:mm a" pickerFormat="DD MMM YYYY h:mm" max="2020-10-31" [(ngModel)]="eventDeadline"></ion-datetime>
-  </ion-item>
-  
-  <ion-item>
-    <ion-label stacked>Image URL</ion-label>
-    <ion-input [(ngModel)]="formData.imageURL" type="text" placeholder="Image URL"></ion-input>
-  </ion-item>
-
-  <button ion-button block (click)="createEvent(formData, eventInitialPrice, eventDeadline)">
-    Create Event
-  </button>
+  <button ion-button (click)="showUsersModal()">Invite Guests</button>
 </ion-content>
+
+<ion-footer>
+  <button ion-button color="secondary" (click)="createEvent()">Add Event</button>
+</ion-footer>

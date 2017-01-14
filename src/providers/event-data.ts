@@ -8,6 +8,7 @@ export class EventData {
   public currentUser: any;
   public rootRef: any;
   public eventsRef: any;
+  public eventPictureRef: any;
   public nextEvent: any;
   public guestsRef: any;
   public invitesRef: any;
@@ -26,6 +27,7 @@ export class EventData {
     this.rootRef = firebase.database();
     this.usersRef = firebase.database().ref('users');
     this.eventsRef = firebase.database().ref('events');
+    this.eventPictureRef = firebase.storage().ref('/eventImages/');
     this.invitesRef = firebase.database().ref('invites');
     this.messagesRef = firebase.database().ref('messages')
     this.transactionsRef = firebase.database().ref('transactions')
@@ -101,7 +103,7 @@ export class EventData {
               inviteeId: guest.id,
               inviteeName: guest.username,
               inviteeAvatarURL: guest.avatarURL,
-              eventId: eventInfo.id,
+              eventId: newFirebaseEventId,
               title: eventInfo.title,
               start_time: eventInfo.start_time,
               initialTicketPrice: ticketValue * 1.00,
@@ -311,4 +313,7 @@ export class EventData {
     });
 
   }
+
+  
+  
 }
