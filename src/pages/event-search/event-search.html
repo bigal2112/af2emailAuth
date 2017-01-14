@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Event Search</ion-title>
+    <ion-title>Events</ion-title>
   </ion-navbar>
 
   <ion-toolbar>
@@ -9,6 +9,9 @@
       <ion-input type="search" name="searchString" [(ngModel)]="searchString" placeholder="Search for artist, venue or title"></ion-input>
       <button ion-button item-right (click)='searchForEvent()'>
         <ion-icon name="search"></ion-icon>
+      </button>
+      <button ion-button color="secondary" item-right (click)='createNewEvent()'>
+        <ion-icon name="add"></ion-icon>
       </button>
     </ion-item>
   </ion-toolbar>

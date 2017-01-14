@@ -147,7 +147,6 @@ export class HomePage {
           return Date.parse(event.start_time) >= Date.now();
         })
 
-        let that = this;
         this.ngZone.run(() => {
           // now create the first item and eventList from the sorted array
           this.eventList = [];

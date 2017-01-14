@@ -153,7 +153,10 @@ page-profile {
     }
 
   ion-footer {
-        background-color: gray;
-        padding: 2px 50px;
+        padding: 3px 70px;
+
+        .button-md {
+            height: 45px;
+        }
     }
 }
