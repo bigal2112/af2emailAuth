@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 
 @Component({
@@ -7,19 +7,30 @@ import { EventData } from '../../providers/event-data';
   templateUrl: 'event-create.html',
 })
 export class EventCreatePage {
-  eventName: string;
-  eventDate: string; 
-  eventStartTime: string;
-  eventPrice: number;
-  eventCost: number;
+  eventInitialPrice: number;
+  eventDeadline: any;
+  formData: any;
 
-  constructor(public nav: NavController, public eventData: EventData) {
-    this.eventDate = new Date().toISOString();
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public eventData: EventData) {
+    this.formData = [];
+    this.eventInitialPrice = 0;
+    this.eventDeadline = new Date().toISOString();
   }
 
-  createEvent(eventName: string, eventDate: string, eventPrice: number, eventCost: number) {
-    // this.eventData.createEvent(eventName, eventDate, eventPrice, eventCost).then(() => {
-    //   this.nav.pop();
-    // });
+  createEvent() {
+    // console.log(this.formData.performers);
+    // console.log(this.eventInitialPrice);
+    // console.log(this.eventDeadline);
+
+    this.eventData.createEvent(this.formData, this.eventInitialPrice, new Date(this.eventDeadline).getTime(), null, true)
+      .then(() => {
+        this.navCtrl.pop();
+
+        let toast = this.toastCtrl.create({
+          message: 'Event was added successfully',
+          duration: 2000
+        });
+        toast.present();
+      });
   }
 }

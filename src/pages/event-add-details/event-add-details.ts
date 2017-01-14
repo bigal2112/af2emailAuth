@@ -134,7 +134,7 @@ export class EventAddDetailsPage {
   }
 
   createEvent() {
-    this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, new Date(this.ticketDeadline).getTime(), this.chosenUsers).then(() => {
+    this.eventData.createEvent(this.eventInfo, this.ticketFaceValue, new Date(this.ticketDeadline).getTime(), this.chosenUsers, false).then(() => {
       this.navCtrl.pop();
 
       let toast = this.toastCtrl.create({

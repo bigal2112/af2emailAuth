@@ -6,32 +6,36 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label stacked>Event Name</ion-label>
-    <ion-input [(ngModel)]="eventName" type="text" placeholder="What's your event's name?"></ion-input>
+    <ion-label stacked>Performers</ion-label>
+    <ion-input [(ngModel)]="formData.performers" type="text" placeholder="Performer"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Title</ion-label>
+    <ion-input [(ngModel)]="formData.title" type="text" placeholder="Title"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Start Time</ion-label>
+    <ion-datetime displayFormat="D-MMM-YY h:mm a" pickerFormat="DD MMM YYYY h:mm" max="2020-10-31" [(ngModel)]="formData.start_time"></ion-datetime>
   </ion-item>
 
   <ion-item>
     <ion-label stacked>Price</ion-label>
-    <ion-input [(ngModel)]="eventPrice" type="number" placeholder="How much will guests pay?"></ion-input>
+    <ion-input [(ngModel)]="eventInitialPrice" type="number" placeholder="Price"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label stacked>Cost</ion-label>
-    <ion-input [(ngModel)]="eventCost" type="number" placeholder="How much are you spending?"></ion-input>
+    <ion-label>Deadline</ion-label>
+    <ion-datetime displayFormat="D-MMM-YY h:mm a" pickerFormat="DD MMM YYYY h:mm" max="2020-10-31" [(ngModel)]="eventDeadline"></ion-datetime>
   </ion-item>
-
+  
   <ion-item>
-    <ion-label>Event Date</ion-label>
-    <!--<ion-datetime displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" max="2020-10-31" [(ngModel)]="eventDate"></ion-datetime>-->
-    <ion-datetime displayFormat="D-MMM-YY h:mm a" pickerFormat="DD MMM YYYY h:mm" max="2020-10-31" [(ngModel)]="eventDate"></ion-datetime>
+    <ion-label stacked>Image URL</ion-label>
+    <ion-input [(ngModel)]="formData.imageURL" type="text" placeholder="Image URL"></ion-input>
   </ion-item>
 
-  <!--<ion-item>
-    <ion-label>Event Date</ion-label>
-    <ion-datetime displayFormat="hh:mm a" pickerFormat="hh:mm" [(ngModel)]="eventStart"></ion-datetime>
-  </ion-item>-->
-
-  <button ion-button block (click)="createEvent(eventName, eventDate, eventPrice, eventCost)">
+  <button ion-button block (click)="createEvent(formData, eventInitialPrice, eventDeadline)">
     Create Event
   </button>
 </ion-content>

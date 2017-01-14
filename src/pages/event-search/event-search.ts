@@ -3,6 +3,7 @@ import { NavController, LoadingController, AlertController, ModalController, Toa
 import { Storage } from '@ionic/storage';
 
 import { EventAddDetailsPage } from '../event-add-details/event-add-details';
+import { EventCreatePage } from '../event-create/event-create';
 import { ModalCityListPage } from '../modal-city-list/modal-city-list';
 import { ModalFavouriteLocationsPage } from '../modal-favourite-locations/modal-favourite-locations';
 import { Geolocation } from 'ionic-native';
@@ -233,6 +234,10 @@ export class EventSearchPage {
       }
     });
     popover.present();
+  }
+
+  createNewEvent() {
+    this.navCtrl.push(EventCreatePage);
   }
 
 }

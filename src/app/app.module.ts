@@ -9,6 +9,7 @@ import { EventDetailInformationPage } from '../pages/event-detail-information/ev
 import { EventDetailMessagesPage } from '../pages/event-detail-messages/event-detail-messages';
 import { EventDetailTabsPage } from '../pages/event-detail-tabs/event-detail-tabs';
 import { EventAddDetailsPage } from '../pages/event-add-details/event-add-details';
+import { EventCreatePage } from '../pages/event-create/event-create';
 import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
@@ -54,7 +55,7 @@ const myFirebaseAuthConfig = {
     MyApp,
     HomePage,
     EventSearchPage,
-    // EventCreatePage,
+    EventCreatePage,
     EventDetailInformationPage,
     EventDetailMessagesPage,
     EventDetailTabsPage,
@@ -80,7 +81,7 @@ const myFirebaseAuthConfig = {
     MyApp,
     HomePage,
     EventSearchPage,
-    // EventCreatePage,
+    EventCreatePage,
     EventDetailInformationPage,
     EventDetailMessagesPage,
     EventDetailTabsPage,

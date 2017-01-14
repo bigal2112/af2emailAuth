@@ -32,42 +32,62 @@ export class EventData {
     // this.balancesRef = firebase.database().ref('balances')
   }
 
-  createEvent(eventInfo: any, ticketValue: any, deadline: any, guestList: any): any {
+  createEvent(eventInfo: any, ticketValue: any, deadline: any, guestList: any, createdManually: boolean): any {
+    console.log("createEvent");
+    console.log(eventInfo);
 
-    // console.log("createEvent");
-    // console.log(eventInfo);
-
+    // get the current users details
     this.userDetails = this.globalVars.getCurrentUserDetals();
-    // console.log("User details retrieved");
-    // console.log(this.userDetails);
 
-    let performerObj = eventInfo.performers
-    let imageObj = eventInfo.image;
+    // get the performer and image URL details
+    let performer = "";
+    let image250 = "";
+    let image188 = "";
+    let imageMed = "";
+    if (createdManually) {
+      performer = eventInfo.performers;
+      image250 = eventInfo.imageURL != null ? eventInfo.imageURL : null;
+      image188 = eventInfo.imageURL != null ? eventInfo.imageURL : null;
+      imageMed = eventInfo.imageURL != null ? eventInfo.imageURL : null;
+    } else {
+      let performerObj = eventInfo.performers
+      performer = performerObj != null ? performerObj.performer.name : eventInfo.title;
 
+      let imageObj = eventInfo.image;
+      image250 = imageObj != null ? imageObj.block250.url : null;
+      image188 = imageObj != null ? imageObj.block188.url : null;
+      imageMed = imageObj != null ? imageObj.medium.url : null;
+    }
+
+    // get a nice new ref and it's key for the new event
+    let newFirebaseEventRef = this.eventsRef.push();
+    let newFirebaseEventId = newFirebaseEventRef.key;
+    
     // create the event
-    return this.eventsRef.push({
+    return newFirebaseEventRef.update({
       ownerId: this.currentUser,
-      eventId: eventInfo.id,
+      eventId: newFirebaseEventId,
       title: eventInfo.title,
       start_time: eventInfo.start_time,
       initialTicketPrice: ticketValue * 1.00,
       ticketDeadline: deadline,
       actualTicketPrice: 0.00,
-      performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
-      image250: imageObj != null ? imageObj.block250.url : null,
-      image188: imageObj != null ? imageObj.block188.url : null,
-      imageMed: imageObj != null ? imageObj.medium.url : null,
-      numberOfInvites: guestList != null ? guestList.length : 0
-    }).then(newEvent => {
+      performer: performer,
+      image250: image250,
+      image188: image188,
+      imageMed: imageMed,
+      numberOfInvites: guestList != null ? guestList.length : 0,
+      dataSource: createdManually ? "MANUAL" : "API"
+    }).then(() => {
 
       // create the initial messages
       this.messagesRef.push({
-        firebaseEventId: newEvent.key,
+        firebaseEventId: newFirebaseEventId,
         ownerId: this.currentUser,
         ownerUsername: this.userDetails.username,
         messageCreatedOn: Date.now(),
         messageBody: "Event created."
-      }).then(data => {
+      }).then(() => {
 
         // console.log("Message created");
 
@@ -76,7 +96,7 @@ export class EventData {
 
           guestList.forEach(guest => {
             this.invitesRef.push({
-              firebaseEventId: newEvent.key,
+              firebaseEventId: newFirebaseEventId,
               ownerId: this.currentUser,
               inviteeId: guest.id,
               inviteeName: guest.username,
@@ -87,11 +107,12 @@ export class EventData {
               initialTicketPrice: ticketValue * 1.00,
               ticketDeadline: deadline,
               actualTicketPrice: 0.00,
-              performer: performerObj != null ? performerObj.performer.name : eventInfo.title,
-              image250: imageObj != null ? imageObj.block250.url : null,
-              image188: imageObj != null ? imageObj.block188.url : null,
-              imageMed: imageObj != null ? imageObj.medium.url : null,
-              inviteAccepted: "NOT YET"
+              performer: performer,
+              image250: image250,
+              image188: image188,
+              imageMed: imageMed,
+              inviteAccepted: "NOT YET",
+              dataSource: createdManually ? "MANUAL" : "API"
             });
           });
 
