@@ -58,12 +58,12 @@ export class EventDetailInformationPage {
   public eventLatitude: any;
   public eventLongitude: any;
 
-  private _platform: Platform;
-  private _isAndroid: boolean;
-  private _isiOS: boolean;
+  // private _platform: Platform;
+  // private _isAndroid: boolean;
+  // private _isiOS: boolean;
 
-  destination:string;
-  start:string;
+  destination: string;
+  start: string;
 
   ngZone: any;
 
@@ -73,9 +73,9 @@ export class EventDetailInformationPage {
 
     this.ngZone = new NgZone({ enableLongStackTrace: false });
 
-    this._platform = platform;
-    this._isAndroid = platform.is('android');
-    this._isiOS = platform.is('ios');
+    // this._platform = platform;
+    // this._isAndroid = platform.is('android');
+    // this._isiOS = platform.is('ios');
 
     this.sliderOptions = {
       pager: true
@@ -105,75 +105,96 @@ export class EventDetailInformationPage {
     // TODO: put the call to EVDB into the event-data provider.
     // ---------------------------------------------------------
 
-    // go get the results from Eventful
-    EVDB.API.call("json/events/get", oArgs, function (eventData) {
-      // console.log(eventData);
-      that.loader.dismiss();
-
-      // if no results returned then inform user
-      if (typeof (eventData) == 'undefined' || eventData == null) {
-        console.log("SOME FUCKING WEIRD SHIT ERROR");
-      } else {
-
-        // so we've got the event details back
-        // load them into the member variable to display on the html.
-
-        // get the performs image
-        let imagesObj = eventData.images;
+    if (this.eventId === this.firebaseEventId) {
+      console.log("MANUALLY ADDED");
+      this.eventData.getEventDetail(this.firebaseEventId).on('value', data => {
+        that.loader.dismiss();
 
         that.groupImages = [];
+        that.groupImages.push({ image: data.val().image188 });
+        that.performer = data.val().performer;
 
-        if (imagesObj != null) {
-          let imageObj = imagesObj.image
-          that.imgCounter = 0;
+        that.eventVenueName = data.val().venue_name != null ? data.val().venue_name : "No venue";
+        that.eventStartTime = data.val().start_time;
+        that.eventVenueAddress = data.val().address != null ? data.val().address : "No address";
+        that.eventCity = data.val().city != null ? data.val().city : "No city";
+        that.eventTitle = data.val().title;
+        that.eventCountry = data.val().country != null ? data.val().country : "No country";
+        that.eventLatitude = data.val().latitude != null ? data.val().latitude : 0;
+        that.eventLongitude = data.val().longitude != null ? data.val().longitude : 0;
+      });
+    } else {
 
-          // 1 image         : push the 1 image to the array
-          // loads of images : push all of them to the array
-          if (typeof (imageObj.length) === 'undefined') {
-            that.groupImages.push({
-              image: imageObj.block188.url
-            });
-          } else {
-            imageObj.forEach(element => {
+      // go get the results from Eventful
+      EVDB.API.call("json/events/get", oArgs, function (eventData) {
+        // console.log(eventData);
+        that.loader.dismiss();
+
+        // if no results returned then inform user
+        if (typeof (eventData) == 'undefined' || eventData == null) {
+          console.log("SOME FUCKING WEIRD SHIT ERROR");
+        } else {
+
+          // so we've got the event details back
+          // load them into the member variable to display on the html.
+
+          // get the performs image
+          let imagesObj = eventData.images;
+
+          that.groupImages = [];
+
+          if (imagesObj != null) {
+            let imageObj = imagesObj.image
+            that.imgCounter = 0;
+
+            // 1 image         : push the 1 image to the array
+            // loads of images : push all of them to the array
+            if (typeof (imageObj.length) === 'undefined') {
               that.groupImages.push({
-                image: imageObj[that.imgCounter].block188.url
+                image: imageObj.block188.url
+              });
+            } else {
+              imageObj.forEach(element => {
+                that.groupImages.push({
+                  image: imageObj[that.imgCounter].block188.url
+                });
+
+                that.imgCounter++;
               });
 
-              that.imgCounter++;
+            }
+          } else {
+            // there are no images so push the default to the array
+            that.groupImages.push({
+              image: "img/no-picture-available.jpg"
             });
-
           }
-        } else {
-          // there are no images so push the default to the array
-          that.groupImages.push({
-            image: "img/no-picture-available.jpg"
-          });
+
+          // get the performer string if there is one
+          let performerObj = eventData.performers
+          if (performerObj != null) {
+            that.performer = performerObj.performer.name;
+          }
+
+          // and finally get all the other event information
+          that.eventVenueName = eventData.venue_name;
+          that.eventStartTime = eventData.start_time;
+          that.eventVenueAddress = eventData.address;
+          that.eventCity = eventData.city;
+          that.eventTitle = eventData.title;
+          that.eventCountry = eventData.country;
+          that.eventLatitude = eventData.latitude;
+          that.eventLongitude = eventData.longitude;
         }
 
-        // get the performer string if there is one
-        let performerObj = eventData.performers
-        if (performerObj != null) {
-          that.performer = performerObj.performer.name;
-        }
+        // console.log("Event Data");
+        // console.log(eventData);
+        // console.log(that.eventLatitude);
+        // console.log(that.eventLongitude);
 
-        // and finally get all the other event information
-        that.eventVenueName = eventData.venue_name;
-        that.eventStartTime = eventData.start_time;
-        that.eventVenueAddress = eventData.address;
-        that.eventCity = eventData.city;
-        that.eventTitle = eventData.title;
-        that.eventCountry = eventData.country;
-        that.eventLatitude = eventData.latitude;
-        that.eventLongitude = eventData.longitude;
-      }
-
-      // console.log("Event Data");
-      // console.log(eventData);
-      // console.log(that.eventLatitude);
-      // console.log(that.eventLongitude);
-
-      that.loadGoogleMaps();
-    });
+        that.loadGoogleMaps();
+      });
+    }
 
     // get the rest of the event information from Firebase (ticket costs ...)
     this.eventData.getEventDetail(this.firebaseEventId).on('value', data => {
@@ -190,8 +211,6 @@ export class EventDetailInformationPage {
           if (data == null || typeof (data) == 'undefined') {
             console.log("NO INVITES");
           } else {
-
-
 
             this.ngZone.run(() => {
 
@@ -482,11 +501,11 @@ export class EventDetailInformationPage {
     };
 
     LaunchNavigator.navigate(this.destination, options)
-        .then(
-            success => console.log('Launched navigator'),
-            error => alert('Error launching navigator: ' + error)
-    );
-    
+      .then(
+      success => console.log('Launched navigator'),
+      error => alert('Error launching navigator: ' + error)
+      );
+
   }
 
   updateInvitedGuests() {
