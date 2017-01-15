@@ -47,7 +47,7 @@ export class EventData {
     let image188 = "";
     let imageMed = "";
     if (createdManually) {
-      performer = eventInfo.performers;
+      performer = eventInfo.performers != null ? eventInfo.performers : null;
       image250 = eventInfo.imageURL != null ? eventInfo.imageURL : null;
       image188 = eventInfo.imageURL != null ? eventInfo.imageURL : null;
       imageMed = eventInfo.imageURL != null ? eventInfo.imageURL : null;
@@ -69,17 +69,19 @@ export class EventData {
     return newFirebaseEventRef.update({
       ownerId: this.currentUser,
       eventId: newFirebaseEventId,
-      title: eventInfo.title,
+      title: eventInfo.title != null ? eventInfo.title : null,
       start_time: eventInfo.start_time,
-      initialTicketPrice: ticketValue * 1.00,
-      ticketDeadline: deadline,
+      initialTicketPrice: ticketValue != null ? ticketValue* 1.00 : 0,
+      ticketDeadline: deadline != null && !isNaN(deadline) ? deadline : eventInfo.start_time,
       actualTicketPrice: 0.00,
       performer: performer,
       image250: image250,
       image188: image188,
       imageMed: imageMed,
       numberOfInvites: guestList != null ? guestList.length : 0,
-      dataSource: createdManually ? "MANUAL" : "API"
+      dataSource: createdManually ? "MANUAL" : "API",
+      latitude: eventInfo.latitude != null ? eventInfo.latitude : null,
+      longitude: eventInfo.longitude != null ? eventInfo.longitude : null
     }).then(() => {
 
       // create the initial messages

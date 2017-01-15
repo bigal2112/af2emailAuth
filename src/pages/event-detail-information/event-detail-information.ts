@@ -58,10 +58,6 @@ export class EventDetailInformationPage {
   public eventLatitude: any;
   public eventLongitude: any;
 
-  // private _platform: Platform;
-  // private _isAndroid: boolean;
-  // private _isiOS: boolean;
-
   destination: string;
   start: string;
 
@@ -72,10 +68,6 @@ export class EventDetailInformationPage {
     public connectivityService: ConnectivityService, public platform: Platform, public alertCtrl: AlertController, public popoverCtrl: PopoverController) {
 
     this.ngZone = new NgZone({ enableLongStackTrace: false });
-
-    // this._platform = platform;
-    // this._isAndroid = platform.is('android');
-    // this._isiOS = platform.is('ios');
 
     this.sliderOptions = {
       pager: true
@@ -122,6 +114,9 @@ export class EventDetailInformationPage {
         that.eventCountry = data.val().country != null ? data.val().country : "No country";
         that.eventLatitude = data.val().latitude != null ? data.val().latitude : 0;
         that.eventLongitude = data.val().longitude != null ? data.val().longitude : 0;
+
+        // the map for manually create event is call in the ionViewDidLoad() event
+        // as the map DIV was not getting rendered quick enough to call it here.
       });
     } else {
 
@@ -187,11 +182,7 @@ export class EventDetailInformationPage {
           that.eventLongitude = eventData.longitude;
         }
 
-        // console.log("Event Data");
-        // console.log(eventData);
-        // console.log(that.eventLatitude);
-        // console.log(that.eventLongitude);
-
+        // show the map
         that.loadGoogleMaps();
       });
     }
@@ -280,6 +271,11 @@ export class EventDetailInformationPage {
         }
       });
     }
+  }
+
+  ionViewDidLoad() {
+    // this is for manually entered events that all get their details from Firebase
+    this.loadGoogleMaps();
   }
 
   updateAcceptanceStatus(statusClicked: string) {
@@ -410,12 +406,12 @@ export class EventDetailInformationPage {
     else {
 
       if (this.connectivityService.isOnline()) {
-        // console.log("showing map");
+        console.log("showing map");
         this.initMap();
         this.enableMap();
       }
       else {
-        // console.log("disabling map");
+        console.log("disabling map");
         this.disableMap();
       }
 
@@ -427,9 +423,6 @@ export class EventDetailInformationPage {
 
     this.mapInitialised = true;
 
-    // Geolocation.getCurrentPosition().then((position) => {
-
-    // console.log("Setting map position to " + this.eventLatitude + ", " + this.eventLongitude);
     let latLng = new google.maps.LatLng(this.eventLatitude, this.eventLongitude);
 
     let mapOptions = {
@@ -440,16 +433,13 @@ export class EventDetailInformationPage {
       draggable: false
     }
 
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    let mapElement = document.getElementById('map');
+    this.map = new google.maps.Map(mapElement, mapOptions);
 
     let marker = new google.maps.Marker({
       position: latLng,
-      map: this.map,
-      title: this.eventVenueName
+      map: this.map
     });
-
-    // });
-
   }
 
   disableMap() {

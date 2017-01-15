@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, PopoverController } from 'ionic-angular';
+import { NavController, ToastController, PopoverController, ModalController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
 import { InAppBrowser, DatePicker } from 'ionic-native';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
+import { ModalGetLocationFromMapPage } from '../modal-get-location-from-map/modal-get-location-from-map';
 import { GlobalVariables } from '../../providers/global-variables';
 
 @Component({
@@ -12,10 +13,13 @@ import { GlobalVariables } from '../../providers/global-variables';
 export class EventCreatePage {
   eventInitialPrice: number;
   eventDeadline: any;
+  eventLatitude: any;
+  eventLongitude: any;
   formData: any;
   public chosenUsers: any;
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public eventData: EventData, public popoverCtrl: PopoverController, public globalVars: GlobalVariables) {
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public eventData: EventData, public popoverCtrl: PopoverController,
+    public globalVars: GlobalVariables, public modalCtrl: ModalController) {
     this.formData = [];
     // this.eventInitialPrice = 0;
     // this.eventDeadline = new Date().toISOString();
@@ -26,9 +30,9 @@ export class EventCreatePage {
   }
 
   createEvent() {
-    // console.log(this.formData.performers);
-    // console.log(this.eventInitialPrice);
-    // console.log(this.eventDeadline);
+    // add the latitude and longitude to the formData object
+    this.formData["latitude"] = this.eventLatitude;
+    this.formData["longitude"] = this.eventLongitude;
 
     this.eventData.createEvent(this.formData, this.eventInitialPrice, new Date(this.eventDeadline).getTime(), this.chosenUsers, true)
       .then(() => {
@@ -44,6 +48,18 @@ export class EventCreatePage {
 
   openBrowser() {
     let browser = new InAppBrowser("http://www.google.co.uk", "_system");
+  }
+
+  openMap() {
+    let modal = this.modalCtrl.create(ModalGetLocationFromMapPage);
+    modal.onDidDismiss((location) => {
+      if (location != null) {
+        this.eventLatitude = location.lat();
+        this.eventLongitude = location.lng();
+      }
+    });
+    // show the modal
+    modal.present();
   }
 
   showUsersModal() {

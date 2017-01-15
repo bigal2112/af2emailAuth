@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Map
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="returnLocation()"><ion-icon name="add"></ion-icon></button>
+      <button ion-button (click)="dismiss()"><ion-icon name="close-circle"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div id="map"></div>
+  <map-marker></map-marker>
+</ion-content>

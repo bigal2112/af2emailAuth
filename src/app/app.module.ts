@@ -21,6 +21,7 @@ import { ModalUserListUpdatePage } from '../pages/modal-user-list-update/modal-u
 import { ModalCityListPage } from '../pages/modal-city-list/modal-city-list';
 import { ModalFavouriteLocationsPage } from '../pages/modal-favourite-locations/modal-favourite-locations';
 import { ModalGetTicketDetailsPage } from '../pages/modal-get-ticket-details/modal-get-ticket-details';
+import { ModalGetLocationFromMapPage } from '../pages/modal-get-location-from-map/modal-get-location-from-map';
 
 // Importing provider
 import { AuthData } from '../providers/auth-data';
@@ -31,6 +32,10 @@ import { CityData } from '../providers/city-data';
 import { GlobalVariables } from '../providers/global-variables';
 import { ConnectivityService } from '../providers/connectivity-service';
 import { TimeSince } from '../pipes/time-since';
+
+// COMPONENTS
+import { MapMarkerComponent } from '../components/map-marker/map-marker';
+// import { MapSearchComponent } from '../components/map-search/map-search';
 
 // Import the AF2 Module
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
@@ -70,7 +75,9 @@ const myFirebaseAuthConfig = {
     ModalCityListPage,
     ModalFavouriteLocationsPage,
     ModalGetTicketDetailsPage,
-    TimeSince
+    ModalGetLocationFromMapPage,
+    TimeSince,
+    MapMarkerComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -95,7 +102,8 @@ const myFirebaseAuthConfig = {
     ModalUserListUpdatePage,
     ModalCityListPage,
     ModalFavouriteLocationsPage,
-    ModalGetTicketDetailsPage
+    ModalGetTicketDetailsPage,
+    ModalGetLocationFromMapPage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthData,
@@ -105,6 +113,7 @@ const myFirebaseAuthConfig = {
     CityData,
     GlobalVariables,
     ConnectivityService,
-    Storage],
+    Storage,
+    MapMarkerComponent],
 })
 export class AppModule { }
