@@ -1,7 +1,8 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { ViewController, PopoverController } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
-import { MapMarkerComponent } from '../../components/map-marker/map-marker';
+import { ModalGetVenueDetailsPage } from '../modal-get-venue-details/modal-get-venue-details';
+// import { MapMarkerComponent } from '../../components/map-marker/map-marker';
 import { Observable } from 'rxjs/Observable';
 
 declare var google;
@@ -17,11 +18,15 @@ export class ModalGetLocationFromMapPage {
   public marker: any;
   public isMapIdle: boolean;
   public locationSearch: string;
+  public searchResults: Array<any>;
+  geocoder: any;
 
-  constructor(public viewCtrl: ViewController) {
+  constructor(public viewCtrl: ViewController, public popoverCtrl: PopoverController) {
     this.loadMap().subscribe((map) => {
       this.map = map;
-    })
+    });
+
+    this.geocoder = new google.maps.Geocoder();
   }
 
   loadMap(): Observable<any> {
@@ -53,14 +58,62 @@ export class ModalGetLocationFromMapPage {
   }
 
   returnLocation() {
+    let returnData = [];
+    // returnData["latitude"] = this.map.getCenter().lat();
+    // returnData["longitude"] = this.map.getCenter().lng();
+
+    // this.viewCtrl.dismiss(returnData);
+
     let latLng = new google.maps.LatLng(this.map.getCenter().lat(), this.map.getCenter().lng());
-    // console.log(this.map.getCenter().lat());
-    // console.log(this.map.getCenter().lng());
-    this.viewCtrl.dismiss(latLng);
+    let that = this;
+    this.geocoder.geocode({ 'location': latLng }, function (results, status) {
+      if (status === 'OK') {
+        console.log(results);
+        if (results[0]) {
+
+          // open the get venue data popover
+          let popover = that.popoverCtrl.create(ModalGetVenueDetailsPage, { "address": results[0].formatted_address });
+          popover.onDidDismiss((returnData) => {
+            // if the user has clicked on Add Venue
+            if (returnData != null) {
+              // add the LatLng to the returnData array
+              returnData["latitude"] = that.map.getCenter().lat();
+              returnData["longitude"] = that.map.getCenter().lng();
+              // and close the map
+              that.viewCtrl.dismiss(returnData);
+            }
+          });
+          // show the modal
+          popover.present();
+
+
+        } else {
+          window.alert('No results found');
+          that.viewCtrl.dismiss();
+        }
+      } else {
+        window.alert('Geocoder failed due to: ' + status);
+        that.viewCtrl.dismiss();
+      }
+    });
   }
 
   dismiss() {
     this.viewCtrl.dismiss();
   }
+
+  // searchForLocation() {
+  //   this.searchResults = [];
+
+  //   this.geocoder.geocode({ 'address': this.locationSearch }, function (results, status) {
+  //     if (status == 'OK') {
+  //       this.searchResults = results.slice(0, 10);
+  //       console.log(this.searchResults);
+
+  //     } else {
+  //       alert('Geocode was not successful for the following reason: ' + status);
+  //     }
+  //   });
+  // }
 
 }

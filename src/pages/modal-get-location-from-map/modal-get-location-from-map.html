@@ -1,12 +1,13 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Map
-    </ion-title>
-    <ion-buttons end>
-      <button ion-button (click)="returnLocation()"><ion-icon name="add"></ion-icon></button>
-      <button ion-button (click)="dismiss()"><ion-icon name="close-circle"></ion-icon></button>
-    </ion-buttons>
+    <ion-row>
+      <ion-col width-50>
+        <button ion-button full clear (click)="dismiss()">Close</button>
+      </ion-col>
+      <ion-col width-50>
+        <button ion-button full clear (click)="returnLocation()">Done</button>
+      </ion-col>
+    </ion-row>
   </ion-navbar>
 </ion-header>
 

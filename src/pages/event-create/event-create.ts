@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController, PopoverController, ModalController } from 'ionic-angular';
 import { EventData } from '../../providers/event-data';
-import { InAppBrowser, DatePicker } from 'ionic-native';
+import { InAppBrowser } from 'ionic-native';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
 import { ModalGetLocationFromMapPage } from '../modal-get-location-from-map/modal-get-location-from-map';
 import { GlobalVariables } from '../../providers/global-variables';
@@ -17,6 +17,7 @@ export class EventCreatePage {
   eventLongitude: any;
   formData: any;
   public chosenUsers: any;
+  public browser: any;
 
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public eventData: EventData, public popoverCtrl: PopoverController,
     public globalVars: GlobalVariables, public modalCtrl: ModalController) {
@@ -47,15 +48,29 @@ export class EventCreatePage {
   }
 
   openBrowser() {
-    let browser = new InAppBrowser("http://www.google.co.uk", "_system");
+    this.browser = new InAppBrowser("http://www.google.co.uk", "_system");
   }
 
   openMap() {
     let modal = this.modalCtrl.create(ModalGetLocationFromMapPage);
-    modal.onDidDismiss((location) => {
-      if (location != null) {
-        this.eventLatitude = location.lat();
-        this.eventLongitude = location.lng();
+    modal.onDidDismiss((venueDetails) => {
+      if (venueDetails != null) {
+        this.eventLatitude = venueDetails.latitude;
+        this.eventLongitude = venueDetails.longitude;
+        this.formData.venue_name = venueDetails.name;
+      }
+    });
+    // show the modal
+    modal.present();
+  }
+
+  openFavouriteVenues() {
+    let modal = this.modalCtrl.create(ModalGetLocationFromMapPage);
+    modal.onDidDismiss((venueDetails) => {
+      if (venueDetails != null) {
+        this.eventLatitude = venueDetails.latitude;
+        this.eventLongitude = venueDetails.longitude;
+        this.formData.venue_name = venueDetails.name;
       }
     });
     // show the modal

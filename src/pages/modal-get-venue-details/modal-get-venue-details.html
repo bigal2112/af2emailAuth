@@ -1,0 +1,57 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Venue Details</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeModal()"><ion-icon name="close-circle"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label color="primary" fixed>Name</ion-label>
+    <ion-input [(ngModel)]="venueAddress.name" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Addr 1</ion-label>
+    <ion-input [(ngModel)]="venueAddress.addr1" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Addr 2</ion-label>
+    <ion-input [(ngModel)]="venueAddress.addr2" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Addr 3</ion-label>
+    <ion-input [(ngModel)]="venueAddress.addr3" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Addr 4</ion-label>
+    <ion-input [(ngModel)]="venueAddress.addr4" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" fixed>Addr 5</ion-label>
+    <ion-input [(ngModel)]="venueAddress.addr5" type="text"></ion-input>
+  </ion-item>
+
+  <ion-item class="favouriteStar" (click)="toggleFavourite()">
+    <ion-row center>
+      <ion-col width-66>
+        Favourite
+      </ion-col>
+
+      <ion-col width-33 >
+        <ion-buttons end>
+          <ion-icon name="heart" class="yes" *ngIf="venueAddress.favourite"></ion-icon>
+          <ion-icon name="heart" class="no" *ngIf="!venueAddress.favourite"></ion-icon>
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+
+</ion-content>
+
+<ion-footer>
+  <button ion-button block color="secondary" (click)="addVenue()">Add Venue</button>
+</ion-footer>

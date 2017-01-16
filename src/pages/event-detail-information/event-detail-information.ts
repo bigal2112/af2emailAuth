@@ -62,6 +62,7 @@ export class EventDetailInformationPage {
   start: string;
 
   ngZone: any;
+  marker: any;
 
   constructor(public nav: NavController, public navParams: NavParams, public loadingCtrl: LoadingController,
     public eventData: EventData, public globalVars: GlobalVariables, public toastCtrl: ToastController,
@@ -436,7 +437,7 @@ export class EventDetailInformationPage {
     let mapElement = document.getElementById('map');
     this.map = new google.maps.Map(mapElement, mapOptions);
 
-    let marker = new google.maps.Marker({
+    this.marker = new google.maps.Marker({
       position: latLng,
       map: this.map
     });

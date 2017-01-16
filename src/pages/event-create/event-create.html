@@ -17,6 +17,7 @@
     <ion-label color="primary" fixed>Location</ion-label>
     <ion-input [(ngModel)]="formData.venue_name" type="text"></ion-input>
     <button ion-button item-right (click)='openMap()'><ion-icon name="map"></ion-icon></button>
+    <button ion-button item-right (click)='openFavouriteVenues()'><ion-icon name="heart"></ion-icon></button>
   </ion-item>
   <ion-item>
     <ion-label color="primary" fixed>Category</ion-label>
