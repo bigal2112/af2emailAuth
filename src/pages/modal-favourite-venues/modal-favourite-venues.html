@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Favourite Venues</ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="dismiss()"><ion-icon name="close-circle"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of favouriteVenues; let i = index">
+      <ion-item tappable (click)="chooseVenue(item)">
+        {{ item.name }}
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="removeFromFavourites(i)"><ion-icon name="trash"></ion-icon></button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

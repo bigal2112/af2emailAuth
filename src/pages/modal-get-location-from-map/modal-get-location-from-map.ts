@@ -58,12 +58,6 @@ export class ModalGetLocationFromMapPage {
   }
 
   returnLocation() {
-    let returnData = [];
-    // returnData["latitude"] = this.map.getCenter().lat();
-    // returnData["longitude"] = this.map.getCenter().lng();
-
-    // this.viewCtrl.dismiss(returnData);
-
     let latLng = new google.maps.LatLng(this.map.getCenter().lat(), this.map.getCenter().lng());
     let that = this;
     this.geocoder.geocode({ 'location': latLng }, function (results, status) {

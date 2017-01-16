@@ -54,22 +54,19 @@ export class ModalGetVenueDetailsPage {
   addVenue() {
     // add this venue to the favourites list if needs be
     if (this.venueAddress["favourite"]) {
+      let that = this;
       // get the favourite venues from storage
       this.storage.get('favourite_venues').then((data) => {
-        this.favouriteVenues = (data != null && typeof (data) != 'undefine') ? data : [];
+        that.favouriteVenues = (data != null && typeof (data) != 'undefine') ? data : [];
 
-        // add this new venue
-        console.log("this.favouriteLocations");
-        console.log(this.favouriteVenues);
-
-        //  add venue to favouriteVenues 
-        this.favouriteVenues.push(this.venueAddress);
+       //  add venue to favouriteVenues 
+        that.favouriteVenues.push(that.venueAddress);
 
         // sort favourites alphabetically
-        let orderedList = this.favouriteVenues.sort(this.sortByAlphabetically);
+        let orderedList = that.favouriteVenues.sort(that.sortByAlphabetically);
 
         // save favourites to local storage
-        this.storage.set('favourite_venues', orderedList);
+        that.storage.set('favourite_venues', orderedList);
       });
     }
     this.viewCtrl.dismiss(this.venueAddress);

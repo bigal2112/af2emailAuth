@@ -23,6 +23,7 @@ import { ModalFavouriteLocationsPage } from '../pages/modal-favourite-locations/
 import { ModalGetTicketDetailsPage } from '../pages/modal-get-ticket-details/modal-get-ticket-details';
 import { ModalGetLocationFromMapPage } from '../pages/modal-get-location-from-map/modal-get-location-from-map';
 import { ModalGetVenueDetailsPage } from '../pages/modal-get-venue-details/modal-get-venue-details';
+import { ModalFavouriteVenuesPage } from '../pages/modal-favourite-venues/modal-favourite-venues';
 
 // Importing provider
 import { AuthData } from '../providers/auth-data';
@@ -78,6 +79,7 @@ const myFirebaseAuthConfig = {
     ModalGetTicketDetailsPage,
     ModalGetLocationFromMapPage,
     ModalGetVenueDetailsPage,
+    ModalFavouriteVenuesPage,
     TimeSince,
     MapMarkerComponent
   ],
@@ -106,7 +108,8 @@ const myFirebaseAuthConfig = {
     ModalFavouriteLocationsPage,
     ModalGetTicketDetailsPage,
     ModalGetLocationFromMapPage,
-    ModalGetVenueDetailsPage
+    ModalGetVenueDetailsPage,
+    ModalFavouriteVenuesPage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthData,

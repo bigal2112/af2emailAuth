@@ -4,6 +4,7 @@ import { EventData } from '../../providers/event-data';
 import { InAppBrowser } from 'ionic-native';
 import { ModalUserListPage } from '../modal-user-list/modal-user-list';
 import { ModalGetLocationFromMapPage } from '../modal-get-location-from-map/modal-get-location-from-map';
+import { ModalFavouriteVenuesPage } from '../modal-favourite-venues/modal-favourite-venues';
 import { GlobalVariables } from '../../providers/global-variables';
 
 @Component({
@@ -65,16 +66,16 @@ export class EventCreatePage {
   }
 
   openFavouriteVenues() {
-    let modal = this.modalCtrl.create(ModalGetLocationFromMapPage);
-    modal.onDidDismiss((venueDetails) => {
-      if (venueDetails != null) {
-        this.eventLatitude = venueDetails.latitude;
-        this.eventLongitude = venueDetails.longitude;
-        this.formData.venue_name = venueDetails.name;
+    let popover = this.popoverCtrl.create(ModalFavouriteVenuesPage);
+    popover.onDidDismiss((chosenVenue) => {
+      if (chosenVenue != null) {
+        this.eventLatitude = chosenVenue.latitude;
+        this.eventLongitude = chosenVenue.longitude;
+        this.formData.venue_name = chosenVenue.name;
       }
     });
     // show the modal
-    modal.present();
+    popover.present();
   }
 
   showUsersModal() {
